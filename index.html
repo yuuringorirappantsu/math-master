@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>まちがいLABO — 中学数学</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#f5f9f2;
+  --white:#ffffff;
+  --text:#2d3a2e;
+  --text2:#5a7060;
+  --text3:#8fa896;
+  --border:#cde3c8;
+  --shadow:rgba(80,120,80,0.08);
+
+  /* 学年カラー */
+  --y1:#d4edc9;--y1b:#87c27a;--y1t:#1e5c14;
+  --y2:#ffe8d6;--y2b:#f4a261;--y2t:#7a2e00;
+  --y3:#c9d8ed;--y3b:#6a8fd4;--y3t:#0d2e6b;
+
+  --r24:24px;--r16:16px;--r12:12px;--r999:999px;
+}
+
+body{
+  font-family:'Zen Maru Gothic',sans-serif;
+  background:var(--bg);
+  min-height:100vh;
+  color:var(--text);
+  padding-bottom:4rem;
+}
+
+/* 背景装飾 */
+body::before{
+  content:'';
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 10% 10%, #e8f5e280 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 90% 80%, #d4e8f580 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 60% 30%, #f5ead480 0%, transparent 50%);
+  pointer-events:none;
+  z-index:0;
+}
+
+.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:0 1rem}
+
+/* ヘッダー */
+.site-header{
+  text-align:center;
+  padding:2.5rem 1rem 2rem;
+}
+.site-logo{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:var(--r999);padding:8px 20px 8px 14px;
+  margin-bottom:1.25rem;
+  box-shadow:0 2px 12px var(--shadow);
+}
+.logo-icon{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,#87c27a,#6aafd4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+}
+.logo-text{font-size:14px;font-weight:700;color:var(--text)}
+.site-title{font-size:26px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:0.02em}
+.site-sub{font-size:14px;color:var(--text2);line-height:1.6}
+
+/* パンくず */
+.breadcrumb{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;color:var(--text3);
+  margin-bottom:1.25rem;
+  min-height:24px;
+}
+.breadcrumb span{cursor:pointer;transition:color 0.15s}
+.breadcrumb span:hover{color:var(--text2)}
+.breadcrumb .sep{color:var(--border)}
+.breadcrumb .current{color:var(--text2);font-weight:500}
+
+/* セクションタイトル */
+.sec-title{
+  font-size:13px;font-weight:700;color:var(--text2);
+  letter-spacing:0.06em;margin-bottom:1rem;
+  display:flex;align-items:center;gap:8px;
+}
+.sec-title::after{
+  content:'';flex:1;height:1px;background:var(--border);
+}
+
+/* 学年カード */
+.grade-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:2rem}
+.grade-card{
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:var(--r24);padding:1.25rem 1rem;
+  text-align:center;cursor:pointer;
+  box-shadow:0 2px 12px var(--shadow);
+  transition:all 0.2s ease;
+  position:relative;overflow:hidden;
+}
+.grade-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  border-radius:var(--r24) var(--r24) 0 0;
+}
+.grade-card.g1::before{background:var(--y1b)}
+.grade-card.g2::before{background:var(--y2b)}
+.grade-card.g3::before{background:var(--y3b)}
+.grade-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px var(--shadow)}
+.grade-card:active{transform:translateY(0)}
+.grade-icon{
+  width:52px;height:52px;border-radius:50%;
+  margin:0 auto 0.75rem;display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+}
+.g1 .grade-icon{background:var(--y1)}
+.g2 .grade-icon{background:var(--y2)}
+.g3 .grade-icon{background:var(--y3)}
+.grade-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px}
+.grade-count{font-size:11px;color:var(--text3)}
+
+/* 単元リスト */
+.unit-list{display:flex;flex-direction:column;gap:8px;margin-bottom:2rem}
+.unit-card{
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:var(--r16);padding:1rem 1.25rem;
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;box-shadow:0 2px 8px var(--shadow);
+  transition:all 0.18s ease;
+}
+.unit-card:hover{transform:translateX(4px);border-color:#aed4a8;box-shadow:0 4px 16px var(--shadow)}
+.unit-card.disabled{opacity:0.5;cursor:default}
+.unit-card.disabled:hover{transform:none;border-color:var(--border)}
+.unit-icon{
+  width:44px;height:44px;border-radius:var(--r12);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.unit-info{flex:1}
+.unit-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px}
+.unit-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.unit-badge{
+  font-size:10px;font-weight:700;padding:3px 10px;
+  border-radius:var(--r999);white-space:nowrap;flex-shrink:0;
+}
+.badge-ready{background:#e2f4db;color:#2d6e20}
+.badge-soon{background:#f0f0f0;color:#999}
+.unit-arrow{color:var(--text3);font-size:16px;flex-shrink:0}
+
+/* 内容選択 */
+.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:2rem}
+.content-card{
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:var(--r16);padding:1.25rem;
+  cursor:pointer;box-shadow:0 2px 8px var(--shadow);
+  transition:all 0.18s ease;text-align:center;
+}
+.content-card:hover{transform:translateY(-2px);box-shadow:0 6px 16px var(--shadow)}
+.content-icon{font-size:28px;margin-bottom:8px}
+.content-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+.content-desc{font-size:11px;color:var(--text2);line-height:1.5}
+.content-card.highlight{border-color:#87c27a;background:linear-gradient(135deg,#f0fae8,#fff)}
+
+/* 戻るボタン */
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:var(--r999);padding:8px 18px;
+  font-size:13px;font-weight:500;color:var(--text2);
+  cursor:pointer;transition:all 0.15s;
+  box-shadow:0 2px 8px var(--shadow);
+  margin-bottom:1.25rem;
+  font-family:'Zen Maru Gothic',sans-serif;
+}
+.back-btn:hover{background:#f0f7ee;border-color:#aed4a8}
+
+/* フッター */
+.footer{
+  text-align:center;font-size:11px;color:var(--text3);
+  padding-top:2rem;border-top:1px solid var(--border);
+  margin-top:3rem;
+}
+
+/* サイクル */
+.cycle-wrap{
+  display:flex;align-items:center;justify-content:center;
+  gap:4px;margin-top:1.25rem;flex-wrap:wrap;
+}
+.cycle-step{
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:var(--r16);padding:10px 14px;
+  text-align:center;min-width:72px;
+  box-shadow:0 2px 8px var(--shadow);
+}
+.cycle-icon{font-size:18px;margin-bottom:4px}
+.cycle-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px}
+.cycle-desc{font-size:10px;color:var(--text2);line-height:1.4}
+.cycle-arrow{font-size:18px;color:var(--border);font-weight:700;padding:0 2px}
+
+/* 入試カード */
+.nyushi-card{
+  background:linear-gradient(135deg,#fffbe6,#fff8d0);
+  border:2px solid #f0c040;border-radius:var(--r16);
+  padding:1rem 1.25rem;display:flex;align-items:center;gap:14px;
+  cursor:pointer;box-shadow:0 2px 12px rgba(200,160,0,0.15);
+  transition:all 0.18s ease;margin-top:4px;
+}
+.nyushi-card:hover{transform:translateX(4px);box-shadow:0 4px 20px rgba(200,160,0,0.2)}
+.nyushi-icon{width:44px;height:44px;border-radius:var(--r12);background:#ffd700;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.nyushi-name{font-size:15px;font-weight:700;color:#7a4e00;margin-bottom:2px}
+.nyushi-desc{font-size:12px;color:#a06820;line-height:1.5}
+.nyushi-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:var(--r999);background:#ffd700;color:#7a4e00;white-space:nowrap;flex-shrink:0}
+.fade-in{animation:fadeIn 0.3s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.stagger-1{animation-delay:0.05s}
+.stagger-2{animation-delay:0.1s}
+.stagger-3{animation-delay:0.15s}
+.stagger-4{animation-delay:0.2s}
+.stagger-5{animation-delay:0.25s}
+.stagger-6{animation-delay:0.3s}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="site-header">
+  <div class="site-logo">
+    <div class="logo-icon">🌿</div>
+    <span class="logo-text">まちがいLABO</span>
+  </div>
+  <h1 class="site-title">中学数学 学習サイト</h1>
+  <p class="site-sub">間違いから気づき、気づきから成長する。<br>自分のペースで、着実に力をつけよう。</p>
+  <div class="cycle-wrap">
+    <div class="cycle-step">
+      <div class="cycle-icon">📋</div>
+      <div class="cycle-name">力試し</div>
+      <div class="cycle-desc">今の現在地を知る</div>
+    </div>
+    <div class="cycle-arrow">›</div>
+    <div class="cycle-step">
+      <div class="cycle-icon">💎</div>
+      <div class="cycle-name">自己分析</div>
+      <div class="cycle-desc">間違いは宝物</div>
+    </div>
+    <div class="cycle-arrow">›</div>
+    <div class="cycle-step">
+      <div class="cycle-icon">⬆️</div>
+      <div class="cycle-name">STEP練習</div>
+      <div class="cycle-desc">レベルアップの時間</div>
+    </div>
+    <div class="cycle-arrow">›</div>
+    <div class="cycle-step">
+      <div class="cycle-icon">🔁</div>
+      <div class="cycle-name">再テスト</div>
+      <div class="cycle-desc">成長を確かめる</div>
+    </div>
+  </div>
+</header>
+
+<div id="breadcrumb-area" class="breadcrumb"></div>
+<div id="main-content"></div>
+
+<footer class="footer">まちがいLABO — 中学数学 学習サイト</footer>
+
+</div>
+
+<script>
+// ======= データ定義 =======
+const GRADES = [
+  {
+    id:'g1', label:'中学1年生', icon:'🌱', color:'g1',
+    units:[
+      {
+        id:'seifusu', label:'正の数・負の数', icon:'±', iconBg:'#d4edc9',
+        desc:'たし算・ひき算・かけ算・わり算の符号ルールをマスター',
+        ready:true,
+        contents:[
+          {id:'s1', label:'計算練習（整数）', icon:'✏️', desc:'整数の四則計算の基本', url:'seifusu.html', highlight:true},
+          {id:'s2', label:'計算練習（分数・小数）', icon:'🔥', desc:'分数・小数を含む四則計算', url:'seifusu_adv.html'},
+        ]
+      },
+      {
+        id:'mojinosiki', label:'文字の式', icon:'🔤', iconBg:'#d4edc9',
+        desc:'文字を使った式の計算・代入・文章題',
+        ready:false,
+        contents:[
+          {id:'m1', label:'文字式の計算（整数）', icon:'✏️', desc:'', url:'moji_basic.html'},
+          {id:'m2', label:'文字式の計算（分数・小数）', icon:'🔥', desc:'', url:'moji_adv.html'},
+          {id:'m3', label:'文章題', icon:'📝', desc:'', url:'moji_bun.html'},
+        ]
+      },
+      {
+        id:'houteisiki1', label:'方程式', icon:'⚖️', iconBg:'#d4edc9',
+        desc:'一次方程式の解き方・活用',
+        ready:false,
+        contents:[
+          {id:'h1', label:'方程式を解く（整数）', icon:'✏️', desc:'', url:'eq1_basic.html'},
+          {id:'h2', label:'方程式を解く（分数・小数）', icon:'🔥', desc:'', url:'eq1_adv.html'},
+          {id:'h3', label:'文章問題', icon:'📝', desc:'', url:'eq1_bun.html'},
+        ]
+      },
+      {
+        id:'henka', label:'変化と対応', icon:'📈', iconBg:'#d4edc9',
+        desc:'比例・反比例のグラフと式',
+        ready:false,
+        contents:[
+          {id:'v1', label:'文章から式を求める', icon:'📝', desc:'', url:'henka_bun.html'},
+          {id:'v2', label:'グラフ・表から式を求める', icon:'📊', desc:'', url:'henka_graph.html'},
+        ]
+      },
+      {
+        id:'heimen', label:'平面図形', icon:'△', iconBg:'#d4edc9',
+        desc:'作図・面積・図形の移動',
+        ready:false,
+        contents:[
+          {id:'p1', label:'位置関係', icon:'📐', desc:'', url:'plane_ichi.html'},
+          {id:'p2', label:'図形の移動', icon:'🔄', desc:'', url:'plane_ido.html'},
+          {id:'p3', label:'面積', icon:'📏', desc:'', url:'plane_menseki.html'},
+        ]
+      },
+      {
+        id:'kukkan', label:'空間図形', icon:'🎲', iconBg:'#d4edc9',
+        desc:'立体の表面積・体積',
+        ready:false,
+        contents:[
+          {id:'k1', label:'位置関係', icon:'📐', desc:'', url:'space_ichi.html'},
+          {id:'k2', label:'体積', icon:'🧊', desc:'', url:'space_vol.html'},
+          {id:'k3', label:'表面積', icon:'📏', desc:'', url:'space_surf.html'},
+        ]
+      },
+      {
+        id:'data1', label:'データの活用', icon:'📊', iconBg:'#d4edc9',
+        desc:'度数分布・平均・中央値',
+        ready:false,
+        contents:[
+          {id:'d1', label:'度数分布表', icon:'📊', desc:'', url:'data1_freq.html'},
+        ]
+      },
+      {
+        id:'sogo1', label:'総合問題', icon:'🏆', iconBg:'#b8e0b0',
+        desc:'1年生の全範囲から出題',
+        ready:false,
+        contents:[
+          {id:'sg1', label:'1年生 総合問題', icon:'🏆', desc:'', url:'sogo1.html'},
+        ]
+      },
+    ]
+  },
+  {
+    id:'g2', label:'中学2年生', icon:'🌿', color:'g2',
+    units:[
+      {
+        id:'sikkeisan', label:'式の計算', icon:'🔢', iconBg:'#ffe8d6',
+        desc:'多項式・単項式の計算・等式変形',
+        ready:false,
+        contents:[
+          {id:'sk1', label:'式の計算（整数）', icon:'✏️', desc:'', url:'siki_basic.html'},
+          {id:'sk2', label:'式の計算（分数・小数）', icon:'🔥', desc:'', url:'siki_adv.html'},
+          {id:'sk3', label:'等式の変形', icon:'⚖️', desc:'', url:'siki_tousiki.html'},
+          {id:'sk4', label:'文字式を利用して', icon:'📝', desc:'', url:'siki_riyou.html'},
+        ]
+      },
+      {
+        id:'renritu', label:'連立方程式', icon:'⚖️', iconBg:'#ffe8d6',
+        desc:'加減法・代入法で解く',
+        ready:false,
+        contents:[
+          {id:'r1', label:'計算練習（整数）', icon:'✏️', desc:'', url:'renritu_basic.html'},
+          {id:'r2', label:'計算練習（分数・小数）', icon:'🔥', desc:'', url:'renritu_adv.html'},
+          {id:'r3', label:'文章題', icon:'📝', desc:'', url:'renritu_bun.html'},
+        ]
+      },
+      {
+        id:'ikizi', label:'一次関数', icon:'📉', iconBg:'#ffe8d6',
+        desc:'y=ax+bのグラフと式',
+        ready:false,
+        contents:[
+          {id:'i1', label:'文章から式を求める', icon:'📝', desc:'', url:'ichi_bun.html'},
+          {id:'i2', label:'グラフ・表から式を求める', icon:'📊', desc:'', url:'ichi_graph.html'},
+          {id:'i3', label:'交点を求める', icon:'✖️', desc:'', url:'ichi_kosaten.html'},
+        ]
+      },
+      {
+        id:'zukei2a', label:'図形の調べ方', icon:'📐', iconBg:'#ffe8d6',
+        desc:'角・三角形の合同',
+        ready:false,
+        contents:[
+          {id:'za1', label:'角を求める', icon:'📐', desc:'', url:'zukei2a_kaku.html'},
+          {id:'za2', label:'三角形の合同', icon:'△', desc:'', url:'zukei2a_godo.html'},
+        ]
+      },
+      {
+        id:'zukei2b', label:'図形の性質と証明', icon:'📝', iconBg:'#ffe8d6',
+        desc:'二等辺三角形・平行四辺形の証明',
+        ready:false,
+        contents:[
+          {id:'zb1', label:'二等辺三角形', icon:'△', desc:'', url:'zukei2b_nito.html'},
+          {id:'zb2', label:'直角三角形', icon:'📐', desc:'', url:'zukei2b_chok.html'},
+          {id:'zb3', label:'平行四辺形', icon:'◻️', desc:'', url:'zukei2b_heiko.html'},
+          {id:'zb4', label:'平行線と面積', icon:'📏', desc:'', url:'zukei2b_menseki.html'},
+        ]
+      },
+      {
+        id:'kakuritsu1', label:'場合の数と確率', icon:'🎲', iconBg:'#ffe8d6',
+        desc:'場合の数・確率の計算',
+        ready:false,
+        contents:[
+          {id:'ka1', label:'確率（基本）', icon:'✏️', desc:'', url:'kakuritsu1_basic.html'},
+          {id:'ka2', label:'確率（複合問題）', icon:'🔥', desc:'', url:'kakuritsu1_adv.html'},
+        ]
+      },
+      {
+        id:'hako', label:'箱ひげ図とデータの活用', icon:'📊', iconBg:'#ffe8d6',
+        desc:'箱ひげ図の読み方・活用',
+        ready:false,
+        contents:[
+          {id:'hk1', label:'箱ひげ図', icon:'📊', desc:'', url:'hako_basic.html'},
+          {id:'hk2', label:'箱ひげ図から読み取る', icon:'🔍', desc:'', url:'hako_yomitoru.html'},
+        ]
+      },
+      {
+        id:'sogo2', label:'総合問題', icon:'🏆', iconBg:'#fdd5b0',
+        desc:'2年生の全範囲から出題',
+        ready:false,
+        contents:[
+          {id:'sg2', label:'2年生 総合問題', icon:'🏆', desc:'', url:'sogo2.html'},
+        ]
+      },
+    ]
+  },
+  {
+    id:'g3', label:'中学3年生', icon:'🌳', color:'g3',
+    units:[
+      {
+        id:'tenkai', label:'展開と因数分解', icon:'🔍', iconBg:'#c9d8ed',
+        desc:'展開の公式・因数分解',
+        ready:true,
+        contents:[
+          {id:'t1', label:'展開（初級）', icon:'✏️', desc:'基本的な展開の計算練習', url:'tenkai_basic.html'},
+          {id:'t2', label:'展開（上級）', icon:'🔥', desc:'複雑な展開・応用問題', url:'tenkai_adv.html'},
+          {id:'t3', label:'因数分解（初級）', icon:'✏️', desc:'公式を使った因数分解', url:'factorization.html', highlight:true},
+          {id:'t4', label:'因数分解（上級）', icon:'🔥', desc:'共通因数・複合問題', url:'insuu_adv.html'},
+        ]
+      },
+      {
+        id:'heihoukon', label:'平方根', icon:'√', iconBg:'#c9d8ed',
+        desc:'平方根の計算・有理化',
+        ready:false,
+        contents:[
+          {id:'sq1', label:'平方根の基本', icon:'✏️', desc:'', url:'sqrt_basic.html'},
+          {id:'sq2', label:'計算練習（整数）', icon:'✏️', desc:'', url:'sqrt_mid.html'},
+          {id:'sq3', label:'計算練習（分数・小数）', icon:'🔥', desc:'', url:'sqrt_adv.html'},
+        ]
+      },
+      {
+        id:'niji', label:'二次方程式', icon:'⚖️', iconBg:'#c9d8ed',
+        desc:'因数分解・解の公式で解く',
+        ready:false,
+        contents:[
+          {id:'nj1', label:'計算練習（整数）', icon:'✏️', desc:'', url:'niji_basic.html'},
+          {id:'nj2', label:'計算練習（分数・小数）', icon:'🔥', desc:'', url:'niji_adv.html'},
+        ]
+      },
+      {
+        id:'kansu2', label:'関数 y=ax²', icon:'📈', iconBg:'#c9d8ed',
+        desc:'放物線のグラフと変化の割合',
+        ready:false,
+        contents:[
+          {id:'kn1', label:'文章から式を求める', icon:'📝', desc:'', url:'kansu2_bun.html'},
+          {id:'kn2', label:'グラフ・表から式を求める', icon:'📊', desc:'', url:'kansu2_graph.html'},
+          {id:'kn3', label:'変域', icon:'📏', desc:'', url:'kansu2_heni.html'},
+          {id:'kn4', label:'変化の割合', icon:'📉', desc:'', url:'kansu2_wariai.html'},
+        ]
+      },
+      {
+        id:'soji', label:'図形と相似', icon:'📐', iconBg:'#c9d8ed',
+        desc:'相似な図形・線分の比・面積比',
+        ready:false,
+        contents:[
+          {id:'sj1', label:'相似な図形', icon:'📐', desc:'', url:'soji_basic.html'},
+          {id:'sj2', label:'証明', icon:'📝', desc:'', url:'soji_proof.html'},
+          {id:'sj3', label:'線分の比', icon:'📏', desc:'', url:'soji_senbu.html'},
+          {id:'sj4', label:'面積比・体積比', icon:'🔢', desc:'', url:'soji_ratio.html'},
+        ]
+      },
+      {
+        id:'en', label:'円の性質', icon:'⭕', iconBg:'#c9d8ed',
+        desc:'円周角の定理・証明',
+        ready:false,
+        contents:[
+          {id:'en1', label:'円周角', icon:'📐', desc:'', url:'en_kaku.html'},
+          {id:'en2', label:'証明', icon:'📝', desc:'', url:'en_proof.html'},
+        ]
+      },
+      {
+        id:'sanhei', label:'三平方の定理', icon:'📐', iconBg:'#c9d8ed',
+        desc:'三平方の定理・平面・空間への応用',
+        ready:false,
+        contents:[
+          {id:'sp1', label:'三平方の定理', icon:'✏️', desc:'', url:'sanhei_basic.html'},
+          {id:'sp2', label:'平面と三平方の定理', icon:'△', desc:'', url:'sanhei_plane.html'},
+          {id:'sp3', label:'空間と三平方の定理', icon:'🎲', desc:'', url:'sanhei_space.html'},
+        ]
+      },
+      {
+        id:'sogo3', label:'総合問題', icon:'🏆', iconBg:'#b0c8e0',
+        desc:'3年生の全範囲から出題',
+        ready:false,
+        contents:[
+          {id:'sg3', label:'3年生 総合問題', icon:'🏆', desc:'', url:'sogo3.html'},
+        ]
+      },
+      {
+        id:'nyushi', label:'入試問題に挑戦！', icon:'🎯', iconBg:'#ffd700',
+        desc:'大問１（小問集合）で総仕上げ。結果をもとに必要な単元へ',
+        ready:false, isNyushi:true,
+        contents:[
+          {id:'ny1', label:'入試 大問１（小問集合）', icon:'🎯', desc:'全範囲から出題・結果をもとに必要な単元へ', url:'nyushi.html', highlight:true},
+        ]
+      },
+    ]
+  }
+];
+
+// ======= 状態管理 =======
+let state = { view: 'grade', gradeId: null, unitId: null };
+
+function getGrade(id){ return GRADES.find(g=>g.id===id); }
+function getUnit(gradeId, unitId){
+  const g = getGrade(gradeId);
+  return g ? g.units.find(u=>u.id===unitId) : null;
+}
+
+// ======= 描画 =======
+function render(){
+  renderBreadcrumb();
+  const el = document.getElementById('main-content');
+  el.innerHTML = '';
+  if(state.view === 'grade') renderGrade(el);
+  else if(state.view === 'unit') renderUnit(el);
+  else if(state.view === 'content') renderContent(el);
+}
+
+function renderBreadcrumb(){
+  const el = document.getElementById('breadcrumb-area');
+  if(state.view === 'grade'){ el.innerHTML = ''; return; }
+  let html = '<span onclick="goGrade()">トップ</span>';
+  if(state.gradeId){
+    const g = getGrade(state.gradeId);
+    html += '<span class="sep">›</span>';
+    if(state.view === 'unit') html += '<span class="current">'+g.label+'</span>';
+    else html += '<span onclick="goUnit()">'+g.label+'</span>';
+  }
+  if(state.unitId && state.view === 'content'){
+    const u = getUnit(state.gradeId, state.unitId);
+    html += '<span class="sep">›</span><span class="current">'+u.label+'</span>';
+  }
+  el.innerHTML = html;
+}
+
+/* 学年選択 */
+function renderGrade(el){
+  el.innerHTML =
+    '<div class="sec-title">学年を選ぼう</div>'+
+    '<div class="grade-grid">'+
+    GRADES.map((g,i)=>{
+      const readyCount = g.units.filter(u=>u.ready).length;
+      return '<div class="grade-card '+g.color+' fade-in stagger-'+(i+1)+'" onclick="selectGrade(\''+g.id+'\')">'+
+        '<div class="grade-icon">'+g.icon+'</div>'+
+        '<div class="grade-name">'+g.label+'</div>'+
+        '<div class="grade-count">'+readyCount+' 単元公開中</div>'+
+      '</div>';
+    }).join('')+
+    '</div>';
+}
+
+/* 単元選択 */
+function renderUnit(el){
+  const g = getGrade(state.gradeId);
+  el.innerHTML =
+    '<button class="back-btn" onclick="goGrade()">← 学年選択に戻る</button>'+
+    '<div class="sec-title">'+g.label+' — 単元を選ぼう</div>'+
+    '<div class="unit-list">'+
+    g.units.map((u,i)=>{
+      // 入試カード特別表示
+      if(u.isNyushi){
+        const onclick = u.ready ? 'onclick="selectUnit(\''+u.id+'\')"' : '';
+        const badge = u.ready
+          ? '<span class="nyushi-badge">✓ 公開中</span>'
+          : '<span class="nyushi-badge" style="background:#eee;color:#999">準備中</span>';
+        const cls = u.ready ? '' : ' disabled';
+        return '<div class="nyushi-card'+cls+' fade-in stagger-6" '+onclick+'>'+
+          '<div class="nyushi-icon">🎯</div>'+
+          '<div class="unit-info">'+
+            '<div class="nyushi-name">'+u.label+'</div>'+
+            '<div class="nyushi-desc">'+u.desc+'</div>'+
+          '</div>'+
+          badge+
+        '</div>';
+      }
+      const disabled = !u.ready ? ' disabled' : '';
+      const badge = u.ready
+        ? '<span class="unit-badge badge-ready">✓ 公開中</span>'
+        : '<span class="unit-badge badge-soon">準備中</span>';
+      const arrow = u.ready ? '<span class="unit-arrow">›</span>' : '';
+      const onclick = u.ready ? 'onclick="selectUnit(\''+u.id+'\')"' : '';
+      return '<div class="unit-card'+disabled+' fade-in stagger-'+(Math.min(i+1,6))+'" '+onclick+'>'+
+        '<div class="unit-icon" style="background:'+u.iconBg+'">'+u.icon+'</div>'+
+        '<div class="unit-info">'+
+          '<div class="unit-name">'+u.label+'</div>'+
+          '<div class="unit-desc">'+u.desc+'</div>'+
+        '</div>'+
+        badge+arrow+
+      '</div>';
+    }).join('')+
+    '</div>';
+}
+
+/* 内容選択 */
+function renderContent(el){
+  const u = getUnit(state.gradeId, state.unitId);
+  el.innerHTML =
+    '<button class="back-btn" onclick="goUnit()">← 単元選択に戻る</button>'+
+    '<div class="sec-title">'+u.label+' — 学習内容を選ぼう</div>'+
+    '<div class="content-grid">'+
+    u.contents.map((c,i)=>{
+      const hl = c.highlight ? ' highlight' : '';
+      return '<div class="content-card'+hl+' fade-in stagger-'+(i+1)+'" onclick="goStudy(\''+c.url+'\')">'+
+        '<div class="content-icon">'+c.icon+'</div>'+
+        '<div class="content-name">'+c.label+'</div>'+
+        '<div class="content-desc">'+c.desc+'</div>'+
+      '</div>';
+    }).join('')+
+    '</div>';
+}
+
+// ======= ナビゲーション =======
+function selectGrade(id){ state = {view:'unit', gradeId:id, unitId:null}; render(); scrollToTop(); }
+function selectUnit(id){ state.view='content'; state.unitId=id; render(); scrollToTop(); }
+function goGrade(){ state = {view:'grade', gradeId:null, unitId:null}; render(); scrollToTop(); }
+function goUnit(){ state.view='unit'; state.unitId=null; render(); scrollToTop(); }
+function goStudy(url){ window.location.href = url; }
+function scrollToTop(){ window.scrollTo({top:0, behavior:'smooth'}); }
+
+// 初期描画
+render();
+</script>
+</body>
+</html>
