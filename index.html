@@ -10,18 +10,18 @@
 *{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  --bg:#f5f9f2;
+  --bg:#f5f3fa;
   --white:#ffffff;
-  --text:#2d3a2e;
-  --text2:#5a7060;
-  --text3:#8fa896;
-  --border:#cde3c8;
-  --shadow:rgba(80,120,80,0.08);
+  --text:#2d2d2d;
+  --text2:#5a5a5a;
+  --text3:#9a9a9a;
+  --border:#e0dbd4;
+  --shadow:rgba(100,90,80,0.08);
 
   /* 学年カラー */
-  --y1:#d4edc9;--y1b:#87c27a;--y1t:#1e5c14;
+  --y1:#d8f3e0;--y1b:#52b069;--y1t:#1a4d28;
   --y2:#ffe8d6;--y2b:#f4a261;--y2t:#7a2e00;
-  --y3:#c9d8ed;--y3b:#6a8fd4;--y3t:#0d2e6b;
+  --y3:#d6e8fb;--y3b:#3a7bd5;--y3t:#0d2e6b;
 
   --r24:24px;--r16:16px;--r12:12px;--r999:999px;
 }
@@ -39,9 +39,11 @@ body::before{
   content:'';
   position:fixed;top:0;left:0;right:0;bottom:0;
   background:
-    radial-gradient(ellipse 60% 40% at 10% 10%, #e8f5e280 0%, transparent 60%),
-    radial-gradient(ellipse 50% 50% at 90% 80%, #d4e8f580 0%, transparent 60%),
-    radial-gradient(ellipse 40% 40% at 60% 30%, #f5ead480 0%, transparent 50%);
+    radial-gradient(ellipse 70% 50% at 15% 15%, #d8f3e055 0%, transparent 65%),
+    radial-gradient(ellipse 60% 60% at 85% 80%, #d6e8fb55 0%, transparent 65%),
+    radial-gradient(ellipse 50% 50% at 55% 45%, #ffe8d645 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 20%, #e8e0f840 0%, transparent 55%),
+    radial-gradient(ellipse 35% 35% at 20% 80%, #e0d8f840 0%, transparent 55%);
   pointer-events:none;
   z-index:0;
 }
@@ -62,7 +64,7 @@ body::before{
 }
 .logo-icon{
   width:32px;height:32px;border-radius:50%;
-  background:linear-gradient(135deg,#87c27a,#6aafd4);
+  background:linear-gradient(135deg,#b8a9e8,#93bef0);
   display:flex;align-items:center;justify-content:center;
   font-size:16px;
 }
@@ -131,7 +133,7 @@ body::before{
   cursor:pointer;box-shadow:0 2px 8px var(--shadow);
   transition:all 0.18s ease;
 }
-.unit-card:hover{transform:translateX(4px);border-color:#aed4a8;box-shadow:0 4px 16px var(--shadow)}
+.unit-card:hover{transform:translateX(4px);border-color:#c5bce8;box-shadow:0 4px 16px var(--shadow)}
 .unit-card.disabled{opacity:0.5;cursor:default}
 .unit-card.disabled:hover{transform:none;border-color:var(--border)}
 .unit-icon{
@@ -146,7 +148,7 @@ body::before{
   font-size:10px;font-weight:700;padding:3px 10px;
   border-radius:var(--r999);white-space:nowrap;flex-shrink:0;
 }
-.badge-ready{background:#e2f4db;color:#2d6e20}
+.badge-ready{background:#eeebf8;color:#6a5acd}
 .badge-soon{background:#f0f0f0;color:#999}
 .unit-arrow{color:var(--text3);font-size:16px;flex-shrink:0}
 
@@ -162,7 +164,7 @@ body::before{
 .content-icon{font-size:28px;margin-bottom:8px}
 .content-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
 .content-desc{font-size:11px;color:var(--text2);line-height:1.5}
-.content-card.highlight{border-color:#87c27a;background:linear-gradient(135deg,#f0fae8,#fff)}
+.content-card.highlight{border-color:#b8a9e8;background:linear-gradient(135deg,#f0eeff,#fff)}
 
 /* 戻るボタン */
 .back-btn{
@@ -175,7 +177,7 @@ body::before{
   margin-bottom:1.25rem;
   font-family:'Zen Maru Gothic',sans-serif;
 }
-.back-btn:hover{background:#f0f7ee;border-color:#aed4a8}
+.back-btn:hover{background:#eeebf8;border-color:#c5bce8}
 
 /* フッター */
 .footer{
@@ -274,7 +276,7 @@ const GRADES = [
     id:'g1', label:'中学1年生', icon:'🌱', color:'g1',
     units:[
       {
-        id:'seifusu', label:'正の数・負の数', icon:'±', iconBg:'#d4edc9',
+        id:'seifusu', label:'正の数・負の数', icon:'±', iconBg:'#d8f3e0',
         desc:'たし算・ひき算・かけ算・わり算の符号ルールをマスター',
         ready:true,
         contents:[
@@ -283,7 +285,7 @@ const GRADES = [
         ]
       },
       {
-        id:'mojinosiki', label:'文字の式', icon:'🔤', iconBg:'#d4edc9',
+        id:'mojinosiki', label:'文字の式', icon:'🔤', iconBg:'#d8f3e0',
         desc:'文字を使った式の計算・代入・文章題',
         ready:false,
         contents:[
@@ -293,7 +295,7 @@ const GRADES = [
         ]
       },
       {
-        id:'houteisiki1', label:'方程式', icon:'⚖️', iconBg:'#d4edc9',
+        id:'houteisiki1', label:'方程式', icon:'⚖️', iconBg:'#d8f3e0',
         desc:'一次方程式の解き方・活用',
         ready:false,
         contents:[
@@ -303,7 +305,7 @@ const GRADES = [
         ]
       },
       {
-        id:'henka', label:'変化と対応', icon:'📈', iconBg:'#d4edc9',
+        id:'henka', label:'変化と対応', icon:'📈', iconBg:'#d8f3e0',
         desc:'比例・反比例のグラフと式',
         ready:false,
         contents:[
@@ -312,7 +314,7 @@ const GRADES = [
         ]
       },
       {
-        id:'heimen', label:'平面図形', icon:'△', iconBg:'#d4edc9',
+        id:'heimen', label:'平面図形', icon:'△', iconBg:'#d8f3e0',
         desc:'作図・面積・図形の移動',
         ready:false,
         contents:[
@@ -322,7 +324,7 @@ const GRADES = [
         ]
       },
       {
-        id:'kukkan', label:'空間図形', icon:'🎲', iconBg:'#d4edc9',
+        id:'kukkan', label:'空間図形', icon:'🎲', iconBg:'#d8f3e0',
         desc:'立体の表面積・体積',
         ready:false,
         contents:[
@@ -332,7 +334,7 @@ const GRADES = [
         ]
       },
       {
-        id:'data1', label:'データの活用', icon:'📊', iconBg:'#d4edc9',
+        id:'data1', label:'データの活用', icon:'📊', iconBg:'#d8f3e0',
         desc:'度数分布・平均・中央値',
         ready:false,
         contents:[
@@ -340,7 +342,7 @@ const GRADES = [
         ]
       },
       {
-        id:'sogo1', label:'総合問題', icon:'🏆', iconBg:'#b8e0b0',
+        id:'sogo1', label:'総合問題', icon:'🏆', iconBg:'#c5dff7',
         desc:'1年生の全範囲から出題',
         ready:false,
         contents:[
@@ -435,7 +437,7 @@ const GRADES = [
     id:'g3', label:'中学3年生', icon:'🌳', color:'g3',
     units:[
       {
-        id:'tenkai', label:'展開と因数分解', icon:'🔍', iconBg:'#c9d8ed',
+        id:'tenkai', label:'展開と因数分解', icon:'🔍', iconBg:'#d6e8fb',
         desc:'展開の公式・因数分解',
         ready:true,
         contents:[
@@ -446,7 +448,7 @@ const GRADES = [
         ]
       },
       {
-        id:'heihoukon', label:'平方根', icon:'√', iconBg:'#c9d8ed',
+        id:'heihoukon', label:'平方根', icon:'√', iconBg:'#d6e8fb',
         desc:'平方根の計算・有理化',
         ready:false,
         contents:[
@@ -456,7 +458,7 @@ const GRADES = [
         ]
       },
       {
-        id:'niji', label:'二次方程式', icon:'⚖️', iconBg:'#c9d8ed',
+        id:'niji', label:'二次方程式', icon:'⚖️', iconBg:'#d6e8fb',
         desc:'因数分解・解の公式で解く',
         ready:false,
         contents:[
@@ -465,7 +467,7 @@ const GRADES = [
         ]
       },
       {
-        id:'kansu2', label:'関数 y=ax²', icon:'📈', iconBg:'#c9d8ed',
+        id:'kansu2', label:'関数 y=ax²', icon:'📈', iconBg:'#d6e8fb',
         desc:'放物線のグラフと変化の割合',
         ready:false,
         contents:[
@@ -476,7 +478,7 @@ const GRADES = [
         ]
       },
       {
-        id:'soji', label:'図形と相似', icon:'📐', iconBg:'#c9d8ed',
+        id:'soji', label:'図形と相似', icon:'📐', iconBg:'#d6e8fb',
         desc:'相似な図形・線分の比・面積比',
         ready:false,
         contents:[
@@ -487,7 +489,7 @@ const GRADES = [
         ]
       },
       {
-        id:'en', label:'円の性質', icon:'⭕', iconBg:'#c9d8ed',
+        id:'en', label:'円の性質', icon:'⭕', iconBg:'#d6e8fb',
         desc:'円周角の定理・証明',
         ready:false,
         contents:[
@@ -496,7 +498,7 @@ const GRADES = [
         ]
       },
       {
-        id:'sanhei', label:'三平方の定理', icon:'📐', iconBg:'#c9d8ed',
+        id:'sanhei', label:'三平方の定理', icon:'📐', iconBg:'#d6e8fb',
         desc:'三平方の定理・平面・空間への応用',
         ready:false,
         contents:[
@@ -506,7 +508,7 @@ const GRADES = [
         ]
       },
       {
-        id:'sogo3', label:'総合問題', icon:'🏆', iconBg:'#b0c8e0',
+        id:'sogo3', label:'総合問題', icon:'🏆', iconBg:'#b8d4f5',
         desc:'3年生の全範囲から出題',
         ready:false,
         contents:[
