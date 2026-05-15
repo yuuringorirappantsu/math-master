@@ -189,18 +189,27 @@ body::before{
 /* サイクル */
 .cycle-wrap{
   display:flex;align-items:center;justify-content:center;
-  gap:4px;margin-top:1.25rem;flex-wrap:wrap;
+  gap:2px;margin-top:1.25rem;flex-wrap:nowrap;
 }
 .cycle-step{
-  background:var(--white);border:1.5px solid var(--border);
-  border-radius:var(--r16);padding:10px 14px;
-  text-align:center;min-width:72px;
-  box-shadow:0 2px 8px var(--shadow);
+  background:rgba(255,255,255,0.5);
+  border-radius:8px;padding:8px 12px;
+  text-align:center;min-width:68px;
+  border:none;
+  flex-shrink:0;
 }
-.cycle-icon{font-size:18px;margin-bottom:4px}
-.cycle-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px}
-.cycle-desc{font-size:10px;color:var(--text2);line-height:1.4}
-.cycle-arrow{font-size:18px;color:var(--border);font-weight:700;padding:0 2px}
+.cycle-icon{font-size:16px;margin-bottom:3px;opacity:0.8}
+.cycle-name{font-size:11px;font-weight:700;color:var(--text);margin-bottom:1px}
+.cycle-desc{font-size:9px;color:var(--text2);line-height:1.4;opacity:0.85}
+.cycle-arrow{font-size:14px;color:var(--text3);padding:0 1px;opacity:0.6;flex-shrink:0}
+
+@media(max-width:480px){
+  .cycle-step{padding:6px 6px;min-width:52px;}
+  .cycle-icon{font-size:13px;margin-bottom:2px;}
+  .cycle-name{font-size:9px;}
+  .cycle-desc{font-size:8px;}
+  .cycle-arrow{font-size:11px;}
+}
 
 /* 入試カード */
 .nyushi-card{
