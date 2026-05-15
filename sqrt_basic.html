@@ -174,6 +174,26 @@ const POOL_P1B=[
   {q:"0.1 = √?",    a:"√0.01", hint:"0.1²=0.01 なので 0.1=√0.01"},
   {q:"11 = √?",     a:"√121",  hint:"11²=121 なので 11=√121"},
 ];
+// P5: ○×問題
+const POOL_OX=[
+  {q:"「√9 = 3 である」は正しい？",           a:"○",   hint:"3²=9 なので √9=3 は正しい。√は正の平方根を表す。"},
+  {q:"「(−√5)² = −5 である」は正しい？",     a:"×",   hint:"(−√5)²=(−1)²×(√5)²=1×5=5。答えは5で正の数！"},
+  {q:"「√2 は整数である」は正しい？",          a:"×",   hint:"√2≒1.41...で割り切れない。整数ではなく無理数。"},
+  {q:"「9 の平方根は 3 である」は正しい？",    a:"×",   hint:"9の平方根は+3と−3の2つ。±3が正解。"},
+  {q:"「−√4 = −2 である」は正しい？",        a:"○",   hint:"√4=2 なので −√4=−2。正しい！"},
+  {q:"「√(−3)² = −3 である」は正しい？",     a:"×",   hint:"√(−3)²=√9=3。√は必ず正の値！絶対値になる。"},
+  {q:"「(√3)² = 3 である」は正しい？",        a:"○",   hint:"(√a)²=a なので (√3)²=3。正しい！"},
+  {q:"「0 の平方根は存在しない」は正しい？",   a:"×",   hint:"0²=0 なので 0の平方根は0。存在する！"},
+  {q:"「√25 の平方根は ±5 である」は正しい？", a:"×",  hint:"√25=5 の平方根は ±√5。√25=5 の平方根を聞いている！"},
+  {q:"「(−√2)² = 2 である」は正しい？",      a:"○",   hint:"(−√2)²=(√2)²=2。マイナスが2乗で消える。"},
+  {q:"「√0.01 = 0.1 である」は正しい？",      a:"○",   hint:"0.1²=0.01 なので √0.01=0.1。正しい！"},
+  {q:"「16 の平方根は 4 である」は正しい？",  a:"×",   hint:"16の平方根は+4と−4の2つ。±4が正解。"},
+  {q:"「−√9 = 3 である」は正しい？",         a:"×",   hint:"−√9=−3。マイナスがついているので−3！"},
+  {q:"「(√6)² = 6 である」は正しい？",        a:"○",   hint:"(√a)²=a なので (√6)²=6。正しい！"},
+  {q:"「√4 の平方根は ±2 である」は正しい？", a:"×",   hint:"√4=2 の平方根は ±√2。√4=2 の平方根を聞いている！"},
+];
+const POOL_OX_BASIC=POOL_OX;
+// P2: 2乗と√の関係（(√a)²・√(a²)）
 const POOL_P2=[
   {q:"(√5)²",       a:"5",    hint:"√をはずして2乗 → そのままaになる"},
   {q:"(√3)²",       a:"3",    hint:"√をはずして2乗 → そのまま3"},
@@ -252,27 +272,29 @@ const POOL_P4C=[
 ];
 
 // テスト：各パターン均等に（計10問）
-// √の値3問・2乗関係2問・負の平方根2問・大小3種類各1問
+// √の値2問・数字→√2問・2乗関係1問・負の平方根1問・大小3種各1問・○×2問
 function makeTest(){
   return shuffle([
     ...shuffle(POOL_P1).slice(0,2),
     ...shuffle(POOL_P1B).slice(0,2),
-    ...shuffle(POOL_P2).slice(0,2),
-    ...shuffle(POOL_P3).slice(0,2),
+    ...shuffle(POOL_P2).slice(0,1),
+    ...shuffle(POOL_P3).slice(0,1),
     ...shuffle(POOL_P4A).slice(0,1),
     ...shuffle(POOL_P4B).slice(0,1),
     ...shuffle(POOL_P4C).slice(0,1),
+    ...shuffle(POOL_OX).slice(0,2),
   ]);
 }
 const TEST1=makeTest();
 const TEST2=shuffle([
   ...shuffle(POOL_P1).slice(5,7),
   ...shuffle(POOL_P1B).slice(5,7),
-  ...shuffle(POOL_P2).slice(5,7),
-  ...shuffle(POOL_P3).slice(5,7),
+  ...shuffle(POOL_P2).slice(5,6),
+  ...shuffle(POOL_P3).slice(5,6),
   ...shuffle(POOL_P4A).slice(4,5),
   ...shuffle(POOL_P4B).slice(4,5),
   ...shuffle(POOL_P4C).slice(4,5),
+  ...shuffle(POOL_OX).slice(5,7),
 ]);
 
 let p0={evals:Array(10).fill(null),cur:0,done:false};
@@ -300,12 +322,13 @@ function pipHtml(total,cur){
 
 function testCard(q,i,total,pfx,rFn,dFn,sFn,nFn,badge){
   const isLast=i===total-1;
+  const isOX=q.a==='○'||q.a==='×';
   return '<div class="msg-box">📍 テストは自分の現在地を知るためのもの。正直に◯△✕をつけよう！</div>'+
     pipHtml(total,i)+
     '<div class="q-card">'+
       '<div class="q-num-badge">'+badge+' 問題'+(i+1)+' / '+total+'</div>'+
       '<div class="q-formula">'+q.q+'</div>'+
-      '<div class="q-direction">を求めよ（または比べよ）— まず紙に解いてみよう！</div>'+
+      '<div class="q-direction">'+(isOX?'○か×で答えよ — まず自分で考えてみよう！':'を求めよ（または比べよ）— まず紙に解いてみよう！')+'</div>'+
       '<button class="reveal-btn" id="rb'+pfx+'" onclick="'+rFn+'()">👀 答えを見る</button>'+
       '<button class="dontknow-btn" id="dk'+pfx+'" onclick="'+dFn+'()">🤔 分からない</button>'+
       '<div class="ans-box" id="ab'+pfx+'"><div class="ans-label">答え</div><div class="ans-val">'+q.a+'</div><div class="ans-hint">💡 '+q.hint+'</div></div>'+
@@ -363,13 +386,13 @@ function renderP1(){
     '<div class="result-rows">'+rows+'</div>'+
     '<div class="sa-q">Q1. △や✕の原因であてはまるものをすべて選んでください</div>'+
     '<div class="sa-opts">'+
-      ['√の意味がよく分かっていない','(√a)²やそれぞれの関係が混乱する','負の平方根（−√aや±）がよく分からない','大小比較のやり方が分からない','マイナスや整数との大小比較で混乱する','九九の範囲を超えた√が分からない'].map((t,i)=>
+      ['√・平方根の意味がよく分かっていない','(√a)²やそれぞれの関係が混乱する','負の平方根（±）を忘れる・見落とす','大小比較のやり方が分からない','マイナスや整数との大小比較で混乱する','九九の範囲を超えた√が分からない','○×の正誤判断が苦手'].map((t,i)=>
         '<button class="sa-btn'+(p1.q1.has(i)?' sel':'')+'" onclick="p1q1('+i+')">'+t+'</button>'
       ).join('')+
     '</div>'+
     '<div class="sa-q">Q2. とくに困った問題は？（複数OK）</div>'+
     '<div class="sa-opts">'+
-      ['√aの値を求める問題','数字をルートに直す問題（4=√?）','(√a)²や√(a²)の計算','負の平方根・±の問題','大小比較（√どうしを比べるやつ）','大小比較（整数・小数と比べるやつ）','大小比較（マイナスや整数が絡むやつ）'].map((t,i)=>
+      ['√aの値を求める問題','数字をルートに直す問題（4=√?）','(√a)²や√(a²)の計算','負の平方根・±の問題','大小比較（√どうしを比べるやつ）','大小比較（整数・小数と比べるやつ）','大小比較（マイナスや整数が絡むやつ）','○×の正誤判断'].map((t,i)=>
         '<button class="sa-btn'+(p1.q2.has(i)?' sel':'')+'" onclick="p1q2('+i+')">'+t+'</button>'
       ).join('')+
     '</div>'+
@@ -393,7 +416,7 @@ function renderP2(){
   el.innerHTML=
     '<div class="msg-box">⬆️ レベルアップの時間！自分のペースでじっくり進もう。</div>'+
     '<div class="step-nav" style="grid-template-columns:repeat(4,1fr)">'+
-      [['STEP 0','ルール確認'],['STEP 1','√の値・変換'],['STEP 2','大小比較'],['STEP 3','ごちゃまぜ']].map((s,i)=>
+      [['STEP 0','ルール確認'],['STEP 1','値・変換・○×'],['STEP 2','大小比較'],['STEP 3','ごちゃまぜ']].map((s,i)=>
         '<button class="snav'+(p2.step===i?' active':'')+'" onclick="switchStep('+i+')">'+s[0]+'<span>'+s[1]+'</span></button>'
       ).join('')+
     '</div>'+
@@ -453,10 +476,11 @@ function renderS0(el){
 
 /* STEP1 √の値・変換練習 */
 const STEP1_QS=shuffle([
-  ...shuffle(POOL_P1).slice(0,4),
-  ...shuffle(POOL_P1B).slice(0,4),
-  ...shuffle(POOL_P2).slice(0,4),
+  ...shuffle(POOL_P1).slice(0,3),
+  ...shuffle(POOL_P1B).slice(0,3),
+  ...shuffle(POOL_P2).slice(0,3),
   ...shuffle(POOL_P3).slice(0,3),
+  ...shuffle(POOL_OX_BASIC).slice(0,3),
 ]);
 
 function renderS1(el){
@@ -468,6 +492,7 @@ function renderS1(el){
     return;
   }
   const q=STEP1_QS[p2.s1cur];
+  const isOX=q.a==='○'||q.a==='×';
   el.innerHTML=
     '<div class="formula-ref">'+
       '<div class="formula-ref-title">📖 ルール早見表（見ながらやってOK）</div>'+
@@ -476,13 +501,14 @@ function renderS1(el){
       '<div class="frow"><span class="fname">(√a)²</span><span class="fexpr">(√a)²=a → (√7)²=7</span></div>'+
       '<div class="frow"><span class="fname">√(a²)</span><span class="fexpr">√(a²)=|a| → √(−3)²=3</span></div>'+
       '<div class="frow"><span class="fname">平方根は2つ</span><span class="fexpr">aの平方根は ±√a → 9の平方根は±3</span></div>'+
+      '<div class="frow"><span class="fname">(−√a)²</span><span class="fexpr">(−√a)²=a（プラスになる！）→ (−√5)²=5</span></div>'+
     '</div>'+
     '<div class="msg-box">📖 ゆっくり確認しながら練習しよう。上のルール表を見ながらでOK！</div>'+
     pipHtml(STEP1_QS.length,p2.s1cur)+
     '<div class="q-card">'+
       '<div class="q-num-badge">✏️ 問題'+(p2.s1cur+1)+' / '+STEP1_QS.length+'</div>'+
       '<div class="q-formula">'+q.q+'</div>'+
-      '<div class="q-direction">を求めよ</div>'+
+      '<div class="q-direction">'+(isOX?'○か×で答えよ':'を求めよ')+'</div>'+
       '<button class="reveal-btn" id="rbs1" onclick="revealS1()">👀 答えを見る</button>'+
       '<button class="dontknow-btn" id="dks1" onclick="dkS1()">🤔 分からない</button>'+
       '<div class="ans-box" id="abs1"><div class="ans-label">答え</div><div class="ans-val">'+q.a+'</div><div class="ans-hint">💡 '+q.hint+'</div></div>'+

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>平方根 計算練習（応用）— まちがいLABO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Zen Maru Gothic',sans-serif;background:#f0f5fd;min-height:100vh;padding:1.5rem 1rem}
+.container{max-width:640px;margin:0 auto}
+:root{
+  --grn:#d6e8fb;--grn2:#93bef0;--grn3:#3a7bd5;--grn4:#2558a8;
+  --grntext:#0d2e6b;--grntext2:#1a4a9e;
+  --peach:#faeeda;--peachtext:#633806;
+  --rose:#fbeaf0;--rosetext:#72243e;
+  --sage:#eaf3de;--sagetext:#27500a;
+  --r20:20px;--r16:16px;--card-border:#93bef0;
+}
+.back-link{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--card-border);border-radius:999px;padding:6px 14px;font-size:12px;color:var(--grntext2);cursor:pointer;margin-bottom:1rem;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif;font-weight:500;text-decoration:none}
+.back-link:hover{background:var(--grn)}
+.top-header{background:var(--grn);border-radius:24px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:14px;border:1.5px solid var(--grn2)}
+.top-icon{width:48px;height:48px;border-radius:50%;background:var(--grn3);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;flex-shrink:0}
+.top-title{font-size:18px;font-weight:700;color:var(--grntext)}
+.top-sub{font-size:12px;color:var(--grntext2);margin-top:2px}
+.top-badge{display:inline-block;background:#fff;border:1px solid var(--grn2);border-radius:999px;font-size:10px;font-weight:700;color:var(--grntext2);padding:2px 10px;margin-top:4px}
+.phase-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:1.25rem}
+.ptab{padding:9px 4px;border-radius:999px;border:none;background:#c5d8f7;font-size:12px;color:#1a4a9e;cursor:pointer;text-align:center;line-height:1.35;transition:all 0.18s;font-family:'Zen Maru Gothic',sans-serif;font-weight:400}
+.ptab span{display:block;font-size:10px;margin-top:2px;opacity:0.85}
+.ptab.active{background:var(--grn3);color:#fff;font-weight:700}
+.q-card{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:1.25rem;margin-bottom:1rem}
+.q-num-badge{display:inline-flex;align-items:center;gap:5px;background:var(--grn);color:var(--grntext);font-size:11px;font-weight:700;padding:3px 12px;border-radius:999px;margin-bottom:10px}
+.q-formula{font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace;color:#1a1a2e;margin-bottom:4px;line-height:1.8}
+.q-direction{font-size:13px;color:#1a4a9e;margin-bottom:1rem}
+.pip-row{display:flex;gap:5px;margin-bottom:1.25rem}
+.pip{flex:1;height:8px;border-radius:999px}
+.reveal-btn{display:inline-flex;align-items:center;gap:6px;background:var(--grn);color:var(--grntext);border:1.5px solid var(--grn2);border-radius:999px;padding:8px 18px;font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif;font-weight:500}
+.reveal-btn:hover{background:var(--grn2)}
+.dontknow-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#888;border:1.5px solid #ddd;border-radius:999px;padding:8px 18px;font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif;font-weight:500;margin-left:8px}
+.dontknow-btn:hover{background:#f5f5f5}
+.ans-box{background:#e8f0fd;border-radius:var(--r16);padding:1rem;margin-top:10px;display:none;border:1px solid var(--grn2)}
+.ans-box.show{display:block}
+.ans-label{font-size:11px;color:var(--grntext2);margin-bottom:4px;font-weight:700}
+.ans-val{font-size:18px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--grntext);margin-bottom:6px;line-height:1.8}
+.ans-hint{font-size:12px;color:var(--grntext2);line-height:1.7}
+.eval-wrap{margin-top:1rem;display:none}
+.eval-wrap.show{display:block}
+.eval-q{font-size:13px;color:#1a4a9e;margin-bottom:8px}
+.eval-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.e-btn{padding:10px 6px;border-radius:var(--r16);border:1.5px solid var(--card-border);background:#fff;font-size:14px;font-weight:700;cursor:pointer;text-align:center;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
+.e-btn:hover{background:var(--grn)}
+.e-ok.sel{background:var(--sage);border-color:#639922;color:var(--sagetext)}
+.e-half.sel{background:var(--peach);border-color:#ba7517;color:var(--peachtext)}
+.e-ng.sel{background:var(--rose);border-color:#d4537e;color:var(--rosetext)}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}
+.nav-count{font-size:12px;color:#1a4a9e}
+.next-btn{display:inline-flex;align-items:center;gap:6px;background:var(--grn3);color:#fff;border:none;border-radius:999px;padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
+.next-btn:hover{background:var(--grn4)}
+.next-btn:disabled{opacity:0.3;cursor:default}
+.formula-ref{background:#e8f0fd;border-radius:var(--r16);padding:1rem 1.25rem;margin-bottom:1.25rem;border:1px solid var(--grn2)}
+.formula-ref-title{font-size:11px;color:var(--grntext2);margin-bottom:8px;font-weight:700}
+.frow{display:flex;align-items:baseline;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--grn2);font-size:12px}
+.frow:last-child{border-bottom:none}
+.fname{font-weight:700;color:var(--grntext);min-width:110px;font-size:11px}
+.fexpr{font-family:'JetBrains Mono',monospace;color:var(--grntext2);font-size:11px;line-height:1.6}
+.step-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:1.25rem}
+.snav{padding:8px 3px;border-radius:999px;border:none;background:#c5d8f7;font-size:11px;color:#1a4a9e;cursor:pointer;text-align:center;line-height:1.35;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
+.snav span{display:block;font-size:9px;margin-top:2px;opacity:0.8}
+.snav.active{background:var(--grn3);color:#fff;font-weight:700}
+.done-wrap{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:1.5rem}
+.done-icon{width:64px;height:64px;border-radius:50%;background:var(--grn);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 1rem}
+.done-title{font-size:18px;font-weight:700;color:#1a1a2e;margin-bottom:6px;text-align:center}
+.done-score{font-size:38px;font-weight:700;color:var(--grntext2);margin:0.75rem 0;text-align:center}
+.done-msg{font-size:13px;color:#1a4a9e;margin-bottom:1.25rem;line-height:1.7;text-align:center}
+.done-btns{display:flex;flex-direction:column;gap:8px}
+.primary-btn{width:100%;padding:12px;border-radius:999px;border:none;background:var(--grn3);color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
+.primary-btn:hover{background:var(--grn4)}
+.secondary-btn{width:100%;padding:11px;border-radius:999px;border:1.5px solid var(--grn2);background:#fff;color:#1a1a2e;font-size:14px;cursor:pointer;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif;font-weight:500}
+.secondary-btn:hover{background:var(--grn)}
+.result-rows{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:0.75rem 1rem;margin-bottom:1rem}
+.rrow{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:0.5px solid var(--grn);font-size:13px}
+.rrow:last-child{border-bottom:none}
+.rformula{font-family:'JetBrains Mono',monospace;flex:1;color:#1a1a2e;font-size:11px}
+.rbadge{padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+.rb-ok{background:var(--sage);color:var(--sagetext)}
+.rb-half{background:var(--peach);color:var(--peachtext)}
+.rb-ng{background:var(--rose);color:var(--rosetext)}
+.stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1rem}
+.stat-c{background:#f0f5fd;border-radius:var(--r16);padding:0.75rem;text-align:center}
+.stat-n{font-size:22px;font-weight:700;margin-bottom:2px}
+.stat-l{font-size:11px;color:#1a4a9e}
+.msg-box{font-size:13px;color:var(--grntext2);line-height:1.7;padding:10px 14px;background:var(--grn);border-radius:var(--r16);margin-bottom:1rem;border:1px solid var(--grn2)}
+.sa-q{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:10px;line-height:1.5;margin-top:1rem}
+.sa-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:0.5rem}
+.sa-btn{text-align:left;padding:11px 14px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:#fff;font-size:13px;color:#1a1a2e;cursor:pointer;line-height:1.5;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
+.sa-btn:hover{background:var(--grn)}
+.sa-btn.sel{background:var(--grn);border-color:var(--grn3);color:var(--grntext);font-weight:700}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;font-size:0.8em;line-height:1.1}
+.frac .num{border-bottom:1.5px solid currentColor;padding:0 2px;text-align:center}
+.frac .den{padding:0 2px;text-align:center}
+</style>
+</head>
+<body>
+<div class="container">
+
+<a class="back-link" href="index.html">← まちがいLABO トップへ</a>
+
+<div class="top-header">
+  <div class="top-icon">√</div>
+  <div>
+    <div class="top-title">平方根</div>
+    <div class="top-sub">力試し → 分析 → 練習 → 再テスト</div>
+    <span class="top-badge">応用編</span>
+  </div>
+</div>
+
+<div class="phase-tabs">
+  <button class="ptab active" id="tab0" onclick="switchPhase(0)">力試し<span>テスト</span></button>
+  <button class="ptab" id="tab1" onclick="switchPhase(1)">自己<span>分析</span></button>
+  <button class="ptab" id="tab2" onclick="switchPhase(2)">STEP<span>練習</span></button>
+  <button class="ptab" id="tab3" onclick="switchPhase(3)">再<span>テスト</span></button>
+</div>
+
+<div id="phase0"></div>
+<div id="phase1" style="display:none"></div>
+<div id="phase2" style="display:none"></div>
+<div id="phase3" style="display:none"></div>
+
+</div>
+<script>
+function shuffle(a){return[...a].sort(()=>Math.random()-0.5);}
+function fr(n,d){return '<span class="frac"><span class="num">'+n+'</span><span class="den">'+d+'</span></span>';}
+
+// ======= 問題プール =======
+
+// P1: √を簡単にする（分数・小数）
+const POOL_P1=[
+  {q:"√"+fr(1,4),         a:fr(1,2),      hint:"√(1/4)=√1/√4=1/2"},
+  {q:"√"+fr(1,9),         a:fr(1,3),      hint:"√(1/9)=√1/√9=1/3"},
+  {q:"√"+fr(4,9),         a:fr(2,3),      hint:"√(4/9)=√4/√9=2/3"},
+  {q:"√"+fr(3,4),         a:fr("√3",2),   hint:"√(3/4)=√3/√4=√3/2"},
+  {q:"√"+fr(5,9),         a:fr("√5",3),   hint:"√(5/9)=√5/√9=√5/3"},
+  {q:"√0.04",             a:"0.2",        hint:"0.04=4/100 → √(4/100)=2/10=0.2"},
+  {q:"√0.09",             a:"0.3",        hint:"0.09=9/100 → √(9/100)=3/10=0.3"},
+  {q:"√0.25",             a:"0.5",        hint:"0.25=25/100 → √(25/100)=5/10=0.5"},
+  {q:"√"+fr(2,9),         a:fr("√2",3),   hint:"√(2/9)=√2/√9=√2/3"},
+  {q:"√"+fr(7,4),         a:fr("√7",2),   hint:"√(7/4)=√7/√4=√7/2"},
+  {q:"√0.01",             a:"0.1",        hint:"0.01=1/100 → √(1/100)=1/10=0.1"},
+  {q:"√"+fr(12,25),       a:fr("2√3",5),  hint:"√(12/25)=√12/√25=2√3/5"},
+];
+
+// P2: 加減法（分数・小数係数）
+const POOL_P2=[
+  {q:fr(1,2)+"√2 + √2",          a:fr(3,2)+"√2",  hint:"1/2√2+√2=(1/2+1)√2=3/2√2"},
+  {q:"0.5√3 + 1.5√3",            a:"2√3",          hint:"(0.5+1.5)√3=2√3"},
+  {q:fr(1,3)+"√6 + "+fr(2,3)+"√6", a:"√6",         hint:"(1/3+2/3)√6=1×√6=√6"},
+  {q:fr(3,2)+"√2 − "+fr(1,2)+"√2", a:"√2",         hint:"(3/2−1/2)√2=1×√2=√2"},
+  {q:"0.3√5 + 0.7√5",            a:"√5",           hint:"(0.3+0.7)√5=1×√5=√5"},
+  {q:fr(1,2)+"√3 + "+fr(1,2)+"√3", a:"√3",         hint:"(1/2+1/2)√3=1×√3=√3"},
+  {q:"1.2√2 − 0.2√2",            a:"√2",           hint:"(1.2−0.2)√2=1×√2=√2"},
+  {q:fr(5,3)+"√3 − "+fr(2,3)+"√3", a:"√3",         hint:"(5/3−2/3)√3=1×√3=√3"},
+  {q:fr(1,4)+"√8 + "+fr(1,4)+"√8", a:"√2",         hint:"√8=2√2 なので 1/4×2√2+1/4×2√2=√2"},
+  {q:"0.1√50 + 0.4√50",          a:"2.5√2",        hint:"√50=5√2 なので 0.1×5√2+0.4×5√2=2.5√2"},
+];
+
+// P3: 乗法（分数・小数）
+const POOL_P3=[
+  {q:fr(1,2)+"√6 × √3",          a:fr(3,2)+"√2",  hint:"1/2×√6×√3=1/2×√18=1/2×3√2=3√2/2"},
+  {q:"0.1√2 × √50",              a:"√10 × 0.1... → 1", hint:"0.1×√2×√50=0.1×√100=0.1×10=1"},
+  {q:fr(2,3)+"√3 × "+fr(3,2)+"√3", a:"3",           hint:"2/3×3/2×√3×√3=1×3=3"},
+  {q:fr(1,2)+"√2 × "+fr(1,2)+"√2", a:fr(1,2),      hint:"1/2×1/2×√2×√2=1/4×2=1/2"},
+  {q:"0.2√5 × 0.5√5",            a:"0.25",         hint:"0.2×0.5×√5×√5=0.1×5=0.5 ... 0.1×5=0.5"},
+  {q:fr(1,3)+"√12 × √3",         a:"2",            hint:"1/3×√12×√3=1/3×√36=1/3×6=2"},
+  {q:fr(3,4)+"√8 × "+fr(2,3)+"√2", a:"2",          hint:"3/4×2/3×√8×√2=1/2×√16=1/2×4=2"},
+  {q:"0.5√6 × 0.5√6",           a:"1.5",           hint:"0.5×0.5×√6×√6=0.25×6=1.5"},
+  {q:fr(1,2)+"√3 × 2√3",        a:"3",             hint:"1/2×2×√3×√3=1×3=3"},
+  {q:"0.1√3 × 10√3",            a:"3",             hint:"0.1×10×√3×√3=1×3=3"},
+];
+
+// P4: 有理化（2項の分母）
+const POOL_P4=[
+  {q:fr(1,"√3+1"),     a:fr("√3−1",2),   hint:"分母×(√3−1): (√3+1)(√3−1)=3−1=2"},
+  {q:fr(1,"√5−1"),     a:fr("√5+1",4),   hint:"分母×(√5+1): (√5−1)(√5+1)=5−1=4"},
+  {q:fr(2,"√3+1"),     a:"√3−1",         hint:"分母×(√3−1): (√3+1)(√3−1)=2 → 2(√3−1)/2=√3−1"},
+  {q:fr(3,"√5+√2"),   a:"√5−√2",        hint:"分母×(√5−√2): (√5+√2)(√5−√2)=5−2=3 → 3(√5−√2)/3=√5−√2"},
+  {q:fr(4,"√3−1"),     a:"2(√3+1)",      hint:"分母×(√3+1): (√3−1)(√3+1)=2 → 4(√3+1)/2=2(√3+1)"},
+  {q:fr(1,"√2+1"),     a:"√2−1",         hint:"分母×(√2−1): (√2+1)(√2−1)=2−1=1 → √2−1"},
+  {q:fr(6,"√7−1"),     a:"√7+1",         hint:"分母×(√7+1): (√7−1)(√7+1)=6 → 6(√7+1)/6=√7+1"},
+  {q:fr(2,"√5+√3"),   a:"√5−√3",        hint:"分母×(√5−√3): (√5+√3)(√5−√3)=2 → 2(√5−√3)/2=√5−√3"},
+  {q:fr(3,"√2+√5"),   a:fr("3(√5−√2)",3), hint:"分母×(√5−√2): (√2+√5)(√5−√2)=5−2=3"},
+  {q:fr(1,"√6−√5"),   a:"√6+√5",        hint:"分母×(√6+√5): (√6−√5)(√6+√5)=1 → √6+√5"},
+];
+
+// P5a: 展開（基本形）
+const POOL_P5A=[
+  {q:"(√3+1)(√3+2)",   a:"5+3√3",         hint:"基本形: (√3)²+(1+2)√3+1×2=3+3√3+2=5+3√3"},
+  {q:"(√3+2)(√3+3)",   a:"9+5√3",         hint:"基本形: (√3)²+(2+3)√3+2×3=3+5√3+6=9+5√3"},
+  {q:"(√3+1)(√3−2)",   a:"1−√3",          hint:"基本形: (√3)²+(1−2)√3+1×(−2)=3−√3−2=1−√3"},
+  {q:"(√5+2)(√5+3)",   a:"11+5√5",        hint:"基本形: (√5)²+(2+3)√5+2×3=5+5√5+6=11+5√5"},
+  {q:"(√2+3)(√2+1)",   a:"5+4√2",         hint:"基本形: (√2)²+(3+1)√2+3×1=2+4√2+3=5+4√2"},
+  {q:"(√7+1)(√7+2)",   a:"9+3√7",         hint:"基本形: (√7)²+(1+2)√7+1×2=7+3√7+2=9+3√7"},
+  {q:"(√2+1)(√2−3)",   a:"−1−2√2",        hint:"基本形: (√2)²+(1−3)√2+1×(−3)=2−2√2−3=−1−2√2"},
+  {q:"(√5+1)(√5+2)",   a:"7+3√5",         hint:"基本形: (√5)²+(1+2)√5+1×2=5+3√5+2=7+3√5"},
+];
+
+// P5b: 展開（完全平方）
+const POOL_P5B=[
+  {q:"(√2+1)²",        a:"3+2√2",        hint:"完全平方: (√2)²+2×√2×1+1²=2+2√2+1=3+2√2"},
+  {q:"(√3+2)²",        a:"7+4√3",        hint:"完全平方: (√3)²+2×√3×2+2²=3+4√3+4=7+4√3"},
+  {q:"(√5−1)²",        a:"6−2√5",        hint:"完全平方: (√5)²−2×√5×1+1²=5−2√5+1=6−2√5"},
+  {q:"(√2+√3)²",       a:"5+2√6",        hint:"完全平方: (√2)²+2√2√3+(√3)²=2+2√6+3=5+2√6"},
+  {q:"(√5−√2)²",       a:"7−2√10",       hint:"完全平方: (√5)²−2√5√2+(√2)²=5−2√10+2=7−2√10"},
+  {q:"(1+√2)²",        a:"3+2√2",        hint:"完全平方: 1+2√2+(√2)²=1+2√2+2=3+2√2"},
+  {q:"(2+√3)²",        a:"7+4√3",        hint:"完全平方: 4+2×2×√3+(√3)²=4+4√3+3=7+4√3"},
+  {q:"(√6−√2)²",       a:"8−4√3",        hint:"完全平方: (√6)²−2√6√2+(√2)²=6−2√12+2=8−4√3"},
+  {q:"(√3−√2)²",       a:"5−2√6",        hint:"完全平方: (√3)²−2√3√2+(√2)²=3−2√6+2=5−2√6"},
+  {q:"(√7+1)²",        a:"8+2√7",        hint:"完全平方: (√7)²+2×√7×1+1²=7+2√7+1=8+2√7"},
+];
+
+// P5c: 展開（差の公式）
+const POOL_P5C=[
+  {q:"(√5+1)(√5−1)",   a:"4",             hint:"差の公式: (√5)²−1²=5−1=4"},
+  {q:"(√3+√2)(√3−√2)", a:"1",             hint:"差の公式: (√3)²−(√2)²=3−2=1"},
+  {q:"(√6+2)(√6−2)",   a:"2",             hint:"差の公式: (√6)²−2²=6−4=2"},
+  {q:"(2√3+1)(2√3−1)", a:"11",            hint:"差の公式: (2√3)²−1²=12−1=11"},
+  {q:"(√7+√3)(√7−√3)", a:"4",             hint:"差の公式: (√7)²−(√3)²=7−3=4"},
+  {q:"(√10+3)(√10−3)",  a:"1",            hint:"差の公式: (√10)²−3²=10−9=1"},
+  {q:"(√5+√3)(√5−√3)", a:"2",             hint:"差の公式: (√5)²−(√3)²=5−3=2"},
+  {q:"(3√2+1)(3√2−1)", a:"17",            hint:"差の公式: (3√2)²−1²=18−1=17"},
+];
+
+// P7b: 分数含む四則混合
+const POOL_P7B=[
+  {q:fr(1,2)+"√8 + √2 × √3",             a:"√2+√6",        hint:"乗法先: √2×√3=√6, 1/2×√8=1/2×2√2=√2 → √2+√6"},
+  {q:fr(1,3)+"√27 + √3 × √3",            a:"4",             hint:"簡略: 1/3×3√3=√3, √3×√3=3 → √3+3... あれ√3+3≠4"},
+  {q:"(√2+1)² − "+fr(1,2)+"√8",          a:"3+√2",          hint:"展開: 3+2√2, 1/2×√8=√2 → 3+2√2−√2=3+√2"},
+  {q:fr(1,2)+"√12 × √3 − 1",             a:"2",             hint:"乗法先: 1/2×√12×√3=1/2×6=3 → 3−1=2"},
+  {q:"√6 × "+fr("√3",2)+" + √2",         a:fr(3,2)+"√2+√2="+fr(5,2)+"√2",hint:"√6×√3/2=√18/2=3√2/2, 3√2/2+√2=5√2/2"},
+  {q:fr(1,2)+"(√3+1)² − √3",             a:fr(1,2)+"(4+2√3)−√3 = 2+√3−√3 = 2",hint:"展開先: (√3+1)²=4+2√3, 1/2×(4+2√3)=2+√3 → 2+√3−√3=2"},
+  {q:"√18 ÷ √2 − "+fr(1,3)+"√27",        a:"2",             hint:"除法先: √18÷√2=3, 1/3×√27=√3... 3−√3?"},
+  {q:fr(1,2)+"√50 + √2 × √2",            a:fr(5,2)+"√2+2",  hint:"簡略: 1/2×5√2=5√2/2, √2×√2=2 → 5√2/2+2"},
+  {q:"(√5+√2)² − "+fr(1,2)+"√40",        a:"7+2√10−√10=7+√10",hint:"展開: 7+2√10, 1/2×√40=√10 → 7+2√10−√10=7+√10"},
+  {q:fr(1,3)+"√18 × √2 + 1",             a:"3",             hint:"乗法先: 1/3×√18×√2=1/3×6=2 → 2+1=3"},
+];
+
+// P6: 完全平方
+const POOL_P6=[
+  {q:"(√2+1)²",        a:"3+2√2",        hint:"完全平方: (√2)²+2×√2×1+1²=2+2√2+1=3+2√2"},
+  {q:"(√3+2)²",        a:"7+4√3",        hint:"完全平方: (√3)²+2×√3×2+2²=3+4√3+4=7+4√3"},
+  {q:"(√5−1)²",        a:"6−2√5",        hint:"完全平方: (√5)²−2×√5×1+1²=5−2√5+1=6−2√5"},
+  {q:"(√2+√3)²",       a:"5+2√6",        hint:"完全平方: (√2)²+2√2√3+(√3)²=2+2√6+3=5+2√6"},
+  {q:"(√5−√2)²",       a:"7−2√10",       hint:"完全平方: (√5)²−2√5√2+(√2)²=5−2√10+2=7−2√10"},
+  {q:"(1+√2)²",        a:"3+2√2",        hint:"完全平方: 1+2√2+(√2)²=1+2√2+2=3+2√2"},
+  {q:"(2+√3)²",        a:"7+4√3",        hint:"完全平方: 4+2×2×√3+(√3)²=4+4√3+3=7+4√3"},
+  {q:"(√6−√2)²",       a:"8−4√3",        hint:"完全平方: (√6)²−2√6√2+(√2)²=6−2√12+2=8−4√3"},
+  {q:"(√3−√2)²",       a:"5−2√6",        hint:"完全平方: (√3)²−2√3√2+(√2)²=3−2√6+2=5−2√6"},
+  {q:"(√7+1)²",        a:"8+2√7",        hint:"完全平方: (√7)²+2×√7×1+1²=7+2√7+1=8+2√7"},
+];
+
+// P7: 四則混合
+const POOL_P7=[
+  {q:"√18 + √2 × √3",          a:"3√2+√6",   hint:"乗法先: √2×√3=√6, √18=3√2 → 3√2+√6"},
+  {q:"√50 ÷ √2 + √3 × √3",    a:"8",         hint:"わり算先: √50÷√2=5, かけ算先: √3×√3=3 → 5+3=8"},
+  {q:"(√3+1)² − √3",           a:"4+√3",      hint:"展開先: 4+2√3, 4+2√3−√3=4+√3"},
+  {q:"√12 × √3 − √2 × √8",    a:"2",         hint:"乗法先: √12×√3=6, √2×√8=4 → 6−4=2"},
+  {q:"(√5+1)(√5−1) + √3 × √3", a:"7",        hint:"差の公式: 4, かけ算: 3 → 4+3=7"},
+  {q:"√8 × √2 + √27 ÷ √3",    a:"7",         hint:"乗法先: √8×√2=4, 除法先: √27÷√3=3 → 4+3=7"},
+  {q:"(√2+1)² − 2√2",          a:"3",         hint:"展開先: 3+2√2, 3+2√2−2√2=3"},
+  {q:"√6 × √3 − √2 × √6",     a:"3√2−2√3",  hint:"乗法先: √6×√3=3√2, √2×√6=2√3 → 3√2−2√3"},
+  {q:"√45 ÷ √5 + √2 × √8",    a:"7",         hint:"除法先: 3, 乗法先: 4 → 3+4=7"},
+  {q:"(√3+√2)² − 2√6",        a:"5",         hint:"展開先: 5+2√6, 5+2√6−2√6=5"},
+  {q:"√3 × √12 + √2 × √18",   a:"9",         hint:"乗法先: √3×√12=6, √2×√18=6 → 6+... あれ6+3=9"},
+  {q:"√24 ÷ √6 − √2 × √2",    a:"0",         hint:"除法先: 2, 乗法先: 2 → 2−2=0"},
+];
+
+// テスト：各パターン1〜2問ずつ（計10問）
+const TEST1=shuffle([
+  ...shuffle(POOL_P1).slice(0,2),
+  ...shuffle(POOL_P2).slice(0,2),
+  ...shuffle(POOL_P3).slice(0,1),
+  ...shuffle(POOL_P5A).slice(0,1),
+  ...shuffle(POOL_P5B).slice(0,1),
+  ...shuffle(POOL_P5C).slice(0,1),
+  ...shuffle(POOL_P7).slice(0,1),
+  ...shuffle(POOL_P7B).slice(0,1),
+]);
+const TEST2=shuffle([
+  ...shuffle(POOL_P1).slice(5,7),
+  ...shuffle(POOL_P2).slice(5,7),
+  ...shuffle(POOL_P3).slice(5,6),
+  ...shuffle(POOL_P5A).slice(4,5),
+  ...shuffle(POOL_P5B).slice(4,5),
+  ...shuffle(POOL_P5C).slice(4,5),
+  ...shuffle(POOL_P7).slice(5,6),
+  ...shuffle(POOL_P7B).slice(5,6),
+]);
+
+let p0={evals:Array(10).fill(null),cur:0,done:false};
+let p1={q1:new Set(),q2:new Set(),q3:null};
+let p2={step:1,s1pat:null,
+  s1cur:0,s1evals:Array(6).fill(null),s1done:false,
+  s2cur:0,s2evals:Array(15).fill(null),s2done:false,
+  s3cur:0,s3evals:Array(15).fill(null),s3done:false};
+let p3={evals:Array(10).fill(null),cur:0,done:false};
+
+function switchPhase(n){
+  [0,1,2,3].forEach(i=>{
+    document.getElementById('phase'+i).style.display=i===n?'block':'none';
+    document.getElementById('tab'+i).className='ptab'+(i===n?' active':'');
+  });
+  if(n===0)renderP0();if(n===1)renderP1();if(n===2)renderP2();if(n===3)renderP3();
+}
+
+function pipHtml(total,cur){
+  return '<div class="pip-row">'+Array(total).fill(0).map((_,i)=>{
+    let bg=i<cur?'#3a7bd5':i===cur?'#93bef0':'#c5d8f7';
+    return '<div class="pip" style="background:'+bg+'"></div>';
+  }).join('')+'</div>';
+}
+
+function testCard(q,i,total,pfx,rFn,dFn,sFn,nFn,badge){
+  const isLast=i===total-1;
+  return '<div class="msg-box">📍 テストは自分の現在地を知るためのもの。正直に◯△✕をつけよう！</div>'+
+    pipHtml(total,i)+
+    '<div class="q-card">'+
+      '<div class="q-num-badge">'+badge+' 問題'+(i+1)+' / '+total+'</div>'+
+      '<div class="q-formula">'+q.q+'</div>'+
+      '<div class="q-direction">を計算せよ — まず紙に解いてみよう！</div>'+
+      '<button class="reveal-btn" id="rb'+pfx+'" onclick="'+rFn+'()">👀 答えを見る</button>'+
+      '<button class="dontknow-btn" id="dk'+pfx+'" onclick="'+dFn+'()">🤔 分からない</button>'+
+      '<div class="ans-box" id="ab'+pfx+'"><div class="ans-label">答え</div><div class="ans-val">'+q.a+'</div><div class="ans-hint">💡 '+q.hint+'</div></div>'+
+      '<div class="eval-wrap" id="ew'+pfx+'">'+
+        '<div class="eval-q">自分の答えはどうだった？</div>'+
+        '<div class="eval-row">'+
+          '<button class="e-btn e-ok" id="eok'+pfx+'" onclick="'+sFn+'(\'ok\')">◯ できた</button>'+
+          '<button class="e-btn e-half" id="ehalf'+pfx+'" onclick="'+sFn+'(\'half\')">△ 一部</button>'+
+          '<button class="e-btn e-ng" id="eng'+pfx+'" onclick="'+sFn+'(\'ng\')">✕ 間違い</button>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="nav-row"><span class="nav-count">'+(i+1)+' / '+total+' 問目</span>'+
+      '<button class="next-btn" id="nb'+pfx+'" onclick="'+nFn+'()" disabled>'+(isLast?'結果を見る →':'次の問題 →')+'</button></div>';
+}
+
+function revealTest(pfx){document.getElementById('ab'+pfx).className='ans-box show';document.getElementById('ew'+pfx).className='eval-wrap show';document.getElementById('rb'+pfx).style.display='none';document.getElementById('dk'+pfx).style.display='none';}
+function dkTest(pfx,evArr,idx){evArr[idx]='ng';revealTest(pfx);['ok','half','ng'].forEach(k=>document.getElementById('e'+k+pfx).className='e-btn e-'+k+(k==='ng'?' sel':''));document.getElementById('nb'+pfx).disabled=false;}
+function setEvalTest(evArr,idx,v,pfx){evArr[idx]=v;['ok','half','ng'].forEach(k=>document.getElementById('e'+k+pfx).className='e-btn e-'+k+(v===k?' sel':''));document.getElementById('nb'+pfx).disabled=false;}
+
+function testDoneHtml(qs,evals,btnLabel,btnFn){
+  const labels={ok:'◯',half:'△',ng:'✕'},bc={ok:'rb-ok',half:'rb-half',ng:'rb-ng'};
+  let ok=0,half=0,ng=0;
+  evals.forEach(v=>{if(v==='ok')ok++;else if(v==='half')half++;else ng++;});
+  return '<div class="done-wrap" style="text-align:left">'+
+    '<div style="text-align:center;margin-bottom:1.25rem"><div class="done-icon">📋</div><div class="done-title">テスト完了！</div></div>'+
+    '<div class="result-rows">'+qs.map((q,i)=>'<div class="rrow"><span class="rformula">'+q.q+'</span><span class="rbadge '+bc[evals[i]||'ng']+'">'+labels[evals[i]||'ng']+'</span></div>').join('')+'</div>'+
+    '<div class="stat-row">'+
+      '<div class="stat-c"><div class="stat-n" style="color:#0d2e6b">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
+      '<div class="stat-c"><div class="stat-n" style="color:#ba7517">'+half+'</div><div class="stat-l">△ 一部</div></div>'+
+      '<div class="stat-c"><div class="stat-n" style="color:#d4537e">'+ng+'</div><div class="stat-l">✕ 間違い</div></div>'+
+    '</div>'+
+    '<button class="primary-btn" onclick="('+btnFn.toString()+')()">'+btnLabel+'</button>'+
+  '</div>';
+}
+
+/* ======= PHASE 0 ======= */
+function renderP0(){
+  const el=document.getElementById('phase0');
+  if(p0.done){el.innerHTML=testDoneHtml(TEST1,p0.evals,'自己分析へ進む →',()=>switchPhase(1));return;}
+  el.innerHTML=testCard(TEST1[p0.cur],p0.cur,TEST1.length,'0','revealP0','dkP0','setE0','nextP0','📝');
+}
+function revealP0(){revealTest('0');}
+function dkP0(){dkTest('0',p0.evals,p0.cur);}
+function setE0(v){setEvalTest(p0.evals,p0.cur,v,'0');}
+function nextP0(){if(p0.cur<TEST1.length-1){p0.cur++;renderP0();}else{p0.done=true;renderP0();}}
+
+/* ======= PHASE 1 自己分析 ======= */
+function renderP1(){
+  const el=document.getElementById('phase1');
+  const labels={ok:'◯',half:'△',ng:'✕'},bc={ok:'rb-ok',half:'rb-half',ng:'rb-ng'};
+  let rows=TEST1.map((q,i)=>'<div class="rrow"><span class="rformula">'+q.q+'</span><span class="rbadge '+bc[p0.evals[i]||'ng']+'">'+labels[p0.evals[i]||'ng']+'</span></div>').join('');
+  el.innerHTML=
+    '<div class="msg-box">💎 間違いは宝物。どこでつまずいたかを知ることが成長の第一歩！</div>'+
+    '<div class="result-rows">'+rows+'</div>'+
+    '<div class="sa-q">Q1. △や✕の原因であてはまるものをすべて選んでください</div>'+
+    '<div class="sa-opts">'+
+      ['分数・小数のルートの扱いが分からない','分数・小数係数の加減法が苦手','分数・小数係数の乗法が苦手','展開の公式の使い方が分からない（基本形・完全平方・差の公式）','四則混合で計算の順序を間違える','やり方は分かるけどミスが多い'].map((t,i)=>
+        '<button class="sa-btn'+(p1.q1.has(i)?' sel':'')+'" onclick="p1q1('+i+')">'+t+'</button>'
+      ).join('')+
+    '</div>'+
+    '<div class="sa-q">Q2. とくに困った問題は？（複数OK）</div>'+
+    '<div class="sa-opts">'+
+      ['√(分数・小数)を簡単にする','加法・減法（分数・小数係数）','乗法（分数・小数係数）','展開の公式（基本形・完全平方・差の公式）','四則混合計算'].map((t,i)=>
+        '<button class="sa-btn'+(p1.q2.has(i)?' sel':'')+'" onclick="p1q2('+i+')">'+t+'</button>'
+      ).join('')+
+    '</div>'+
+    '<div class="sa-q">Q3. 次に自分がやるべきだと思うのは？</div>'+
+    '<div class="sa-opts">'+
+      ['STEP 0 — 計算ルールを確認する','STEP 1 — パターンを選んで練習する','STEP 2 — 展開・完全平方・四則混合の練習','STEP 3 — 全パターンごちゃまぜ練習'].map((t,i)=>
+        '<button class="sa-btn'+(p1.q3===i?' sel':'')+'" onclick="p1q3('+i+')">'+t+'</button>'
+      ).join('')+
+    '</div>'+
+    '<button class="primary-btn" onclick="saGo()" '+(saReady()?'':'disabled style="opacity:0.35;cursor:default"')+'>このSTEPの練習を始める →</button>';
+}
+function p1q1(i){if(p1.q1.has(i))p1.q1.delete(i);else p1.q1.add(i);renderP1();}
+function p1q2(i){if(p1.q2.has(i))p1.q2.delete(i);else p1.q2.add(i);renderP1();}
+function p1q3(i){p1.q3=i;renderP1();}
+function saReady(){return p1.q1.size>0&&p1.q2.size>0&&p1.q3!==null;}
+function saGo(){if(!saReady())return;p2.step=p1.q3;switchPhase(2);}
+
+/* ======= PHASE 2 STEP練習 ======= */
+function renderP2(){
+  const el=document.getElementById('phase2');
+  el.innerHTML=
+    '<div class="msg-box">⬆️ レベルアップの時間！自分のペースでじっくり進もう。</div>'+
+    '<div class="step-nav">'+
+      [['STEP 0','ルール確認'],['STEP 1','パターン別'],['STEP 2','展開混合'],['STEP 3','ごちゃまぜ']].map((s,i)=>
+        '<button class="snav'+(p2.step===i?' active':'')+'" onclick="switchStep('+i+')">'+s[0]+'<span>'+s[1]+'</span></button>'
+      ).join('')+
+    '</div>'+
+    '<div id="step-content"></div>';
+  renderStepContent();
+}
+function switchStep(i){p2.step=i;renderP2();}
+function renderStepContent(){
+  const el=document.getElementById('step-content');
+  if(p2.step===0)renderS0(el);
+  else if(p2.step===1)renderS1(el);
+  else if(p2.step===2)renderS2(el);
+  else if(p2.step===3)renderS3(el);
+}
+
+/* STEP0 ルール確認 */
+function renderS0(el){
+  const items=[
+    {label:"√(分数)を簡単にする",
+     rule:"√(a/b) = √a/√b。分子と分母それぞれにルートをかける。",
+     q:"√"+fr(3,4)+" = "+fr("√3","√4")+" = "+fr("√3",2),
+     note:"分母が完全平方数なら整数になる"},
+    {label:"√(小数)を簡単にする",
+     rule:"小数を分数に直してから計算するのが確実。",
+     q:"√0.04 = √"+fr(4,100)+" = "+fr("√4","√100")+" = "+fr(2,10)+" = 0.2",
+     note:"0.04=4/100 と考えると計算しやすい"},
+    {label:"分数・小数係数の加減法",
+     rule:"係数が分数・小数でも√の部分が同じものだけ足し引きできる。",
+     q:fr(1,2)+"√3 + √3 = ("+fr(1,2)+"+1)√3 = "+fr(3,2)+"√3",
+     note:"係数をそのまま足し引きする"},
+    {label:"分数・小数係数の乗法",
+     rule:"係数どうし・√どうしを別々にかける。",
+     q:fr(1,2)+"√6 × √3 = "+fr(1,2)+"×√18 = "+fr(1,2)+"×3√2 = "+fr(3,2)+"√2",
+     note:"係数は係数どうし、√は√どうし"},
+    {label:"展開の公式を使う",
+     rule:"√が含まれていても展開の公式はそのまま使える。",
+     q:"(√5+1)(√5−1) = (√5)²−1² = 5−1 = 4",
+     note:"差の公式: (a+b)(a−b)=a²−b²"},
+    {label:"完全平方",
+     rule:"(√a+b)²=(√a)²+2b√a+b²=a+2b√a+b²",
+     q:"(√2+1)² = (√2)²+2×√2×1+1² = 2+2√2+1 = 3+2√2",
+     note:"√どうしの完全平方は√が残ることが多い"},
+    {label:"四則混合",
+     rule:"計算の順序: ①かっこ・展開 ②乗法・除法 ③加法・減法",
+     q:"√50÷√2 + √3×√3 = 5 + 3 = 8",
+     note:"乗除を先に計算してから加減する"},
+  ];
+  el.innerHTML=
+    '<div class="msg-box">📖 ルールと例題を確認しよう。覚えたら STEP 1 へ！</div>'+
+    items.map(it=>
+      '<div class="q-card" style="margin-bottom:0.75rem">'+
+        '<div class="q-num-badge">📖 '+it.label+'</div>'+
+        '<div style="font-size:12px;color:var(--grntext2);background:#e8f0fd;border-radius:var(--r16);padding:8px 12px;margin-bottom:10px;line-height:1.6">'+it.rule+'</div>'+
+        '<div style="font-family:JetBrains Mono,monospace;font-size:13px;color:#1a1a2e;line-height:1.8">'+it.q+'</div>'+
+        '<div style="font-size:11px;color:var(--grntext2);margin-top:6px">'+it.note+'</div>'+
+      '</div>'
+    ).join('')+
+    '<button class="primary-btn" style="margin-top:0.5rem" onclick="switchStep(1)">ルールを確認できた！STEP 1 へ →</button>';
+}
+
+const RULE_REF=
+  '<div class="formula-ref">'+
+    '<div class="formula-ref-title">📖 計算ルール早見表</div>'+
+    '<div class="frow"><span class="fname">√(分数)</span><span class="fexpr">√(a/b) = √a/√b</span></div>'+
+    '<div class="frow"><span class="fname">√(小数)</span><span class="fexpr">小数→分数に直してから計算</span></div>'+
+    '<div class="frow"><span class="fname">加減法</span><span class="fexpr">√の部分が同じものだけ足し引き可</span></div>'+
+    '<div class="frow"><span class="fname">乗法</span><span class="fexpr">係数どうし・√どうしを別々にかける</span></div>'+
+    '<div class="frow"><span class="fname">展開の公式</span><span class="fexpr">√でも基本形・完全平方・差の公式が使える</span></div>'+
+    '<div class="frow"><span class="fname">完全平方</span><span class="fexpr">(√a+b)²=(√a)²+2b√a+b²=a+2b√a+b²</span></div>'+
+    '<div class="frow"><span class="fname">四則混合</span><span class="fexpr">①かっこ・展開 ②乗除 ③加減 の順に計算</span></div>'+
+  '</div>';
+
+/* STEP1 パターン別練習 */
+const STEP1_PATTERNS=[
+  {label:"√(分数・小数)を簡単にする", pool:POOL_P1},
+  {label:"加法・減法",                pool:POOL_P2},
+  {label:"乗法",                      pool:POOL_P3},
+  {label:"展開（基本形）",            pool:POOL_P5A},
+  {label:"展開（完全平方）",          pool:POOL_P5B},
+  {label:"展開（差の公式）",          pool:POOL_P5C},
+  {label:"四則混合",                  pool:POOL_P7},
+];
+
+function renderS1(el){
+  if(p2.s1pat===null){
+    el.innerHTML=
+      '<div class="q-card">'+
+        '<div class="q-num-badge">✏️ STEP 1 — 練習したいパターンを選ぼう</div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">'+
+          STEP1_PATTERNS.map((pt,i)=>
+            '<div onclick="selectPat1('+i+')" style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:0.75rem;cursor:pointer;transition:all 0.15s" onmouseover="this.style.background=\'var(--grn)\'" onmouseout="this.style.background=\'#fff\'">'+
+              '<div style="font-size:12px;font-weight:700;color:var(--grntext);margin-bottom:4px">'+pt.label+'</div>'+
+              '<div style="font-size:10px;color:var(--grntext2);font-family:JetBrains Mono,monospace">'+pt.pool[0].q+'</div>'+
+            '</div>'
+          ).join('')+
+        '</div>'+
+      '</div>';
+    return;
+  }
+  if(p2.s1done){
+    let ok=p2.s1evals.filter(v=>v==='ok').length,half=p2.s1evals.filter(v=>v==='half').length,ng=p2.s1evals.filter(v=>v==='ng').length;
+    el.innerHTML='<div class="done-wrap"><div class="done-icon">✏️</div><div class="done-title">'+STEP1_PATTERNS[p2.s1pat].label+' 完了！</div>'+
+      '<div class="done-score">◯'+ok+' △'+half+' ✕'+ng+'</div>'+
+      '<div class="done-msg">'+(ok>=4?'よくできました！':'もう一度やってみよう。')+'</div>'+
+      '<div class="done-btns">'+
+        '<button class="primary-btn" onclick="p2.s1pat=null;p2.s1done=false;renderP2()">別のパターンを練習する</button>'+
+        '<button class="primary-btn" style="margin-top:0" onclick="switchStep(2)">STEP 2 へ進む →</button>'+
+        '<button class="secondary-btn" onclick="resetSN(\'s1\',6)">このパターンをもう一度</button>'+
+      '</div></div>';
+    return;
+  }
+  const pool=shuffle(STEP1_PATTERNS[p2.s1pat].pool);
+  const q=pool[p2.s1cur%pool.length];
+  el.innerHTML=RULE_REF+'<div class="msg-box">✏️ 【'+STEP1_PATTERNS[p2.s1pat].label+'】の練習</div>'+renderQCard(q,p2.s1cur,6,'s1');
+}
+function selectPat1(i){p2.s1pat=i;p2.s1cur=0;p2.s1evals=Array(6).fill(null);p2.s1done=false;renderP2();}
+
+/* STEP2 展開ごちゃまぜ＋分数含む四則混合 */
+const STEP2_QS=shuffle([...POOL_P5A,...POOL_P5B,...POOL_P5C,...POOL_P7B]).slice(0,15);
+function renderS2(el){
+  if(p2.s2done){
+    let ok=p2.s2evals.filter(v=>v==='ok').length,half=p2.s2evals.filter(v=>v==='half').length,ng=p2.s2evals.filter(v=>v==='ng').length;
+    el.innerHTML='<div class="done-wrap"><div class="done-icon">📐</div><div class="done-title">STEP 2 完了！</div><div class="done-score">◯'+ok+' △'+half+' ✕'+ng+'</div><div class="done-msg">'+(ok>=10?'完璧！':'よくがんばりました！')+'</div><div class="done-btns"><button class="primary-btn" onclick="switchStep(3)">STEP 3 へ進む →</button><button class="secondary-btn" onclick="resetSN(\'s2\',15)">もう一度やる</button></div></div>';
+    return;
+  }
+  const q=STEP2_QS[p2.s2cur];
+  el.innerHTML=RULE_REF+'<div class="msg-box">📐 展開ごちゃまぜ＋分数含む四則混合！どのパターンか考えながら解こう。</div>'+renderQCard(q,p2.s2cur,STEP2_QS.length,'s2');
+}
+
+/* STEP3 ごちゃまぜ */
+const STEP3_QS=shuffle([...POOL_P1,...POOL_P2,...POOL_P3,...POOL_P5A,...POOL_P5B,...POOL_P5C,...POOL_P7,...POOL_P7B]).slice(0,15);
+function renderS3(el){
+  if(p2.s3done){
+    let ok=p2.s3evals.filter(v=>v==='ok').length,half=p2.s3evals.filter(v=>v==='half').length,ng=p2.s3evals.filter(v=>v==='ng').length;
+    el.innerHTML='<div class="done-wrap"><div class="done-icon">🔀</div><div class="done-title">STEP 3 完了！</div><div class="done-score">◯'+ok+' △'+half+' ✕'+ng+'</div><div class="done-msg">'+(ok>=12?'完璧！':'よくがんばりました！')+'</div><div class="done-btns"><button class="primary-btn" onclick="switchPhase(3)">再テストに挑戦する →</button><button class="secondary-btn" onclick="resetSN(\'s3\',15)">もう一度やる</button></div></div>';
+    return;
+  }
+  const q=STEP3_QS[p2.s3cur];
+  el.innerHTML='<div class="msg-box">🔀 全パターンごちゃまぜ！どのルールか考えながら解こう。</div>'+renderQCard(q,p2.s3cur,STEP3_QS.length,'s3');
+}
+
+function renderQCard(q,cur,total,key){
+  const isLast=cur===total-1;
+  return pipHtml(total,cur)+
+    '<div class="q-card">'+
+      '<div class="q-num-badge">✏️ 問題'+(cur+1)+' / '+total+'</div>'+
+      '<div class="q-formula">'+q.q+'</div>'+
+      '<div class="q-direction">を計算せよ — 紙に書いてから確認しよう！</div>'+
+      '<button class="reveal-btn" id="rb'+key+'" onclick="revealSN(\''+key+'\')">👀 答えを見る</button>'+
+      '<button class="dontknow-btn" id="dk'+key+'" onclick="dkSN(\''+key+'\','+total+')">🤔 分からない</button>'+
+      '<div class="ans-box" id="ab'+key+'"><div class="ans-label">答え</div><div class="ans-val">'+q.a+'</div><div class="ans-hint">💡 '+q.hint+'</div></div>'+
+      '<div class="eval-wrap" id="ew'+key+'"><div class="eval-q">自分の答えはどうだった？</div><div class="eval-row">'+
+        '<button class="e-btn e-ok" id="eok'+key+'" onclick="setESN(\''+key+'\',\'ok\','+total+')">◯ できた</button>'+
+        '<button class="e-btn e-half" id="ehalf'+key+'" onclick="setESN(\''+key+'\',\'half\','+total+')">△ 一部</button>'+
+        '<button class="e-btn e-ng" id="eng'+key+'" onclick="setESN(\''+key+'\',\'ng\','+total+')">✕ 間違い</button>'+
+      '</div></div>'+
+    '</div>'+
+    '<div class="nav-row"><span class="nav-count">'+(cur+1)+' / '+total+' 問目</span>'+
+      '<button class="next-btn" id="nb'+key+'" onclick="nextSN(\''+key+'\','+total+')" disabled>'+(isLast?'結果を見る →':'次の問題 →')+'</button></div>';
+}
+
+function revealSN(key){document.getElementById('ab'+key).className='ans-box show';document.getElementById('ew'+key).className='eval-wrap show';document.getElementById('rb'+key).style.display='none';document.getElementById('dk'+key).style.display='none';}
+function dkSN(key,len){p2[key+'evals'][p2[key+'cur']]='ng';revealSN(key);['ok','half','ng'].forEach(k=>document.getElementById('e'+k+key).className='e-btn e-'+k+(k==='ng'?' sel':''));document.getElementById('nb'+key).disabled=false;}
+function setESN(key,v,len){p2[key+'evals'][p2[key+'cur']]=v;['ok','half','ng'].forEach(k=>document.getElementById('e'+k+key).className='e-btn e-'+k+(v===k?' sel':''));document.getElementById('nb'+key).disabled=false;}
+function nextSN(key,len){if(p2[key+'cur']<len-1){p2[key+'cur']++;renderP2();}else{p2[key+'done']=true;renderP2();}}
+function resetSN(key,len){p2[key+'cur']=0;p2[key+'evals']=Array(len).fill(null);p2[key+'done']=false;renderP2();}
+
+/* ======= PHASE 3 再テスト ======= */
+function renderP3(){
+  const el=document.getElementById('phase3');
+  if(p3.done){
+    let ok=0,half=0,ng=0;
+    p3.evals.forEach(v=>{if(v==='ok')ok++;else if(v==='half')half++;else ng++;});
+    const patterns=['√簡略化','加減法','乗法','展開の公式'];
+    const patLen=[3,3,2,2];
+    const t1ok=patterns.map((_,pi)=>{let c=0,s=patLen.slice(0,pi).reduce((a,b)=>a+b,0);for(let i=s;i<s+patLen[pi];i++)if(p0.evals[i]==='ok')c++;return c;});
+    const t2ok=patterns.map((_,pi)=>{let c=0,s=patLen.slice(0,pi).reduce((a,b)=>a+b,0);for(let i=s;i<s+patLen[pi];i++)if(p3.evals[i]==='ok')c++;return c;});
+    let compareRows=patterns.map((name,pi)=>{
+      const before=t1ok[pi],after=t2ok[pi],max=patLen[pi];
+      const arrow=after>before?'<span style="color:#0d2e6b;font-weight:700">↑ アップ</span>':after===before?'<span style="color:#888">→ 同じ</span>':'<span style="color:#d4537e;font-weight:700">↓ ダウン</span>';
+      return '<div class="rrow"><span style="font-size:13px;color:#1a1a2e;flex:1">'+name+'</span><span class="rbadge rb-half" style="min-width:42px;text-align:center">'+before+'/'+max+'</span><span style="color:#aaa;font-size:12px;margin:0 4px">→</span><span class="rbadge rb-ok" style="min-width:42px;text-align:center">'+after+'/'+max+'</span><span style="margin-left:8px;font-size:12px">'+arrow+'</span></div>';
+    }).join('');
+    const msgs=['まだ難しいところが残っています。STEPに戻って練習しよう。','着実に伸びています！もう一息。','大きく伸びています！','完璧！'];
+    const mi=ok<=3?0:ok<=6?1:ok<=8?2:3;
+    el.innerHTML=
+      '<div class="done-wrap" style="text-align:left">'+
+        '<div style="text-align:center;margin-bottom:1.25rem"><div class="done-icon">🎉</div><div class="done-title">再テスト 完了！</div></div>'+
+        '<div class="stat-row">'+
+          '<div class="stat-c"><div class="stat-n" style="color:#0d2e6b">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
+          '<div class="stat-c"><div class="stat-n" style="color:#ba7517">'+half+'</div><div class="stat-l">△ 一部</div></div>'+
+          '<div class="stat-c"><div class="stat-n" style="color:#d4537e">'+ng+'</div><div class="stat-l">✕ 間違い</div></div>'+
+        '</div>'+
+        '<div style="font-size:12px;font-weight:700;color:var(--grntext2);margin:1rem 0 6px">📊 パターン別 前回との比較</div>'+
+        '<div style="font-size:11px;color:#888;margin-bottom:8px;display:flex;gap:8px;padding:0 4px"><span style="flex:1">パターン</span><span style="min-width:42px;text-align:center">力試し</span><span style="margin:0 8px"></span><span style="min-width:42px;text-align:center">再テスト</span></div>'+
+        '<div class="result-rows" style="margin-bottom:1rem">'+compareRows+'</div>'+
+        '<div class="msg-box">'+msgs[mi]+'</div>'+
+        '<div class="done-btns">'+
+          (ok>=8?'<button class="primary-btn" onclick="window.location.href=\'index.html\'">まちがいLABO トップへ →</button>':
+                 '<button class="primary-btn" onclick="switchPhase(1)">もう一度自己分析して練習する →</button>')+
+          '<button class="secondary-btn" onclick="resetP3()">もう一度再テストする</button>'+
+        '</div>'+
+      '</div>';
+    return;
+  }
+  el.innerHTML=
+    '<div class="msg-box">📍 テストは自分の現在地を知るためのもの。練習の成果を確かめよう！</div>'+
+    pipHtml(TEST2.length,p3.cur)+
+    '<div class="q-card">'+
+      '<div class="q-num-badge">🔁 問題'+(p3.cur+1)+' / '+TEST2.length+'</div>'+
+      '<div class="q-formula">'+TEST2[p3.cur].q+'</div>'+
+      '<div class="q-direction">を計算せよ — まず紙に解いてみよう！</div>'+
+      '<button class="reveal-btn" id="rb3" onclick="revealP3()">👀 答えを見る</button>'+
+      '<button class="dontknow-btn" id="dk3" onclick="dkP3()">🤔 分からない</button>'+
+      '<div class="ans-box" id="ab3"><div class="ans-label">答え</div><div class="ans-val">'+TEST2[p3.cur].a+'</div><div class="ans-hint">💡 '+TEST2[p3.cur].hint+'</div></div>'+
+      '<div class="eval-wrap" id="ew3"><div class="eval-q">自分の答えはどうだった？</div><div class="eval-row">'+
+        '<button class="e-btn e-ok" id="eok3" onclick="setE3(\'ok\')">◯ できた</button>'+
+        '<button class="e-btn e-half" id="ehalf3" onclick="setE3(\'half\')">△ 一部</button>'+
+        '<button class="e-btn e-ng" id="eng3" onclick="setE3(\'ng\')">✕ 間違い</button>'+
+      '</div></div>'+
+    '</div>'+
+    '<div class="nav-row"><span class="nav-count">'+(p3.cur+1)+' / '+TEST2.length+' 問目</span>'+
+      '<button class="next-btn" id="nb3" onclick="nextP3()" disabled>'+(p3.cur===TEST2.length-1?'結果を見る →':'次の問題 →')+'</button></div>';
+}
+function revealP3(){document.getElementById('ab3').className='ans-box show';document.getElementById('ew3').className='eval-wrap show';document.getElementById('rb3').style.display='none';document.getElementById('dk3').style.display='none';}
+function dkP3(){p3.evals[p3.cur]='ng';revealP3();['ok','half','ng'].forEach(k=>document.getElementById('e'+k+'3').className='e-btn e-'+k+(k==='ng'?' sel':''));document.getElementById('nb3').disabled=false;}
+function setE3(v){p3.evals[p3.cur]=v;['ok','half','ng'].forEach(k=>document.getElementById('e'+k+'3').className='e-btn e-'+k+(v===k?' sel':''));document.getElementById('nb3').disabled=false;}
+function nextP3(){if(p3.cur<TEST2.length-1){p3.cur++;renderP3();}else{p3.done=true;renderP3();}}
+function resetP3(){p3.evals=Array(10).fill(null);p3.cur=0;p3.done=false;renderP3();}
+
+renderP0();
+</script>
+</body>
+</html>
