@@ -459,11 +459,11 @@ const GRADES = [
       {
         id:'heihoukon', label:'平方根', icon:'√', iconBg:'#d6e8fb',
         desc:'平方根の計算・有理化',
-        ready:false,
+        ready:true,
         contents:[
           {id:'sq1', label:'平方根の基本', icon:'✏️', desc:'', url:'sqrt_basic.html'},
-          {id:'sq2', label:'計算練習（整数）', icon:'✏️', desc:'', url:'sqrt_mid.html'},
-          {id:'sq3', label:'計算練習（分数・小数）', icon:'🔥', desc:'', url:'sqrt_adv.html'},
+          {id:'sq2', label:'計算練習（基本編）', icon:'✏️', desc:'', url:'sqrt_mid.html'},
+          {id:'sq3', label:'計算練習（応用編）', icon:'🔥', desc:'', url:'sqrt_adv.html'},
         ]
       },
       {
@@ -574,6 +574,9 @@ function renderBreadcrumb(){
 
 /* 学年選択 */
 function renderGrade(el){
+  el.style.background='';
+  el.style.borderRadius='';
+  el.style.padding='';
   el.innerHTML =
     '<div class="sec-title">学年を選ぼう</div>'+
     '<div class="grade-grid">'+
@@ -591,10 +594,19 @@ function renderGrade(el){
 /* 単元選択 */
 function renderUnit(el){
   const g = getGrade(state.gradeId);
+  const gradeColors={
+    g1:{bg:'linear-gradient(160deg,#e8f7ec 0%,#f5f3fa 60%)',badge:'background:#d8f3e0;color:#1a4d28',border:'#aee4bc'},
+    g2:{bg:'linear-gradient(160deg,#fef0e6 0%,#f5f3fa 60%)',badge:'background:#ffe8d6;color:#7a2e00',border:'#f4a261'},
+    g3:{bg:'linear-gradient(160deg,#e6f0fc 0%,#f5f3fa 60%)',badge:'background:#d6e8fb;color:#0d2e6b',border:'#93bef0'},
+  };
+  const gc=gradeColors[state.gradeId]||{bg:'',badge:'',border:''};
+  el.style.background='';
+  el.style.borderRadius='';
+  el.style.padding='';
   el.innerHTML =
     '<button class="back-btn" onclick="goGrade()">← 学年選択に戻る</button>'+
     '<div class="sec-title">'+g.label+' — 単元を選ぼう</div>'+
-    '<div class="unit-list">'+
+    '<div class="unit-list" id="unit-list-area" style="background:'+gc.bg+';border-radius:16px;padding:1rem;transition:background 0.4s ease">'+
     g.units.map((u,i)=>{
       // 入試カード特別表示
       if(u.isNyushi){
@@ -614,7 +626,7 @@ function renderUnit(el){
       }
       const disabled = !u.ready ? ' disabled' : '';
       const badge = u.ready
-        ? '<span class="unit-badge badge-ready">✓ 公開中</span>'
+        ? '<span class="unit-badge badge-ready" style="'+gc.badge+'">✓ 公開中</span>'
         : '<span class="unit-badge badge-soon">準備中</span>';
       const arrow = u.ready ? '<span class="unit-arrow">›</span>' : '';
       const onclick = u.ready ? 'onclick="selectUnit(\''+u.id+'\')"' : '';
@@ -633,13 +645,23 @@ function renderUnit(el){
 /* 内容選択 */
 function renderContent(el){
   const u = getUnit(state.gradeId, state.unitId);
+  const gradeColors={
+    g1:{bg:'linear-gradient(160deg,#e8f7ec 0%,#f5f3fa 60%)',card:'#d8f3e0',cardHover:'#aee4bc',text:'#1a4d28'},
+    g2:{bg:'linear-gradient(160deg,#fef0e6 0%,#f5f3fa 60%)',card:'#ffe8d6',cardHover:'#f4a261',text:'#7a2e00'},
+    g3:{bg:'linear-gradient(160deg,#e6f0fc 0%,#f5f3fa 60%)',card:'#d6e8fb',cardHover:'#93bef0',text:'#0d2e6b'},
+  };
+  const gc=gradeColors[state.gradeId]||{bg:'',card:'#f0eeff',cardHover:'#c5bce8',text:'#333'};
   el.innerHTML =
     '<button class="back-btn" onclick="goUnit()">← 単元選択に戻る</button>'+
     '<div class="sec-title">'+u.label+' — 学習内容を選ぼう</div>'+
-    '<div class="content-grid">'+
+    '<div class="content-grid" style="background:'+gc.bg+';border-radius:16px;padding:1rem;transition:background 0.4s ease">'+
     u.contents.map((c,i)=>{
       const hl = c.highlight ? ' highlight' : '';
-      return '<div class="content-card'+hl+' fade-in stagger-'+(i+1)+'" onclick="goStudy(\''+c.url+'\')">'+
+      return '<div class="content-card'+hl+' fade-in stagger-'+(i+1)+'" '+
+        'style="border-color:'+gc.card+';background:white" '+
+        'onmouseover="this.style.borderColor=\''+gc.cardHover+'\';this.style.background=\''+gc.card+'\'" '+
+        'onmouseout="this.style.borderColor=\''+gc.card+'\';this.style.background=\'white\'" '+
+        'onclick="goStudy(\''+c.url+'\')">'+
         '<div class="content-icon">'+c.icon+'</div>'+
         '<div class="content-name">'+c.label+'</div>'+
         '<div class="content-desc">'+c.desc+'</div>'+
