@@ -8,15 +8,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Zen Maru Gothic',sans-serif;background:#f5f9f2;min-height:100vh;padding:1.5rem 1rem}
+body{font-family:'Zen Maru Gothic',sans-serif;background:#f0f5fd;min-height:100vh;padding:1.5rem 1rem}
 .container{max-width:640px;margin:0 auto}
 :root{
-  --grn:#d8f3e0;--grn2:#aee4bc;--grn3:#52b069;--grn4:#368a4a;
-  --grntext:#1a4d28;--grntext2:#2d7a42;
+  --grn:#d6e8fb;--grn2:#93bef0;--grn3:#3a7bd5;--grn4:#2558a8;
+  --grntext:#0d2e6b;--grntext2:#1a4a9e;
   --peach:#faeeda;--peachtext:#633806;
   --rose:#fbeaf0;--rosetext:#72243e;
-  --sage:#eaf3de;--sagetext:#27500a;
-  --r20:20px;--r16:16px;--card-border:#aee4bc;
+  --sage:#eaf3de;--sagetext:#0d2e6b;
+  --r20:20px;--r16:16px;--card-border:#93bef0;
 }
 .back-link{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--card-border);border-radius:999px;padding:6px 14px;font-size:12px;color:var(--grntext2);cursor:pointer;margin-bottom:1rem;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif;font-weight:500;text-decoration:none}
 .back-link:hover{background:var(--grn)}
@@ -26,27 +26,27 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#f5f9f2;min-height:100v
 .top-sub{font-size:12px;color:var(--grntext2);margin-top:2px}
 .top-badge{display:inline-block;background:#fff;border:1px solid var(--grn2);border-radius:999px;font-size:10px;font-weight:700;color:var(--grntext2);padding:2px 10px;margin-top:4px}
 .phase-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:1.25rem}
-.ptab{padding:9px 4px;border-radius:999px;border:none;background:#c8ecd1;font-size:12px;color:#2d7a42;cursor:pointer;text-align:center;line-height:1.35;transition:all 0.18s;font-family:'Zen Maru Gothic',sans-serif;font-weight:400}
+.ptab{padding:9px 4px;border-radius:999px;border:none;background:#c5d8f7;font-size:12px;color:#1a4a9e;cursor:pointer;text-align:center;line-height:1.35;transition:all 0.18s;font-family:'Zen Maru Gothic',sans-serif;font-weight:400}
 .ptab span{display:block;font-size:10px;margin-top:2px;opacity:0.85}
 .ptab.active{background:var(--grn3);color:#fff;font-weight:700}
 .q-card{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:1.25rem;margin-bottom:1rem}
 .q-num-badge{display:inline-flex;align-items:center;gap:5px;background:var(--grn);color:var(--grntext);font-size:11px;font-weight:700;padding:3px 12px;border-radius:999px;margin-bottom:10px}
 .q-formula{font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace;color:#1a1a2e;margin-bottom:4px;line-height:1.5}
-.q-direction{font-size:13px;color:#2d7a42;margin-bottom:1rem}
+.q-direction{font-size:13px;color:#1a4a9e;margin-bottom:1rem}
 .pip-row{display:flex;gap:5px;margin-bottom:1.25rem}
 .pip{flex:1;height:8px;border-radius:999px}
 .reveal-btn{display:inline-flex;align-items:center;gap:6px;background:var(--grn);color:var(--grntext);border:1.5px solid var(--grn2);border-radius:999px;padding:8px 18px;font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif;font-weight:500}
 .reveal-btn:hover{background:var(--grn2)}
 .dontknow-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#888;border:1.5px solid #ddd;border-radius:999px;padding:8px 18px;font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif;font-weight:500;margin-left:8px}
 .dontknow-btn:hover{background:#f5f5f5}
-.ans-box{background:#edf9f0;border-radius:var(--r16);padding:1rem;margin-top:10px;display:none;border:1px solid var(--grn2)}
+.ans-box{background:#e8f0fd;border-radius:var(--r16);padding:1rem;margin-top:10px;display:none;border:1px solid var(--grn2)}
 .ans-box.show{display:block}
 .ans-label{font-size:11px;color:var(--grntext2);margin-bottom:4px;font-weight:700}
 .ans-val{font-size:16px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--grntext);margin-bottom:6px;line-height:1.6}
 .ans-hint{font-size:12px;color:var(--grntext2);line-height:1.7}
 .eval-wrap{margin-top:1rem;display:none}
 .eval-wrap.show{display:block}
-.eval-q{font-size:13px;color:#2d7a42;margin-bottom:8px}
+.eval-q{font-size:13px;color:#1a4a9e;margin-bottom:8px}
 .eval-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .e-btn{padding:10px 6px;border-radius:var(--r16);border:1.5px solid var(--card-border);background:#fff;font-size:14px;font-weight:700;cursor:pointer;text-align:center;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
 .e-btn:hover{background:var(--grn)}
@@ -54,11 +54,11 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#f5f9f2;min-height:100v
 .e-half.sel{background:var(--peach);border-color:#ba7517;color:var(--peachtext)}
 .e-ng.sel{background:var(--rose);border-color:#d4537e;color:var(--rosetext)}
 .nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}
-.nav-count{font-size:12px;color:#2d7a42}
+.nav-count{font-size:12px;color:#1a4a9e}
 .next-btn{display:inline-flex;align-items:center;gap:6px;background:var(--grn3);color:#fff;border:none;border-radius:999px;padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
 .next-btn:hover{background:var(--grn4)}
 .next-btn:disabled{opacity:0.3;cursor:default}
-.formula-ref{background:#edf9f0;border-radius:var(--r16);padding:1rem 1.25rem;margin-bottom:1.25rem;border:1px solid var(--grn2)}
+.formula-ref{background:#e8f0fd;border-radius:var(--r16);padding:1rem 1.25rem;margin-bottom:1.25rem;border:1px solid var(--grn2)}
 .formula-ref-title{font-size:11px;color:var(--grntext2);margin-bottom:8px;font-weight:700}
 .frow{display:flex;align-items:baseline;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--grn2);font-size:12px}
 .frow:last-child{border-bottom:none}
@@ -79,14 +79,14 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#f5f9f2;min-height:100v
 .xp-pill{display:inline-flex;align-items:center;gap:5px;background:var(--grn);color:var(--grntext);font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;opacity:0;transition:opacity 0.4s}
 .xp-pill.show{opacity:1}
 .step-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:1.25rem}
-.snav{padding:8px 3px;border-radius:999px;border:none;background:#c8ecd1;font-size:11px;color:#2d7a42;cursor:pointer;text-align:center;line-height:1.35;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
+.snav{padding:8px 3px;border-radius:999px;border:none;background:#c5d8f7;font-size:11px;color:#1a4a9e;cursor:pointer;text-align:center;line-height:1.35;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
 .snav span{display:block;font-size:9px;margin-top:2px;opacity:0.8}
 .snav.active{background:var(--grn3);color:#fff;font-weight:700}
 .done-wrap{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:1.5rem}
 .done-icon{width:64px;height:64px;border-radius:50%;background:var(--grn);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 1rem}
 .done-title{font-size:18px;font-weight:700;color:#1a1a2e;margin-bottom:6px;text-align:center}
 .done-score{font-size:38px;font-weight:700;color:var(--grntext2);margin:0.75rem 0;text-align:center}
-.done-msg{font-size:13px;color:#2d7a42;margin-bottom:1.25rem;line-height:1.7;text-align:center}
+.done-msg{font-size:13px;color:#1a4a9e;margin-bottom:1.25rem;line-height:1.7;text-align:center}
 .done-btns{display:flex;flex-direction:column;gap:8px}
 .primary-btn{width:100%;padding:12px;border-radius:999px;border:none;background:var(--grn3);color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
 .primary-btn:hover{background:var(--grn4)}
@@ -101,9 +101,9 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#f5f9f2;min-height:100v
 .rb-half{background:var(--peach);color:var(--peachtext)}
 .rb-ng{background:var(--rose);color:var(--rosetext)}
 .stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1rem}
-.stat-c{background:#f2faf4;border-radius:var(--r16);padding:0.75rem;text-align:center}
+.stat-c{background:#f0f5fd;border-radius:var(--r16);padding:0.75rem;text-align:center}
 .stat-n{font-size:22px;font-weight:700;margin-bottom:2px}
-.stat-l{font-size:11px;color:#2d7a42}
+.stat-l{font-size:11px;color:#1a4a9e}
 .msg-box{font-size:13px;color:var(--grntext2);line-height:1.7;padding:10px 14px;background:var(--grn);border-radius:var(--r16);margin-bottom:1rem;border:1px solid var(--grn2)}
 .sa-q{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:10px;line-height:1.5;margin-top:1rem}
 .sa-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:0.5rem}
@@ -347,7 +347,7 @@ function switchPhase(n){
 
 function pipHtml(total,cur){
   return '<div class="pip-row">'+Array(total).fill(0).map((_,i)=>{
-    let bg=i<cur?'#52b069':i===cur?'#aee4bc':'#c8ecd1';
+    let bg=i<cur?'#3a7bd5':i===cur?'#93bef0':'#c5d8f7';
     return '<div class="pip" style="background:'+bg+'"></div>';
   }).join('')+'</div>';
 }
@@ -388,7 +388,7 @@ function testDoneHtml(qs,evals,btnLabel,btnFn){
     '<div style="text-align:center;margin-bottom:1.25rem"><div class="done-icon">📋</div><div class="done-title">テスト完了！</div></div>'+
     '<div class="result-rows">'+qs.map((q,i)=>'<div class="rrow"><span class="rformula">'+q.q+'</span><span class="rbadge '+bc[evals[i]||'ng']+'">'+labels[evals[i]||'ng']+'</span></div>').join('')+'</div>'+
     '<div class="stat-row">'+
-      '<div class="stat-c"><div class="stat-n" style="color:#27500a">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
+      '<div class="stat-c"><div class="stat-n" style="color:#0d2e6b">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
       '<div class="stat-c"><div class="stat-n" style="color:#ba7517">'+half+'</div><div class="stat-l">△ 一部</div></div>'+
       '<div class="stat-c"><div class="stat-n" style="color:#d4537e">'+ng+'</div><div class="stat-l">✕ 間違い</div></div>'+
     '</div>'+
@@ -478,7 +478,7 @@ function renderS0(el){
     items.map(it=>
       '<div class="q-card" style="margin-bottom:0.75rem">'+
         '<div class="q-num-badge">📖 '+it.label+'</div>'+
-        '<div style="font-family:JetBrains Mono,monospace;font-size:11px;color:var(--grntext2);background:#edf9f0;border-radius:var(--r16);padding:8px 12px;margin-bottom:10px">'+it.formula+'</div>'+
+        '<div style="font-family:JetBrains Mono,monospace;font-size:11px;color:var(--grntext2);background:#e8f0fd;border-radius:var(--r16);padding:8px 12px;margin-bottom:10px">'+it.formula+'</div>'+
         '<div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">'+
           '<span style="font-family:JetBrains Mono,monospace;font-size:13px;color:#1a1a2e">'+it.q+'</span>'+
           '<span style="color:#aaa;font-size:12px">→</span>'+
@@ -644,7 +644,7 @@ function renderP3(){
       '<div class="done-wrap" style="text-align:left">'+
         '<div style="text-align:center;margin-bottom:1.25rem"><div class="done-icon">🎉</div><div class="done-title">再テスト 完了！</div></div>'+
         '<div class="stat-row">'+
-          '<div class="stat-c"><div class="stat-n" style="color:#27500a">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
+          '<div class="stat-c"><div class="stat-n" style="color:#0d2e6b">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
           '<div class="stat-c"><div class="stat-n" style="color:#ba7517">'+half+'</div><div class="stat-l">△ 一部</div></div>'+
           '<div class="stat-c"><div class="stat-n" style="color:#d4537e">'+ng+'</div><div class="stat-l">✕ 間違い</div></div>'+
         '</div>'+
