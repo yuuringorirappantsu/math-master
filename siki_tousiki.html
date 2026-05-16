@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>式の計算（中2）— まちがいLABO</title>
+<title>等式の変形（中2）— まちがいLABO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -110,11 +110,11 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#fcf2e6;min-height:100v
 <div class="container">
 <a class="back-link" href="index.html">← まちがいLABO トップへ</a>
 <div class="top-header">
-  <div class="top-icon">式</div>
+  <div class="top-icon">⇄</div>
   <div>
-    <div class="top-title">式の計算</div>
+    <div class="top-title">等式の変形</div>
     <div class="top-sub">力試し → 分析 → 練習 → 再テスト</div>
-    <span class="top-badge">中2・基本編</span>
+    <span class="top-badge">中2・等式の変形</span>
   </div>
 </div>
 <div class="phase-tabs">
@@ -130,78 +130,99 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#fcf2e6;min-height:100v
 </div>
 <script>
 function shuffle(a){return [...a].sort(()=>Math.random()-0.5);}
+function fr(n,d){return '<span class="frac"><span>'+n+'</span><span>'+d+'</span></span>';}
 
 // ===== 問題プール =====
 // P1: 同類項をまとめる
+// P1: 1ステップ変形（移項するだけ）
 const POOL_P1=[
-  {q:'3a + 2b + 4a',         a:'7a+2b',          hint:'aどうしをまとめる'},
-  {q:'5x − 3y + 2x − y',     a:'7x−4y',          hint:'xどうし・yどうしをまとめる'},
-  {q:'2a + 3 − 5a + 1',      a:'−3a+4',          hint:'aどうし・数どうしをまとめる'},
-  {q:'7x − 4y − 3x + 2y',    a:'4x−2y',          hint:'同類項をまとめる'},
-  {q:'6x + y − 2x + 3y',     a:'4x+4y',          hint:'同類項をまとめる'},
-  {q:'−2a + 5b + 3a − 7b',   a:'a−2b',           hint:'aどうし・bどうしをまとめる'},
-  {q:'x² + 3x − 2x² + x',    a:'−x²+4x',         hint:'x²とxは別の同類項'},
-  {q:'2a² + 3a − a² + a',    a:'a²+4a',          hint:'a²とaは別の同類項'},
-  {q:'4a²b − 2ab² + a²b',    a:'5a²b−2ab²',      hint:'a²bとab²は別の同類項'},
-  {q:'3xy + 2x − xy + 5x',   a:'2xy+7x',         hint:'xyとxは別の同類項'},
-  {q:'8x − 5y + 3y − 4x',    a:'4x−2y',          hint:'同類項をまとめる'},
-  {q:'−3a + 2b + 5a − 4b',   a:'2a−2b',          hint:'符号に注意'},
-  {q:'5ab + 2a − 3ab + a',   a:'2ab+3a',         hint:'abとaは別の同類項'},
-  {q:'4x²y − 3xy² + 2x²y',   a:'6x²y−3xy²',      hint:'x²yとxy²は別の同類項'},
-  {q:'a + 2b − 3c − 2a + b', a:'−a+3b−3c',       hint:'文字ごとにまとめる'},
+  {q:'x + 3 = 7　を x について解け',         a:'x = 4',             hint:'+3を右辺に移項（符号を逆に）: x = 7−3'},
+  {q:'y − 5 = 2　を y について解け',         a:'y = 7',             hint:'−5を右辺に移項: y = 2+5'},
+  {q:'a + b = c　を a について解け',         a:'a = c−b',           hint:'+bを右辺に移項: a = c−b'},
+  {q:'x − y = 4　を x について解け',         a:'x = y+4',           hint:'−yを右辺に移項: x = y+4'},
+  {q:'2x = 10　を x について解け',           a:'x = 5',             hint:'両辺を2でわる: x = 10÷2'},
+  {q:'−3x = 12　を x について解け',          a:'x = −4',            hint:'両辺を−3でわる（符号に注意）: x = 12÷(−3)'},
+  {q:'4y = 20　を y について解け',           a:'y = 5',             hint:'両辺を4でわる: y = 20÷4'},
+  {q:'ax = b　を x について解け',            a:'x = '+fr('b','a'),  hint:'両辺をaでわる: x = b÷a = b/a'},
+  {q:'a + 7 = b　を a について解け',         a:'a = b−7',           hint:'+7を右辺に移項: a = b−7'},
+  {q:'x − a = 5　を x について解け',         a:'x = a+5',           hint:'−aを右辺に移項: x = a+5'},
+  {q:'5x = y　を x について解け',            a:'x = '+fr('y','5'),  hint:'両辺を5でわる: x = y÷5 = y/5'},
+  {q:'2a = b−c　を a について解け',          a:'a = '+fr('b−c','2'),hint:'両辺を2でわる: a = (b−c)/2'},
+  {q:'p + q = 10　を p について解け',        a:'p = 10−q',          hint:'+qを右辺に移項: p = 10−q'},
+  {q:'h − k = 3　を h について解け',         a:'h = k+3',           hint:'−kを右辺に移項: h = k+3'},
+  {q:'−x = 6　を x について解け',            a:'x = −6',            hint:'両辺を−1倍（または両辺に−1をかける）: x = −6'},
 ];
 
-// P2: 多項式の加法・減法（かっこあり）
+// P2: 2ステップ変形（移項 + 両辺で割る）
 const POOL_P2=[
-  {q:'(3x+2y) + (x+y)',          a:'4x+3y',          hint:'同類項をまとめる'},
-  {q:'(5a−2b) + (a+3b)',         a:'6a+b',           hint:'aどうし・bどうしをまとめる'},
-  {q:'(4x+y) − (2x−y)',          a:'2x+2y',          hint:'−(2x−y)=−2x+y'},
-  {q:'(3a−b) − (a−2b)',          a:'2a+b',           hint:'−(a−2b)=−a+2b'},
-  {q:'(2x²+3x) + (x²−5x)',       a:'3x²−2x',         hint:'x²どうし・xどうしをまとめる'},
-  {q:'(a+2b−1) + (3a−b+4)',      a:'4a+b+3',         hint:'同類項それぞれをまとめる'},
-  {q:'(5x−3y) − (2x+y)',         a:'3x−4y',          hint:'−(2x+y)=−2x−y'},
-  {q:'(6a+2b−1) − (3a−b+2)',     a:'3a+3b−3',        hint:'引く式の符号を全部逆に'},
-  {q:'(x²−2x+1) − (x²+x−3)',     a:'−3x+4',          hint:'x²どうしが消える'},
-  {q:'(4a−3b+c) + (−a+2b−2c)',   a:'3a−b−c',         hint:'同類項それぞれをまとめる'},
-  {q:'(3x+y) + (x−2y) − (2x−y)', a:'2x',             hint:'yが消える'},
-  {q:'(2a−b) − (a+b) + (3a+2b)', a:'4a',             hint:'bが消える'},
-  {q:'(a²+2ab) − (3ab−b²)',      a:'a²−ab+b²',       hint:'abどうしをまとめる'},
-  {q:'(5x−2y+3) − (2x+y−4)',     a:'3x−3y+7',        hint:'引く式の符号を全部逆に'},
-  {q:'(7a+3b) − (2a−b) − (a+2b)',a:'4a+2b',          hint:'順番にかっこを外す'},
+  {q:'2x + 3 = 11　を x について解け',       a:'x = 4',             hint:'①+3を移項: 2x=11−3=8　②両辺を2でわる: x=4'},
+  {q:'3y − 5 = 7　を y について解け',        a:'y = 4',             hint:'①−5を移項: 3y=7+5=12　②両辺を3でわる: y=4'},
+  {q:'ax + b = c　を x について解け',        a:'x = '+fr('c−b','a'),hint:'①+bを移項: ax=c−b　②両辺をaでわる: x=(c−b)/a'},
+  {q:'2a − b = c　を a について解け',        a:'a = '+fr('b+c','2'),hint:'①−bを移項: 2a=c+b　②両辺を2でわる: a=(b+c)/2'},
+  {q:'4x − 1 = 2y　を x について解け',       a:'x = '+fr('2y+1','4'),hint:'①−1を移項: 4x=2y+1　②両辺を4でわる: x=(2y+1)/4'},
+  {q:'3p + q = 5　を p について解け',        a:'p = '+fr('5−q','3'),hint:'①+qを移項: 3p=5−q　②両辺を3でわる: p=(5−q)/3'},
+  {q:'−2x + 5 = y　を x について解け',       a:'x = '+fr('5−y','2'),hint:'①+5を移項: −2x=y−5　②両辺を−2でわる: x=(y−5)/(−2)=(5−y)/2'},
+  {q:'5a + 2b = 7　を a について解け',       a:'a = '+fr('7−2b','5'),hint:'①+2bを移項: 5a=7−2b　②両辺を5でわる: a=(7−2b)/5'},
+  {q:'3x − 2 = y　を x について解け',        a:'x = '+fr('y+2','3'),hint:'①−2を移項: 3x=y+2　②両辺を3でわる: x=(y+2)/3'},
+  {q:'2y + 4 = 3x　を y について解け',       a:'y = '+fr('3x−4','2'),hint:'①+4を移項: 2y=3x−4　②両辺を2でわる: y=(3x−4)/2'},
+  {q:'−x + 3 = a　を x について解け',        a:'x = 3−a',           hint:'①+3を移項: −x=a−3　②両辺を−1倍: x=3−a'},
+  {q:'4a + 5 = 3b　を a について解け',       a:'a = '+fr('3b−5','4'),hint:'①+5を移項: 4a=3b−5　②両辺を4でわる: a=(3b−5)/4'},
 ];
 
-// P3: 単項式の乗法・除法
+// P3: 分数・かっこを含む変形
 const POOL_P3=[
-  {q:'2a × 3b',                a:'6ab',             hint:'係数どうし・文字どうしをかける'},
-  {q:'(−3x) × 4y',             a:'−12xy',           hint:'符号に注意'},
-  {q:'5a × (−2a)',             a:'−10a²',           hint:'a×a=a²'},
-  {q:'2x² × 3x',               a:'6x³',             hint:'x²×x=x³'},
-  {q:'(2a)²',                  a:'4a²',             hint:'2²×a²=4a²'},
-  {q:'(−3x)²',                 a:'9x²',             hint:'(−3)²=9'},
-  {q:'(−2a)³',                 a:'−8a³',            hint:'(−2)³=−8'},
-  {q:'6ab ÷ 2a',               a:'3b',              hint:'÷2a → ×<span class="frac"><span>1</span><span>2a</span></span> に直す → <span class="frac"><span>6ab</span><span>2a</span></span> で約分'},
-  {q:'12x²y ÷ (−3xy)',         a:'−4x',             hint:'÷(−3xy) → ×<span class="frac"><span>1</span><span>−3xy</span></span> に直す → <span class="frac"><span>12x²y</span><span>−3xy</span></span> で約分。符号に注意'},
-  {q:'(−8a²b) ÷ 4ab',          a:'−2a',             hint:'÷4ab → ×<span class="frac"><span>1</span><span>4ab</span></span> に直す → <span class="frac"><span>−8a²b</span><span>4ab</span></span> で約分'},
-  {q:'(−a)³ × (−2b)',          a:'2a³b',            hint:'(−a)³=−a³、負×負=正'},
+  {q:fr('x+1','2')+' = 3　を x について解け', a:'x = 5',          hint:'両辺に2をかける: x+1=6 → 移項: x=5'},
+  {q:fr('a','3')+' = b　を a について解け',   a:'a = 3b',         hint:'両辺に3をかける: a=3b'},
+  {q:fr('y−2','5')+' = 1　を y について解け', a:'y = 7',          hint:'両辺に5をかける: y−2=5 → 移項: y=7'},
+  {q:fr('a+b','2')+' = c　を a について解け', a:'a = 2c−b',       hint:'両辺に2をかける: a+b=2c → 移項: a=2c−b'},
+  {q:fr('x','a')+' = b　を x について解け',   a:'x = ab',         hint:'両辺にaをかける: x=ab'},
+  {q:'2(x + 3) = 10　を x について解け',     a:'x = 2',           hint:'①両辺を2でわる: x+3=5　②移項: x=2 （または分配して: 2x+6=10）'},
+  {q:'3(a − 1) = b　を a について解け',      a:'a = '+fr('b','3')+'+1', hint:'①両辺を3でわる: a−1='+fr('b','3')+'　②移項: a='+fr('b','3')+'+1'},
+  {q:'5(x + y) = 20　を y について解け',     a:'y = 4−x',         hint:'①両辺を5でわる: x+y=4　②移項: y=4−x'},
+  {q:'2(a − b) = c　を a について解け',      a:'a = '+fr('c','2')+'+b', hint:'①両辺を2でわる: a−b='+fr('c','2')+'　②移項: a='+fr('c','2')+'+b'},
+  {q:fr('a+b','3')+' = 2c　を b について解け', a:'b = 6c−a',     hint:'両辺に3をかける: a+b=6c → 移項: b=6c−a'},
+  {q:fr('2x−1','3')+' = y　を x について解け', a:'x = '+fr('3y+1','2'), hint:'①両辺に3をかける: 2x−1=3y　②移項: 2x=3y+1　③両辺を2でわる: x=(3y+1)/2'},
+  {q:'4(x − 2y) = 8　を x について解け',     a:'x = 2y+2',        hint:'①両辺を4でわる: x−2y=2　②移項: x=2y+2'},
 ];
 
-// P4: いろいろな計算（×数・÷数・分配法則）
+// P4: 公式の変形（速さ・図形などの応用）
 const POOL_P4=[
-  {q:'2(x+3y)',                a:'2x+6y',           hint:'2をかっこの中全部にかける'},
-  {q:'−3(a−2b)',               a:'−3a+6b',          hint:'−3をかっこの中全部にかける'},
-  {q:'(4x+6y) ÷ 2',            a:'2x+3y',           hint:'÷2 → ×<span class="frac"><span>1</span><span>2</span></span> に直して、<span class="frac"><span>4x+6y</span><span>2</span></span>。各項を約分'},
-  {q:'(9a−6b) ÷ (−3)',         a:'−3a+2b',          hint:'÷(−3) → ×<span class="frac"><span>1</span><span>−3</span></span> に直して、<span class="frac"><span>9a−6b</span><span>−3</span></span>。符号に注意'},
-  {q:'2(x+y) + 3(x−y)',        a:'5x−y',            hint:'それぞれ分配してからまとめる'},
-  {q:'3(2a−b) − 2(a+b)',       a:'4a−5b',           hint:'−2(a+b)=−2a−2b'},
-  {q:'4(x−2y) − 3(x−y)',       a:'x−5y',            hint:'分配してから同類項をまとめる'},
-  {q:'5(x+2y) − 3(2x+y)',      a:'−x+7y',           hint:'分配してから同類項をまとめる'},
-  {q:'2(a²+a−1) + 3(a²−a+2)',  a:'5a²−a+4',         hint:'a²どうし・aどうし・数どうし'},
-  {q:'−2(x−3y) + 4(x+y)',      a:'2x+10y',          hint:'−2(x−3y)=−2x+6y'},
-  {q:'3(2x+y−1) − 2(x+y+2)',   a:'4x+y−7',          hint:'分配してからまとめる'},
-  {q:'(8a+12b) ÷ 4',           a:'2a+3b',           hint:'÷4 → ×<span class="frac"><span>1</span><span>4</span></span> に直して、<span class="frac"><span>8a+12b</span><span>4</span></span>。各項を約分'},
-  {q:'(10x−5y) ÷ (−5)',        a:'−2x+y',           hint:'÷(−5) → ×<span class="frac"><span>1</span><span>−5</span></span> に直して、<span class="frac"><span>10x−5y</span><span>−5</span></span>。符号に注意'},
-  {q:'2(3a−b) − (a−5b)',       a:'5a+3b',           hint:'−(a−5b)=−a+5b'},
-  {q:'4(x+y) − 2(x−2y) + (y−x)',a:'x+9y',           hint:'順番に分配してまとめる'},
+  {q:'長方形の周の長さの公式 ℓ = 2(a+b) を b について解け',
+   a:'b = '+fr('ℓ','2')+' − a',
+   hint:'①両辺を2でわる: '+fr('ℓ','2')+' = a+b　②移項: b='+fr('ℓ','2')+'−a'},
+  {q:'三角形の面積の公式 S = '+fr('1','2')+'ah を h について解け',
+   a:'h = '+fr('2S','a'),
+   hint:'①両辺に2をかける: 2S=ah　②両辺をaでわる: h=2S/a'},
+  {q:'速さの公式 v = '+fr('x','t')+' を x について解け',
+   a:'x = vt',
+   hint:'両辺にtをかける: x=vt'},
+  {q:'速さの公式 v = '+fr('x','t')+' を t について解け',
+   a:'t = '+fr('x','v'),
+   hint:'①両辺にtをかける: vt=x　②両辺をvでわる: t=x/v'},
+  {q:'平均の式 m = '+fr('a+b','2')+' を a について解け',
+   a:'a = 2m−b',
+   hint:'①両辺に2をかける: 2m=a+b　②移項: a=2m−b'},
+  {q:'長方形の面積の公式 S = ab を a について解け',
+   a:'a = '+fr('S','b'),
+   hint:'両辺をbでわる: a=S/b'},
+  {q:'円周の公式 ℓ = 2πr を r について解け',
+   a:'r = '+fr('ℓ','2π'),
+   hint:'両辺を2πでわる: r=ℓ/(2π)'},
+  {q:'台形の面積の公式 S = '+fr('1','2')+'(a+b)h を h について解け',
+   a:'h = '+fr('2S','a+b'),
+   hint:'①両辺に2をかける: 2S=(a+b)h　②両辺を(a+b)でわる: h=2S/(a+b)'},
+  {q:'台形の面積の公式 S = '+fr('1','2')+'(a+b)h を a について解け',
+   a:'a = '+fr('2S','h')+' − b',
+   hint:'①両辺に2をかける: 2S=(a+b)h　②両辺をhでわる: '+fr('2S','h')+'=a+b　③移項: a='+fr('2S','h')+'−b'},
+  {q:'体積の公式 V = abc を c について解け',
+   a:'c = '+fr('V','ab'),
+   hint:'両辺をabでわる: c=V/(ab)'},
+  {q:'平均の式 m = '+fr('a+b+c','3')+' を c について解け',
+   a:'c = 3m−a−b',
+   hint:'①両辺に3をかける: 3m=a+b+c　②移項: c=3m−a−b'},
+  {q:'食塩水の濃度の式 p = '+fr('x','y')+'×100 を x について解け',
+   a:'x = '+fr('py','100'),
+   hint:'①両辺に'+fr('y','100')+'をかける（または両辺をひっくり返して整理）: x=py/100'},
 ];
 
 // テスト（各パターンから2問ずつ・計8問）
@@ -222,9 +243,9 @@ let p0={evals:Array(8).fill(null),cur:0,done:false};
 let p1={q1:new Set(),q2:new Set(),q3:null};
 let p2={step:0,
   s1qs:[],s1cur:0,s1ev:Array(8).fill(null),s1done:false,
-  s2sub:0,s2qs:[],s2cur:0,s2ev:Array(6).fill(null),s2done:false,
-  s3sub:0,s3qs:[],s3cur:0,s3ev:Array(6).fill(null),s3done:false,
-  s4qs:[],s4cur:0,s4ev:Array(10).fill(null),s4done:false};
+  s2qs:[],s2cur:0,s2ev:Array(8).fill(null),s2done:false,
+  s3qs:[],s3cur:0,s3ev:Array(8).fill(null),s3done:false,
+  s4qs:[],s4cur:0,s4ev:Array(8).fill(null),s4done:false};
 let p3={evals:Array(8).fill(null),cur:0,done:false};
 
 function switchPhase(n){
@@ -282,7 +303,7 @@ function testCard(q,cur,total,pfx){
     '<div class="q-card">'+
       '<div class="q-num-badge">📝 問題'+(cur+1)+' / '+total+'</div>'+
       '<div class="q-formula">'+q.q+'</div>'+
-      '<div class="q-direction">を計算せよ — まず紙に解いてみよう！</div>'+
+      '<div class="q-direction">まず紙に解いてみよう！</div>'+
       '<button class="reveal-btn" id="rb'+pfx+'" onclick="revT(\''+pfx+'\')">👀 答えを見る</button>'+
       '<button class="dontknow-btn" id="dk'+pfx+'" onclick="dkT(\''+pfx+'\')">🤔 分からない</button>'+
       '<div class="ans-box" id="ab'+pfx+'"><div class="ans-label">答え</div><div class="ans-val">'+q.a+'</div><div class="ans-hint">💡 '+q.hint+'</div></div>'+
@@ -339,9 +360,9 @@ function renderP1(){
   const el=document.getElementById('phase1');
   const L={ok:'◯',half:'△',ng:'✕'},C={ok:'rb-ok',half:'rb-half',ng:'rb-ng'};
   const rows=TEST1.map((q,i)=>'<div class="rrow"><span class="rformula">'+q.q+'</span><span class="rbadge '+C[p0.evals[i]||'ng']+'">'+L[p0.evals[i]||'ng']+'</span></div>').join('');
-  const causes=['同類項のまとめ方が分からない','加減でかっこを外すのが苦手','単項式の乗除（累乗）が苦手','分配法則を使う計算が苦手','分かっているけどミスが多い'];
-  const topics=['同類項をまとめる','多項式の加法・減法','単項式の乗法・除法','いろいろな計算（分配法則）'];
-  const steps=['STEP 0 — ルール確認','STEP 1 — 同類項','STEP 2 — 多項式の加減・単項式の乗除','STEP 3 — いろいろな計算（分配法則）','STEP 4 — 全パターン混合'];
+  const causes=['移項のルール（符号の逆転）が分からない','両辺を「文字でわる」のが苦手','分数やかっこのある式が苦手','公式の変形（速さ・図形）が苦手','分かっているけどミスが多い'];
+  const topics=['1ステップの変形（移項だけ）','2ステップの変形（移項+わる）','分数・かっこを含む変形','公式の変形（応用）'];
+  const steps=['STEP 0 — ルール確認','STEP 1 — 1ステップ変形','STEP 2 — 2ステップ変形','STEP 3 — 分数・かっこ','STEP 4 — 公式の変形'];
   el.innerHTML=
     '<div class="msg-box">💎 間違いは宝物。どこでつまずいたかを知ることが成長の第一歩！</div>'+
     '<div class="result-rows">'+rows+'</div>'+
@@ -362,12 +383,14 @@ function saGo(){if(!saReady())return;p2.step=p1.q3;switchPhase(2);}
 // ===== PHASE 2 STEP練習 =====
 function ruleRef(items){
   const all={
-    dourui:{name:'同類項', expr:'3a+5a=8a（係数をたす）'},
-    minus: {name:'−( )を外す', expr:'−(a−b)=−a+b'},
-    mul:   {name:'単項式×単項式', expr:'2a×3b=6ab、a×a=a²'},
-    pow:   {name:'累乗', expr:'(−2a)²=4a²、(−2a)³=−8a³'},
-    div:   {name:'÷ → ×分数で', expr:'6ab÷2a = 6ab×<span class="frac"><span>1</span><span>2a</span></span> = <span class="frac"><span>6ab</span><span>2a</span></span> = 3b'},
-    dist:  {name:'分配法則', expr:'a(b+c)=ab+ac'},
+    iko:    {name:'移項', expr:'A+B=C → A=C−B（符号が逆になる）'},
+    iko2:   {name:'移項（−の場合）', expr:'A−B=C → A=C+B'},
+    waru:   {name:'両辺をわる', expr:'2x=8 → x=4（両辺を2でわる）'},
+    aware:  {name:'文字でわる', expr:'ax=b → x=b÷a='+fr('b','a')},
+    kake:   {name:'両辺をかける', expr:fr('x','3')+'=5 → x=15（両辺に3をかける）'},
+    bunsu:  {name:'分数の式', expr:fr('a+b','2')+'=c → a+b=2c → a=2c−b（両辺に2をかけてから移項）'},
+    kakko:  {name:'かっこのある式', expr:'2(x+3)=10 → x+3=5（両辺を2でわる、または分配する）'},
+    fugou:  {name:'−の処理', expr:'−x=3 → x=−3　　−2x=6 → x=−3'},
   };
   let h='<div class="formula-ref"><div class="formula-ref-title">📖 この問題に関係するルール</div>';
   items.forEach(k=>{
@@ -380,7 +403,7 @@ function ruleRef(items){
 
 function renderP2(){
   const el=document.getElementById('phase2');
-  const labels=[['STEP 0','ルール確認'],['STEP 1','同類項'],['STEP 2','加減・乗除'],['STEP 3','分配法則'],['STEP 4','混合']];
+  const labels=[['STEP 0','ルール確認'],['STEP 1','1ステップ'],['STEP 2','2ステップ'],['STEP 3','分数・かっこ'],['STEP 4','公式の変形']];
   el.innerHTML='<div class="msg-box">⬆️ レベルアップの時間！自分のペースでじっくり進もう。</div>'+
     '<div class="step-nav">'+
     labels.map((s,i)=>'<button class="snav'+(p2.step===i?' active':'')+'" onclick="switchStep('+i+')">'+s[0]+'<span>'+s[1]+'</span></button>').join('')+
@@ -400,15 +423,16 @@ function renderSC(){
 // STEP 0: ルール確認
 function renderS0(el){
   const rules=[
-    {title:'① 同類項をまとめる',ex:'3a + 5a = 8a\n2x + 3y − x + y = x + 4y',note:'同じ文字（同じ次数）の係数どうしを計算。x²とxは別の同類項'},
-    {title:'② かっこを外す（加法・減法）',ex:'(2x+3) + (x−1) = 3x + 2\n(2x+3) − (x−1) = x + 4',note:'引くときは符号が全部逆になる'},
-    {title:'③ −( ) の展開',ex:'−(a − 3) = −a + 3\n−(2x + y) = −2x − y',note:'−をかっこの中全部にかける'},
-    {title:'④ 単項式×単項式',ex:'2a × 3b = 6ab\n5x × (−2x) = −10x²',note:'係数どうし・文字どうしをかける。同じ文字は累乗に'},
-    {title:'⑤ 累乗のある計算',ex:'(2a)² = 4a²\n(−3x)² = 9x²\n(−2a)³ = −8a³',note:'指数は係数・文字どちらにもかかる。負の数の偶数乗は正、奇数乗は負'},
-    {title:'⑥ 単項式÷単項式（×に直して分数で）',ex:'6ab ÷ 2a = 6ab × <span class="frac"><span>1</span><span>2a</span></span> = <span class="frac"><span>6ab</span><span>2a</span></span> = 3b\n12x²y ÷ (−3xy) = <span class="frac"><span>12x²y</span><span>−3xy</span></span> = −4x',note:'÷ → ×(逆数) に直して、分数にまとめてから約分。符号にも注意。'},
-    {title:'⑦ 分配法則（多項式×数）',ex:'2(x + 3y) = 2x + 6y\n−3(a − 2b) = −3a + 6b',note:'かっこの中の全部にかける'},
+    {title:'① 等式変形ってなに？',ex:'a+b=c　を「a について解く」<br>= a=（aだけが左辺、それ以外は右辺）の形にする',note:'「○○について解く」と言われたら、その文字だけを左辺にする。'},
+    {title:'② 移項（プラスの項を動かす）',ex:'x + 3 = 7\n→ x = 7 − 3\n→ x = 4',note:'反対側に渡すと符号が逆になる。+ ⇄ −'},
+    {title:'③ 移項（マイナスの項を動かす）',ex:'x − 5 = 2\n→ x = 2 + 5\n→ x = 7',note:'−5 を渡すと +5 になる。'},
+    {title:'④ 両辺を「数」でわる',ex:'2x = 10\n→ x = 10 ÷ 2 = 5\n\n−3x = 12\n→ x = 12 ÷ (−3) = −4',note:'両辺を同じ数でわってOK。負の数でわるときは符号に注意。'},
+    {title:'⑤ 両辺を「文字」でわる',ex:'ax = b\n→ x = b ÷ a = '+fr('b','a'),note:'文字でわってもOK（ただしaが0でないとき）。結果は分数の形になる。'},
+    {title:'⑥ 両辺に数や文字をかける',ex:fr('x','3')+' = 5\n→ x = 5 × 3 = 15\n\n'+fr('a+b','2')+' = c\n→ a+b = 2c',note:'分母をはらうために、両辺に分母をかける。'},
+    {title:'⑦ かっこのある式',ex:'2(x + 3) = 10\n方法A：両辺を2でわる → x+3=5 → x=2\n方法B：分配する → 2x+6=10 → 2x=4 → x=2',note:'どちらの方法でもOK。両辺をわった方が早いことが多い。'},
+    {title:'⑧ 公式を変形する',ex:'ℓ = 2(a+b) を b について解く\n→ '+fr('ℓ','2')+' = a+b\n→ b = '+fr('ℓ','2')+' − a',note:'「公式変形」も基本は同じ。①〜⑦を組み合わせて使う。'},
   ];
-  el.innerHTML='<div class="msg-box">📖 まず7つのルールを確認しよう！例題を見て、理解できたら次のSTEPへ。</div>'+
+  el.innerHTML='<div class="msg-box">📖 等式の変形のルールを確認しよう！「○○について解く」とは、その文字だけを左辺に分けること。</div>'+
     rules.map(r=>'<div class="rule-card"><div class="rule-title">'+r.title+'</div><div class="rule-ex">'+r.ex.replace(/\n/g,'<br>')+'</div><div class="rule-note">💡 '+r.note+'</div></div>').join('')+
     '<button class="primary-btn" onclick="switchStep(1)">STEP 1 へ進む →</button>';
 }
@@ -423,62 +447,47 @@ function renderS1(el){
       '<button class="secondary-btn" onclick="p2.s1qs=[];p2.s1cur=0;p2.s1ev=Array(8).fill(null);p2.s1done=false;renderP2()">もう一度</button>');
     return;
   }
-  el.innerHTML=ruleRef(['dourui'])+'<div class="msg-box">✏️ 同類項をまとめる練習をしよう！</div>'+renderQCard(qs[p2.s1cur],p2.s1cur,total,'s1');
+  el.innerHTML=ruleRef(['iko','iko2','waru','aware','fugou'])+'<div class="msg-box">✏️ STEP 1：1ステップで解ける問題！移項するだけ、または両辺をわるだけ。</div>'+renderQCard(qs[p2.s1cur],p2.s1cur,total,'s1');
 }
 
-// STEP 2: 多項式の加減 or 単項式の乗除（サブ選択）
+// STEP 2: 2ステップ変形
 function renderS2(el){
-  const subLabels=['多項式の加法・減法','単項式の乗法・除法'];
-  el.innerHTML='<div class="msg-box">📐 どちらを練習する？</div>'+
-    '<div class="sub-nav">'+
-    subLabels.map((s,i)=>'<button class="subbtn'+(p2.s2sub===i?' active':'')+'" onclick="setS2sub('+i+')">'+s+'</button>').join('')+
-    '</div><div id="s2content"></div>';
-  renderS2content();
-}
-function setS2sub(i){
-  p2.s2sub=i; p2.s2qs=[];p2.s2cur=0;p2.s2ev=Array(6).fill(null);p2.s2done=false;
-  renderP2();
-}
-function renderS2content(){
-  const scel=document.getElementById('s2content');
-  if(!scel)return;
-  const pool=p2.s2sub===0?POOL_P2:POOL_P3;
-  if(!p2.s2qs.length)p2.s2qs=shuffle(pool);
-  const qs=p2.s2qs; const total=6;
+  if(!p2.s2qs.length)p2.s2qs=shuffle(POOL_P2);
+  const qs=p2.s2qs; const total=Math.min(qs.length,8);
   if(p2.s2done){
-    scel.innerHTML=stepDoneHtml('📐','STEP 2 完了！',qs.slice(0,p2.s2cur+1),p2.s2ev.slice(0,p2.s2cur+1),
+    el.innerHTML=stepDoneHtml('📐','STEP 2 完了！',qs.slice(0,p2.s2cur+1),p2.s2ev.slice(0,p2.s2cur+1),
       '<button class="primary-btn" onclick="switchStep(3)">STEP 3 へ進む →</button>'+
-      '<button class="secondary-btn" onclick="setS2sub('+0+')">もう一度</button>');
+      '<button class="secondary-btn" onclick="p2.s2qs=[];p2.s2cur=0;p2.s2ev=Array(8).fill(null);p2.s2done=false;renderP2()">もう一度</button>');
     return;
   }
-  scel.innerHTML=ruleRef(p2.s2sub===0?['dourui','minus']:['mul','pow','div'])+renderQCard(qs[p2.s2cur],p2.s2cur,total,'s2c');
+  el.innerHTML=ruleRef(['iko','iko2','waru','aware'])+'<div class="msg-box">📐 STEP 2：2ステップで解く問題！「移項 → 両辺をわる」の順で進めよう。</div>'+renderQCard(qs[p2.s2cur],p2.s2cur,total,'s2');
 }
 
-// STEP 3: いろいろな計算（分配法則）
+// STEP 3: 分数・かっこを含む変形
 function renderS3(el){
-  if(!p2.s3qs.length)p2.s3qs=shuffle(POOL_P4);
-  const qs=p2.s3qs; const total=6;
+  if(!p2.s3qs.length)p2.s3qs=shuffle(POOL_P3);
+  const qs=p2.s3qs; const total=Math.min(qs.length,8);
   if(p2.s3done){
     el.innerHTML=stepDoneHtml('🔀','STEP 3 完了！',qs.slice(0,p2.s3cur+1),p2.s3ev.slice(0,p2.s3cur+1),
       '<button class="primary-btn" onclick="switchStep(4)">STEP 4 へ進む →</button>'+
-      '<button class="secondary-btn" onclick="p2.s3qs=[];p2.s3cur=0;p2.s3ev=Array(6).fill(null);p2.s3done=false;renderP2()">もう一度</button>');
+      '<button class="secondary-btn" onclick="p2.s3qs=[];p2.s3cur=0;p2.s3ev=Array(8).fill(null);p2.s3done=false;renderP2()">もう一度</button>');
     return;
   }
-  el.innerHTML=ruleRef(['dist','dourui','minus'])+'<div class="msg-box">🔀 分配法則を使った計算を練習しよう！</div>'+renderQCard(qs[p2.s3cur],p2.s3cur,total,'s3c');
+  el.innerHTML=ruleRef(['bunsu','kakko','kake','iko'])+'<div class="msg-box">🔀 STEP 3：分数やかっこのある式の変形！両辺にかける／わるで、まずは形をシンプルに。</div>'+renderQCard(qs[p2.s3cur],p2.s3cur,total,'s3');
 }
 
-// STEP 4: 全パターン混合
+// STEP 4: 公式の変形（応用）
 function renderS4(el){
-  if(!p2.s4qs.length)p2.s4qs=shuffle([...POOL_P1,...POOL_P2,...POOL_P3,...POOL_P4]);
-  const qs=p2.s4qs; const total=10;
+  if(!p2.s4qs.length)p2.s4qs=shuffle(POOL_P4);
+  const qs=p2.s4qs; const total=Math.min(qs.length,8);
   if(p2.s4done){
     el.innerHTML=stepDoneHtml('🎯','STEP 4 完了！',qs.slice(0,p2.s4cur+1),p2.s4ev.slice(0,p2.s4cur+1),
       '<button class="primary-btn" onclick="switchPhase(3)">再テストに挑戦する →</button>'+
-      '<button class="secondary-btn" onclick="p2.s4qs=[];p2.s4cur=0;p2.s4ev=Array(10).fill(null);p2.s4done=false;renderP2()">もう一度</button>');
+      '<button class="secondary-btn" onclick="p2.s4qs=[];p2.s4cur=0;p2.s4ev=Array(8).fill(null);p2.s4done=false;renderP2()">もう一度</button>');
     return;
   }
-  el.innerHTML=ruleRef(['dourui','minus','mul','pow','div','dist'])+
-    '<div class="msg-box">🎯 全パターンごちゃまぜ！どのルールか考えながら解こう。</div>'+
+  el.innerHTML=ruleRef(['iko','waru','aware','kake','bunsu'])+
+    '<div class="msg-box">🎯 STEP 4：図形や速さの公式を変形しよう！STEP 1〜3で身につけたコツを総動員。</div>'+
     renderQCard(qs[p2.s4cur],p2.s4cur,total,'s4');
 }
 
@@ -491,7 +500,7 @@ function renderQCard(q,cur,total,key,stateEl,isSub){
     '<div class="q-card">'+
       '<div class="q-num-badge">✏️ 問題'+(cur+1)+' / '+total+'</div>'+
       '<div class="q-formula">'+q.q+'</div>'+
-      '<div class="q-direction">を計算せよ</div>'+
+      '<div class="q-direction">紙に書いてから確認しよう！</div>'+
       '<button class="reveal-btn" id="rb'+key+'" onclick="revS(\''+key+'\')">👀 答えを見る</button>'+
       '<button class="dontknow-btn" onclick="dkS(\''+key+'\')">🤔 分からない</button>'+
       '<div class="ans-box" id="ab'+key+'"><div class="ans-label">答え</div><div class="ans-val">'+q.a+'</div><div class="ans-hint">💡 '+q.hint+'</div></div>'+
@@ -535,9 +544,9 @@ function nxS(k){
 }
 function getStepInfo(k){
   if(k==='s1') return {ev:p2.s1ev,cur:p2.s1cur,total:Math.min(p2.s1qs.length,8),setCur:c=>p2.s1cur=c,setDone:()=>p2.s1done=true};
-  if(k==='s2c') return {ev:p2.s2ev,cur:p2.s2cur,total:6,setCur:c=>p2.s2cur=c,setDone:()=>p2.s2done=true};
-  if(k==='s3c') return {ev:p2.s3ev,cur:p2.s3cur,total:6,setCur:c=>p2.s3cur=c,setDone:()=>p2.s3done=true};
-  if(k==='s4') return {ev:p2.s4ev,cur:p2.s4cur,total:10,setCur:c=>p2.s4cur=c,setDone:()=>p2.s4done=true};
+  if(k==='s2') return {ev:p2.s2ev,cur:p2.s2cur,total:Math.min(p2.s2qs.length,8),setCur:c=>p2.s2cur=c,setDone:()=>p2.s2done=true};
+  if(k==='s3') return {ev:p2.s3ev,cur:p2.s3cur,total:Math.min(p2.s3qs.length,8),setCur:c=>p2.s3cur=c,setDone:()=>p2.s3done=true};
+  if(k==='s4') return {ev:p2.s4ev,cur:p2.s4cur,total:Math.min(p2.s4qs.length,8),setCur:c=>p2.s4cur=c,setDone:()=>p2.s4done=true};
   return null;
 }
 
@@ -573,7 +582,7 @@ function renderP3(){
 }
 
 // ===== 目標達成機能 =====
-const GOAL='式の計算（中2）を使いこなせるようになろう！';
+const GOAL='等式の変形（中2）を使いこなせるようになろう！';
 const NEXT_OPTIONS=[
   {icon:'👨‍🏫',label:'説明してみる・教える'},
   {icon:'📚',label:'ほかの問題にも挑戦'},
@@ -646,8 +655,54 @@ function addTeach(n){
 }
 function c1(){return '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">📚 ほかの問題にも挑戦</div><div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ 同じ単元の別の問題で、もう一度力試しをしてみよう！</div><button class="primary-btn" onclick="TEST1.sort(()=>Math.random()-0.5);p0.evals=Array(TEST1.length).fill(null);p0.cur=0;p0.done=false;switchPhase(0);">別の問題でもう一度 →</button>';}
 function c2(){var prev=window._taTime||null;var h='<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">⏱ タイムアタックに挑戦</div><div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ ストップウォッチを用意しよう！<br>☆ スタートを押したらすぐ問題が始まるよ。</div>';if(prev)h+='<div style="background:var(--grn);border:1px solid var(--grn2);border-radius:var(--r16);padding:10px;margin-bottom:1rem;font-size:13px;color:var(--grntext2)">⏱ 前回：<strong style="color:var(--grntext)">'+prev+'</strong></div>';h+='<button class="primary-btn" onclick="TEST1.sort(()=>Math.random()-0.5);p0.evals=Array(TEST1.length).fill(null);p0.cur=0;p0.done=false;switchPhase(0);">⏱ スタート！</button>';return h;}
-function c3(){return '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">🚀 文字式の利用・証明に挑戦！</div><div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ 偶数・奇数や連続する整数の性質を、文字式で説明してみよう！</div><button class="primary-btn" onclick="window.location.href=\'index.html\'">内容選択画面へ →</button>';}
+function c3(){
+  var qs=[
+    {q:'次の等式を [ ] の中の文字について解け。<br>3x + 2y = 12　［y］',
+     h:'💡 y だけを左辺に残すために、まず +3x を右辺に移項。最後に両辺を 2 でわる。',
+     a:'3x + 2y = 12<br>移項: 2y = 12 − 3x<br>両辺を 2 でわる:<br>y = '+fr('12 − 3x','2')+' = <strong>6 − '+fr('3x','2')+'</strong><br>（または y = '+fr('12 − 3x','2')+' のままでもOK）',
+     level:'★★'},
+    {q:'次の等式を [ ] の中の文字について解け。<br>'+fr('x − 2','3')+' + 1 = y　［x］',
+     h:'💡 まず +1 を右辺に移項。次に、分母を消すために両辺に 3 をかける。最後に −2 を移項。',
+     a:fr('x − 2','3')+' + 1 = y<br>移項: '+fr('x − 2','3')+' = y − 1<br>両辺に 3 をかける: x − 2 = 3(y − 1) = 3y − 3<br>移項: <strong>x = 3y − 1</strong>',
+     level:'★★'},
+    {q:'三角錐の体積の公式 V = '+fr('1','3')+'·S·h を、h について解け。<br>（S は底面積、h は高さ、V は体積）',
+     h:'💡 ① 両辺に 3 をかけて分母をはらう（3V = Sh）<br>② 両辺を S でわる',
+     a:'V = '+fr('1','3')+'Sh<br>両辺に 3 をかける: 3V = Sh<br>両辺を S でわる: <strong>h = '+fr('3V','S')+'</strong>',
+     level:'★★'},
+    {q:'次の等式を [ ] の中の文字について解け。<br>4(a − 2b) = 3a + c　［a］',
+     h:'💡 まずかっこを分配で外す → 4a − 8b = 3a + c。<br>a の項を左辺に、それ以外を右辺に集める。',
+     a:'4(a − 2b) = 3a + c<br>分配: 4a − 8b = 3a + c<br>3a を左辺、−8b を右辺に移項:<br>4a − 3a = c + 8b<br><strong>a = c + 8b</strong>（または a = 8b + c）',
+     level:'★★★'},
+    {q:'次の等式を [ ] の中の文字について解け。<br>'+fr('a + b','2')+' = '+fr('2a − c','3')+'　［a］',
+     h:'💡 分母 2 と 3 の最小公倍数は 6。両辺に 6 をかけて分母をはらう。<br>そのあと、a の項を左辺に集めて、共通因数 a でくくる。',
+     a:fr('a + b','2')+' = '+fr('2a − c','3')+'<br>両辺に 6 をかける: 3(a + b) = 2(2a − c)<br>分配: 3a + 3b = 4a − 2c<br>3a を右辺に、−2c を左辺に移項:<br>3b + 2c = 4a − 3a<br>3b + 2c = a<br>よって <strong>a = 3b + 2c</strong>',
+     level:'★★★'},
+  ];
+  var checks=window._devChecks||Array(5).fill(false);
+  window._devChecks=checks;
+  var html='<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:0.75rem">🚀 もう一歩先の発展問題</div>';
+  html+='<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ ちょっと複雑な等式変形！分母をはらう・かっこを外す・両辺を集める など、コツを総動員。</div>';
+  qs.forEach(function(q,i){
+    html+='<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem;margin-bottom:0.75rem">';
+    html+='<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">';
+    html+='<label style="display:flex;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;margin-top:2px">';
+    html+='<input type="checkbox" id="dev'+i+'" '+(checks[i]?'checked':'')+' onchange="devCheck('+i+')" style="width:18px;height:18px;accent-color:var(--grn3);cursor:pointer"></label>';
+    html+='<div><span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--grn);color:var(--grntext);margin-right:6px">'+q.level+'</span>';
+    html+='<span style="font-size:13px;font-weight:700;color:#1a1a2e;line-height:1.7">Q'+(i+1)+'. '+q.q+'</span></div></div>';
+    html+='<div style="display:flex;gap:8px;margin-bottom:6px">';
+    html+='<button onclick="toggleHint('+i+')" style="flex:1;text-align:left;padding:8px 12px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:var(--grn);font-size:12px;font-weight:700;color:var(--grntext);cursor:pointer;display:flex;justify-content:space-between">💡 ヒントを見る <span id="hintarr'+i+'">▼</span></button>';
+    html+='<button onclick="toggleDev('+i+')" style="flex:1;text-align:left;padding:8px 12px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:#fdebd8;font-size:12px;font-weight:700;color:var(--grntext2);cursor:pointer;display:flex;justify-content:space-between">答えと解説 <span id="devarr'+i+'">▼</span></button>';
+    html+='</div>';
+    html+='<div id="hintbody'+i+'" style="display:none;background:var(--grn);border:1px solid var(--grn2);border-radius:var(--r16);padding:0.75rem 1rem;margin-bottom:6px;font-size:13px;color:var(--grntext);line-height:1.8">'+q.h+'</div>';
+    html+='<div id="devans'+i+'" style="display:none;background:#fdebd8;border:1px solid var(--grn2);border-radius:var(--r16);padding:1rem;font-size:12px;color:var(--grntext2);line-height:1.9">'+q.a+'</div>';
+    html+='</div>';
+  });
+  return html;
+}
 function c4(){return '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">🔁 基礎に戻って確認</div><div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ 満点でも「なんとなく解けた」部分がないか確認しよう！</div><button class="primary-btn" onclick="switchPhase(2)">STEP練習へ戻る →</button>';}
+function devCheck(i){if(!window._devChecks)window._devChecks=Array(5).fill(false);window._devChecks[i]=document.getElementById('dev'+i).checked;}
+function toggleDev(i){var b=document.getElementById('devans'+i),a=document.getElementById('devarr'+i);if(!b)return;var open=b.style.display==='block';b.style.display=open?'none':'block';if(a)a.textContent=open?'\u25B2':'\u25BC';}
+function toggleHint(i){var b=document.getElementById('hintbody'+i),a=document.getElementById('hintarr'+i);if(!b)return;var open=b.style.display==='block';b.style.display=open?'none':'block';if(a)a.textContent=open?'\u25B2':'\u25BC';}
 var _restTimer=null,_restRemain=0,_restPaused=false;
 function c5(){
   var h='';
