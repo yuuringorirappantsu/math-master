@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文字式 文章題 — まちがいLABO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Zen Maru Gothic',sans-serif;background:#f5f9f2;min-height:100vh;padding:1.5rem 1rem}
+.container{max-width:640px;margin:0 auto}
+:root{
+  --grn:#d8f3e0;--grn2:#aee4bc;--grn3:#52b069;--grn4:#368a4a;
+  --grntext:#1a4d28;--grntext2:#2d7a42;
+  --peach:#faeeda;--peachtext:#633806;
+  --rose:#fbeaf0;--rosetext:#72243e;
+  --sage:#eaf3de;--sagetext:#27500a;
+  --r20:20px;--r16:16px;--card-border:#aee4bc;
+}
+.back-link{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--card-border);border-radius:999px;padding:6px 14px;font-size:12px;color:var(--grntext2);cursor:pointer;margin-bottom:1rem;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif;font-weight:500;text-decoration:none}
+.back-link:hover{background:var(--grn)}
+.top-header{background:var(--grn);border-radius:24px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:14px;border:1.5px solid var(--grn2)}
+.top-icon{width:48px;height:48px;border-radius:50%;background:var(--grn3);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;flex-shrink:0}
+.top-title{font-size:18px;font-weight:700;color:var(--grntext)}
+.top-sub{font-size:12px;color:var(--grntext2);margin-top:2px}
+.top-badge{display:inline-block;background:#fff;border:1px solid var(--grn2);border-radius:999px;font-size:10px;font-weight:700;color:var(--grntext2);padding:2px 10px;margin-top:4px}
+.phase-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:1.25rem}
+.ptab{padding:9px 4px;border-radius:999px;border:none;background:#c8ecd1;font-size:12px;color:#2d7a42;cursor:pointer;text-align:center;line-height:1.35;transition:all 0.18s;font-family:'Zen Maru Gothic',sans-serif}
+.ptab span{display:block;font-size:10px;margin-top:2px;opacity:0.85}
+.ptab.active{background:var(--grn3);color:#fff;font-weight:700}
+.q-card{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:1.25rem;margin-bottom:1rem}
+.q-num-badge{display:inline-flex;align-items:center;gap:5px;background:var(--grn);color:var(--grntext);font-size:11px;font-weight:700;padding:3px 12px;border-radius:999px;margin-bottom:10px}
+.q-formula{font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:4px;line-height:1.8}
+.q-direction{font-size:13px;color:#2d7a42;margin-bottom:1rem}
+.pip-row{display:flex;gap:5px;margin-bottom:1.25rem}
+.pip{flex:1;height:8px;border-radius:999px}
+.reveal-btn{display:inline-flex;align-items:center;gap:6px;background:var(--grn);color:var(--grntext);border:1.5px solid var(--grn2);border-radius:999px;padding:8px 18px;font-size:13px;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;font-weight:500}
+.reveal-btn:hover{background:var(--grn2)}
+.dontknow-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#888;border:1.5px solid #ddd;border-radius:999px;padding:8px 18px;font-size:13px;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;margin-left:8px}
+.ans-box{background:#edf9f0;border-radius:var(--r16);padding:1rem;margin-top:10px;display:none;border:1px solid var(--grn2)}
+.ans-box.show{display:block}
+.ans-label{font-size:11px;color:var(--grntext2);margin-bottom:4px;font-weight:700}
+.ans-val{font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--grntext);margin-bottom:6px;line-height:1.8}
+.ans-hint{font-size:12px;color:var(--grntext2);line-height:1.8}
+.eval-wrap{margin-top:1rem;display:none}
+.eval-wrap.show{display:block}
+.eval-q{font-size:13px;color:#2d7a42;margin-bottom:8px}
+.eval-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.e-btn{padding:10px 6px;border-radius:var(--r16);border:1.5px solid var(--card-border);background:#fff;font-size:14px;font-weight:700;cursor:pointer;text-align:center;font-family:'Zen Maru Gothic',sans-serif}
+.e-btn:hover{background:var(--grn)}
+.e-ok.sel{background:var(--sage);border-color:#639922;color:var(--sagetext)}
+.e-half.sel{background:var(--peach);border-color:#ba7517;color:var(--peachtext)}
+.e-ng.sel{background:var(--rose);border-color:#d4537e;color:var(--rosetext)}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}
+.nav-count{font-size:12px;color:#2d7a42}
+.next-btn{display:inline-flex;align-items:center;gap:6px;background:var(--grn3);color:#fff;border:none;border-radius:999px;padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif}
+.next-btn:hover{background:var(--grn4)}
+.next-btn:disabled{opacity:0.3;cursor:default}
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0.75rem}
+.choice-btn{padding:12px 8px;border-radius:var(--r16);border:1.5px solid var(--card-border);background:#fff;font-size:15px;font-weight:700;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:all 0.2s;text-align:center}
+.choice-btn:hover{background:var(--grn)}
+.choice-correct{background:#d8f3e0!important;border-color:#52b069!important;color:#1a4d28!important;cursor:default}
+.choice-wrong{background:#fbeaf0!important;border-color:#d4537e!important;color:#72243e!important;cursor:default}
+.ox-result{text-align:center;font-size:18px;font-weight:700;padding:10px;border-radius:var(--r16);margin-bottom:0.75rem}
+.ox-correct{background:#d8f3e0;color:#1a4d28}
+.ox-wrong{background:#fbeaf0;color:#72243e}
+.step-nav{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:1.25rem}
+.snav{padding:8px 3px;border-radius:999px;border:none;background:#c8ecd1;font-size:11px;color:#2d7a42;cursor:pointer;text-align:center;line-height:1.35;font-family:'Zen Maru Gothic',sans-serif}
+.snav span{display:block;font-size:9px;margin-top:2px;opacity:0.8}
+.snav.active{background:var(--grn3);color:#fff;font-weight:700}
+.done-wrap{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:1.5rem}
+.done-icon{width:64px;height:64px;border-radius:50%;background:var(--grn);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 1rem}
+.done-title{font-size:18px;font-weight:700;color:#1a1a2e;text-align:center;margin-bottom:0.5rem}
+.done-btns{display:flex;flex-direction:column;gap:8px}
+.primary-btn{width:100%;padding:12px;border-radius:999px;border:none;background:var(--grn3);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif}
+.primary-btn:hover{background:var(--grn4)}
+.secondary-btn{width:100%;padding:11px;border-radius:999px;border:1.5px solid var(--grn2);background:#fff;color:#1a1a2e;font-size:14px;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif}
+.secondary-btn:hover{background:var(--grn)}
+.result-rows{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:0.75rem 1rem;margin-bottom:1rem}
+.rrow{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:0.5px solid var(--grn)}
+.rrow:last-child{border-bottom:none}
+.rformula{flex:1;color:#1a1a2e;font-size:12px;line-height:1.5}
+.rbadge{padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+.rb-ok{background:var(--sage);color:var(--sagetext)}
+.rb-half{background:var(--peach);color:var(--peachtext)}
+.rb-ng{background:var(--rose);color:var(--rosetext)}
+.stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1rem}
+.stat-c{background:#f2faf4;border-radius:var(--r16);padding:0.75rem;text-align:center}
+.stat-n{font-size:22px;font-weight:700;margin-bottom:2px}
+.stat-l{font-size:11px;color:#2d7a42}
+.msg-box{font-size:13px;color:var(--grntext2);line-height:1.7;padding:10px 14px;background:var(--grn);border-radius:var(--r16);margin-bottom:1rem;border:1px solid var(--grn2)}
+.sa-q{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:10px;line-height:1.5;margin-top:1rem}
+.sa-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:0.5rem}
+.sa-btn{text-align:left;padding:11px 14px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:#fff;font-size:13px;color:#1a1a2e;cursor:pointer;line-height:1.5;font-family:'Zen Maru Gothic',sans-serif}
+.sa-btn:hover{background:var(--grn)}
+.sa-btn.sel{background:var(--grn);border-color:var(--grn3);color:var(--grntext);font-weight:700}
+.rule-toggle{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--grn);border:1.5px solid var(--grn2);border-radius:var(--r16);cursor:pointer;font-size:13px;font-weight:700;color:var(--grntext);margin-bottom:0.75rem}
+.rule-toggle:hover{background:var(--grn2)}
+.rule-body{display:none;background:#edf9f0;border:1px solid var(--grn2);border-radius:var(--r16);padding:1rem;margin-bottom:0.75rem;font-size:11px}
+.rule-body.open{display:block}
+.rule-sec{margin-bottom:10px}
+.rule-sec:last-child{margin-bottom:0}
+.rule-sec-title{font-weight:700;color:var(--grntext);margin-bottom:6px;font-size:12px}
+.rule-row{display:flex;gap:8px;padding:4px 0;border-bottom:0.5px solid var(--grn2);line-height:1.6}
+.rule-row:last-child{border-bottom:none}
+.rule-label{font-weight:700;color:var(--grntext);min-width:90px;font-size:11px;flex-shrink:0}
+.rule-ex{font-family:'JetBrains Mono',monospace;color:var(--grntext2);font-size:11px}
+.pat-grid1{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.pat-card{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:0.75rem;cursor:pointer;transition:all 0.15s}
+.pat-card:hover{background:var(--grn)}
+.pat-name{font-size:12px;font-weight:700;color:var(--grntext);margin-bottom:4px}
+.pat-ex{font-size:11px;color:var(--grntext2)}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;font-size:0.85em;line-height:1.1}
+.frac .num{border-bottom:1.5px solid currentColor;padding:0 3px;text-align:center}
+.frac .den{padding:0 3px;text-align:center}
+</style>
+</head>
+<body>
+<div class="container">
+<a class="back-link" href="index.html">← まちがいLABO トップへ</a>
+<div class="top-header">
+  <div class="top-icon">📝</div>
+  <div>
+    <div class="top-title">文字式の文章題</div>
+    <div class="top-sub">力試し → 分析 → 練習 → 再テスト</div>
+    <span class="top-badge">文章題</span>
+  </div>
+</div>
+<div class="phase-tabs">
+  <button class="ptab active" id="tab0" onclick="goPhase(0)">力試し<span>テスト</span></button>
+  <button class="ptab" id="tab1" onclick="goPhase(1)">自己<span>分析</span></button>
+  <button class="ptab" id="tab2" onclick="goPhase(2)">STEP<span>練習</span></button>
+  <button class="ptab" id="tab3" onclick="goPhase(3)">再<span>テスト</span></button>
+</div>
+<div id="app"></div>
+</div>
+<script>
+const sh = a => [...a].sort(()=>Math.random()-0.5);
+const fr = (n,d) => `<span class="frac"><span class="num">${n}</span><span class="den">${d}</span></span>`;
+const pipHtml = (total,cur) =>
+  '<div class="pip-row">'+Array(total).fill(0).map((_,i)=>
+    `<div class="pip" style="background:${i<cur?'#52b069':i===cur?'#aee4bc':'#c8ecd1'}"></div>`).join('')+'</div>';
+
+// ===== 問題プール =====
+
+// STEP1: 単純な言葉→式（1操作）
+const PS1=[
+  {q:'aの3倍',               a:'3a',                   hint:'倍はかけ算: a×3=3a'},
+  {q:'xより5大きい数',       a:'x+5',                  hint:'より大きい→たし算: x+5'},
+  {q:'yより8小さい数',       a:'y−8',                  hint:'より小さい→ひき算: y−8'},
+  {q:'bの半分',               a:fr('b','2'),            hint:'半分→÷2'},
+  {q:'aの4倍',               a:'4a',                   hint:'倍はかけ算: a×4=4a'},
+  {q:'xより3大きい数',       a:'x+3',                  hint:'より大きい→たし算: x+3'},
+  {q:'yの5分の1',            a:fr('y','5'),            hint:'5分の1→÷5'},
+  {q:'n番目の偶数',           a:'2n',                   hint:'偶数は2の倍数: 2×n=2n'},
+  {q:'n番目の奇数',           a:'2n−1',                 hint:'奇数は2n−1と表せる'},
+  {q:'aの2倍',               a:'2a',                   hint:'倍はかけ算: a×2=2a'},
+  {q:'xより6小さい数',       a:'x−6',                  hint:'より小さい→ひき算: x−6'},
+  {q:'aの3分の1',            a:fr('a','3'),            hint:'3分の1→÷3'},
+  {q:'xの10倍',              a:'10x',                  hint:'倍はかけ算: x×10=10x'},
+  {q:'bを4等分した1つ分',    a:fr('b','4'),            hint:'4等分→÷4'},
+  {q:'aより2大きい数',       a:'a+2',                  hint:'より大きい→たし算: a+2'},
+];
+
+// STEP2: 複合的な言葉→式（2操作以上）
+const PS2=[
+  {q:'aの3倍より5大きい数',             a:'3a+5',               hint:'3倍=3a, そこから5大きい: 3a+5'},
+  {q:'xの2倍より4小さい数',             a:'2x−4',               hint:'2倍=2x, そこから4小さい: 2x−4'},
+  {q:'aとbの和の2倍',                   a:'2(a+b)',             hint:'まず和=a+b, その2倍: 2(a+b)'},
+  {q:'xの3倍とyの和',                   a:'3x+y',               hint:'3倍=3x, それとyの和: 3x+y'},
+  {q:'aを2倍してbを引いた数',           a:'2a−b',               hint:'2倍=2a, そこからbを引く: 2a−b'},
+  {q:'xより大きい最小の整数',           a:'x+1',                hint:'xより大きい最小の整数はx+1（xが整数のとき）'},
+  {q:'連続する2つの整数（小さい方をn）',a:'n と n+1',           hint:'連続する整数は1ずつ増える: n, n+1'},
+  {q:'連続する3つの整数（真ん中をn）',  a:'n−1, n, n+1',       hint:'前後に1ずつ: n−1, n, n+1'},
+  {q:'連続する2つの奇数（小さい方をn）',a:'n と n+2',           hint:'奇数は2とびなので: n, n+2'},
+  {q:'十の位がa、一の位がbの2桁の数',  a:'10a+b',             hint:'十の位はa×10=10a, 一の位はb: 10a+b'},
+  {q:'十の位と一の位を入れ替えた数\n（もとは10a+b）',a:'10b+a',hint:'十の位↔一の位を入れ替え: 10b+a'},
+  {q:'2で割ると1余る整数（整数nを使って）',a:'2n+1',           hint:'奇数はすべて2n+1と表せる'},
+  {q:'aの5倍からbの2倍を引いた数',     a:'5a−2b',             hint:'5倍=5a, 2倍=2b: 5a−2b'},
+  {q:'xとyの差の3倍',                   a:'3(x−y)',            hint:'まず差=x−y, その3倍: 3(x−y)'},
+  {q:'aを3倍してから4を加えた数',       a:'3a+4',              hint:'3倍=3a, 4を加える: 3a+4'},
+];
+
+// STEP3: 文章題（等式・不等式はchoicesあり）
+// 代金・過不足・面積
+const PS3A=[
+  {q:'1個x円のりんごを5個買った代金',            a:'5x円',           hint:'代金=単価×個数: x×5=5x円'},
+  {q:'1個a円のケーキをb個買ったときの代金',      a:'ab円',           hint:'代金=単価×個数: a×b=ab円'},
+  {q:'a円持っていてb円の本を買ったときのおつり',  a:'a−b円',         hint:'おつり=持っているお金−代金: a−b円'},
+  {q:'1本x円のペンを3本買うと代金は300円になる',
+   choices:['3x=300','x+3=300','3x>300','x=300+3'], hint:'3本の代金=3x, それが300円: 3x=300'},
+  {q:'1個a円のりんごをb個買うと代金は500円以下になる',
+   choices:['ab≦500','ab<500','ab=500','a+b≦500'], hint:'代金=ab, 500円以下（≦）: ab≦500'},
+  {q:'縦acm、横bcmの長方形の面積',               a:'ab cm²',        hint:'面積=縦×横: a×b=ab'},
+  {q:'1辺がacmの正方形の面積',                   a:'a² cm²',        hint:'面積=辺×辺: a×a=a²'},
+  {q:'縦acm、横bcmの長方形の周の長さがLcm',
+   choices:['2(a+b)=L','ab=L','2a+b=L','a+b=L'],   hint:'周の長さ=2×(縦+横)=2(a+b)=L'},
+  {q:'縦xm、横ymの長方形の面積が20m²以上になる',
+   choices:['xy≧20','xy>20','xy=20','x+y≧20'],     hint:'面積=xy, 20以上（≧）: xy≧20'},
+  {q:'a円の品物をx個買った代金がb円より高くなる',
+   choices:['ax>b','ax≧b','ax<b','ax=b'],           hint:'代金=ax, それがbより高い（超える→>）: ax>b'},
+  {q:'クラスのx人のうちy人が女子で、男子はz人',
+   choices:['x−y=z','x+y=z','y−x=z','x=y+z'],     hint:'男子=全体−女子: x−y=z'},
+  {q:'1個x円のお菓子をa個買って1000円払うとおつりはy円',
+   choices:['1000−ax=y','ax−1000=y','1000+ax=y','ax=1000+y'], hint:'おつり=1000−代金=1000−ax=y'},
+];
+
+// 速さ
+const PS3B=[
+  {q:'時速xkmで走る自動車がa時間で進む距離',        a:'ax km',          hint:'距離=速さ×時間: x×a=ax'},
+  {q:'分速amで歩くとき、b分間に歩く距離',           a:'ab m',           hint:'距離=速さ×時間: a×b=ab'},
+  {q:'時速akm でb km進むのにかかる時間',            a:fr('b','a')+'時間', hint:'時間=距離÷速さ: b÷a'},
+  {q:'x kmの道のりをa時間で歩いたときの時速',       a:fr('x','a')+' <span class="frac"><span>km</span><span>h</span></span>', hint:'速さ=距離÷時間: x÷a'},
+  {q:'xkmの道のりを時速4kmで歩くとy時間かかる',
+   choices:['x=4y','4x=y','x+4=y','y=x+4'],        hint:'距離=速さ×時間より x=4×y=4y'},
+  {q:'時速xkmで3時間走ったとき進む距離はykm以上になる',
+   choices:['3x≧y','3x>y','3x≦y','x≧3y'],         hint:'距離=3x, それがy以上（≧）: 3x≧y'},
+  {q:'分速amで歩くときb分間に歩く距離がckm未満になる',
+   choices:['ab<1000c','ab<c','ab≦1000c','ab>1000c'], hint:'距離=ab(m), c km=1000c m: ab<1000c'},
+  {q:'時速xkmで走る自動車がa時間でy km以上進む',
+   choices:['ax≧y','ax>y','ax≦y','ax=y'],          hint:'距離=ax, それがy以上（≧）: ax≧y'},
+];
+
+// 割合
+const PS3C=[
+  {q:'定価a円の商品を2割引きで買ったときの値段',    a:'0.8a円',         hint:'2割引き=8割の値段: a×0.8=0.8a円'},
+  {q:'a円の品物を3割増しで売ったときの値段',        a:'1.3a円',         hint:'3割増し=1.3倍: a×1.3=1.3a円'},
+  {q:'x%の食塩水100gに含まれる食塩の量',            a:'x g',            hint:'食塩=100×<span class="frac"><span>x</span><span>100</span></span>=x g'},
+  {q:'濃度a%の食塩水xgに含まれる食塩の量',         a:fr('ax','100')+' g', hint:'食塩=食塩水×濃度/100: <span class="frac"><span>ax</span><span>100</span></span> g'},
+  {q:'aとbの平均がcになる',
+   choices:['<span class="frac"><span>a+b</span><span>2</span></span>=c','a+b=c','(a+b)×2=c','<span class="frac"><span>a</span><span>2</span></span>+b=c'], hint:'平均=(a+b)÷2, それがc: <span class="frac"><span>a+b</span><span>2</span></span>=c'},
+  {q:'半径rcmの円の面積（πを使って）',              a:'πr² cm²',        hint:'円の面積=πr²'},
+  {q:'a円のx%引きの値段',                           a:'a−'+fr('ax','100')+'円', hint:'x%引き=a×<span class="frac"><span>x</span><span>100</span></span>引き: a<span class="frac"><span>−ax</span><span>100</span></span>円'},
+  {q:'定価a円の商品を3割引きで買ったときの値段',
+   choices:['0.7a円','0.3a円','a−3円','1.3a円'],    hint:'3割引き=7割の値段: a×0.7=0.7a円'},
+];
+
+// テスト
+const TEST1=sh([...sh(PS1).slice(0,2),...sh(PS2).slice(0,2),...sh(PS3A).slice(0,2),...sh(PS3B).slice(0,2),...sh(PS3C).slice(0,2)]);
+const TEST2=sh([...sh(PS1).slice(5,7),...sh(PS2).slice(5,7),...sh(PS3A).slice(5,7),...sh(PS3B).slice(3,5),...sh(PS3C).slice(3,5)]);
+
+// ===== 状態 =====
+let phase=0;
+let t1={cur:0,ev:Array(TEST1.length).fill(null),done:false};
+let t2={cur:0,ev:Array(TEST2.length).fill(null),done:false};
+let sa={q1:new Set(),q2:new Set(),q3:null};
+let st={step:0,
+  s1qs:[],s1cur:0,s1ev:Array(8).fill(null),s1done:false,
+  s2qs:[],s2cur:0,s2ev:Array(8).fill(null),s2done:false,
+  s3pat:null,s3qs:[],s3cur:0,s3ev:Array(8).fill(null),s3done:false,
+  s4qs:[],s4cur:0,s4ev:Array(15).fill(null),s4done:false};
+let _ox={};
+
+function goPhase(n){
+  phase=n;
+  [0,1,2,3].forEach(i=>document.getElementById('tab'+i).className='ptab'+(i===n?' active':''));
+  renderApp();
+}
+function renderApp(){
+  if(phase===0)renderTest(TEST1,t1,true);
+  else if(phase===1)renderSA();
+  else if(phase===2)renderSTEP();
+  else renderTest(TEST2,t2,false);
+}
+
+// ===== 共通部品 =====
+function mkStat(ev){
+  const ok=ev.filter(v=>v==='ok').length,half=ev.filter(v=>v==='half').length,ng=ev.filter(v=>v==='ng').length;
+  return `<div class="stat-row">
+    <div class="stat-c"><div class="stat-n" style="color:#27500a">${ok}</div><div class="stat-l">◯ できた</div></div>
+    <div class="stat-c"><div class="stat-n" style="color:#ba7517">${half}</div><div class="stat-l">△ 一部</div></div>
+    <div class="stat-c"><div class="stat-n" style="color:#d4537e">${ng}</div><div class="stat-l">✕ 間違い</div></div>
+  </div>`;
+}
+function mkRows(qs,ev){
+  const L={ok:'◯',half:'△',ng:'✕'},C={ok:'rb-ok',half:'rb-half',ng:'rb-ng'};
+  return '<div class="result-rows">'+qs.map((q,i)=>
+    `<div class="rrow"><span class="rformula">${q.q}</span><span class="rbadge ${C[ev[i]||'ng']}">${L[ev[i]||'ng']}</span></div>`
+  ).join('')+'</div>';
+}
+function mkDone(icon,title,qs,ev,btns){
+  return `<div class="done-wrap">
+    <div style="text-align:center;margin-bottom:1rem"><div class="done-icon">${icon}</div><div class="done-title">${title}</div></div>
+    ${mkStat(ev)}${mkRows(qs,ev)}
+    <div class="msg-box" style="font-size:12px">💭 △・✕の問題をもう一度見て、どこで間違えたか考えてみよう。</div>
+    <div class="done-btns">${btns}</div>
+  </div>`;
+}
+
+// ===== テスト =====
+function renderTest(qs,state,isFirst){
+  const el=document.getElementById('app');
+  if(state.done){
+    const perfect=state.ev.every(v=>v==='ok');
+    // タイムアタックモード完了
+    if(window._taMode&&isFirst){
+      window._taMode=false;
+      renderTAResult(el,state);
+      return;
+    }
+    if(perfect){renderGoalAchieved(el,isFirst);return;}
+    const btn=isFirst
+      ?`<button class="primary-btn" onclick="goPhase(1)">自己分析へ進む →</button>`
+      :`<button class="primary-btn" onclick="goPhase(1)">もう一度自己分析して練習する →</button>
+        <button class="secondary-btn" onclick="resetT2()">もう一度再テストする</button>`;
+    el.innerHTML=`<div class="msg-box">📍 テスト完了！</div>${mkStat(state.ev)}${mkRows(qs,state.ev)}<div class="done-btns">${btn}</div>`;
+    return;
+  }
+  const q=qs[state.cur];
+  const isLast=state.cur===qs.length-1;
+  const nfn=isFirst?'nextT1':'nextT2';
+  let body='';
+  if(q.choices){
+    const shuffled=sh(q.choices.map((c,i)=>({c,ok:i===0})));
+    _ox['test']=shuffled;
+    body=`<div class="q-direction">正しい式を選べ</div>
+      <div class="choice-grid">${shuffled.map((it,i)=>
+        `<button class="choice-btn" id="txb${i}" onclick="pickOXTest(${i},'${nfn}')">${it.c}</button>`).join('')}</div>
+      <div id="txres"></div>
+      <div class="ans-box" id="txans"><div class="ans-hint">💡 ${q.hint}</div></div>
+      <div id="txnav" style="display:none">
+        <div class="nav-row"><span class="nav-count">${state.cur+1} / ${qs.length} 問目</span>
+          <button class="next-btn" onclick="${nfn}()">${isLast?'結果を見る →':'次の問題 →'}</button></div></div>`;
+  } else {
+    body=`<div class="q-direction">を文字式で表せ — まず紙に解いてみよう！</div>
+      <button class="reveal-btn" id="trb" onclick="revTest()">👀 答えを見る</button>
+      <button class="dontknow-btn" onclick="dkTest('${nfn}')">🤔 分からない</button>
+      <div class="ans-box" id="tans"><div class="ans-label">答え</div><div class="ans-val">${q.a}</div><div class="ans-hint">💡 ${q.hint}</div></div>
+      <div class="eval-wrap" id="tev">
+        <div class="eval-q">自分の答えはどうだった？</div>
+        <div class="eval-row">
+          <button class="e-btn e-ok" id="te-ok" onclick="evTest('ok','${nfn}')">◯ できた</button>
+          <button class="e-btn e-half" id="te-half" onclick="evTest('half','${nfn}')">△ 一部</button>
+          <button class="e-btn e-ng" id="te-ng" onclick="evTest('ng','${nfn}')">✕ 間違い</button>
+        </div>
+      </div>
+      <div class="nav-row"><span class="nav-count">${state.cur+1} / ${qs.length} 問目</span>
+        <button class="next-btn" id="tnb" onclick="${nfn}()" disabled>${isLast?'結果を見る →':'次の問題 →'}</button></div>`;
+  }
+  el.innerHTML=`<div class="msg-box">📍 テストは自分の現在地を知るためのもの。正直に◯△✕をつけよう！</div>
+    ${pipHtml(qs.length,state.cur)}
+    <div class="q-card">
+      <div class="q-num-badge">📝 問題${state.cur+1} / ${qs.length}</div>
+      <div class="q-formula">${q.q}</div>
+      ${body}
+    </div>`;
+}
+// ===== 目標達成画面 =====
+const GOAL='文字式マスターになろう！';
+const NEXT_OPTIONS=[
+  {icon:'👨‍🏫', label:'説明してみる・教える'},
+  {icon:'📚', label:'ほかの問題にも挑戦'},
+  {icon:'⏱', label:'タイムアタックに挑戦'},
+  {icon:'🚀', label:'もう一歩先の発展問題'},
+  {icon:'🔁', label:'基礎に戻って確認'},
+  {icon:'☕', label:'休憩する'},
+];
+
+function renderGoalAchieved(el,isFirst){
+  const btnStyle='padding:14px 8px;border-radius:var(--r16);border:1.5px solid var(--card-border);background:#fff;font-size:13px;font-weight:700;color:var(--grntext);cursor:pointer;font-family:Zen Maru Gothic,sans-serif;transition:all 0.15s;text-align:center;line-height:1.5;width:100%';
+  const optBtns=NEXT_OPTIONS.map((opt,i)=>
+    '<button onclick="showNextOption('+i+')" style="'+btnStyle+'" '+
+    'onmouseover="this.style.background=\'var(--grn)\'" onmouseout="this.style.background=\'#fff\'">'+
+    '<div style="font-size:24px;margin-bottom:4px">'+opt.icon+'</div>'+opt.label+
+    '</button>'
+  ).join('');
+  el.innerHTML=
+    '<div class="done-wrap" style="text-align:center">'+
+      '<div style="font-size:48px;margin-bottom:0.5rem">🏆</div>'+
+      '<div style="font-size:22px;font-weight:700;color:var(--grntext);margin-bottom:4px">目標達成！</div>'+
+      '<div style="font-size:15px;color:var(--grntext2);margin-bottom:1.25rem;font-weight:700">'+GOAL+'</div>'+
+      '<div style="background:var(--grn);border-radius:var(--r16);padding:1rem;margin-bottom:1.25rem;border:1px solid var(--grn2);text-align:left">'+
+        '<div style="font-size:13px;color:var(--grntext2);line-height:1.8">🌟 全問正解！すばらしい！<br>次は何をする？</div>'+
+      '</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+optBtns+'</div>'+
+    '</div>'+
+    '<div id="next-detail"></div>';
+}
+
+let _nextEl=null;
+function showNextOption(i){
+  const el=document.getElementById('next-detail');
+  if(!el)return;
+  const fns=[c0,c1,c2,c3,c4,c5];
+  if(fns[i])el.innerHTML='<div class="q-card" style="margin-top:1rem">'+fns[i]()+'</div>';
+}
+function c0(){
+  return '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">👨‍🏫 説明してみる・教える</div>'+
+    '<div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:0.75rem">☆ 教えることで、自分の理解がグッと深まる！</div>'+
+    '<button onclick="toggleEffect()" style="width:100%;text-align:left;padding:10px 14px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:var(--grn);font-size:13px;font-weight:700;color:var(--grntext);cursor:pointer;font-family:Zen Maru Gothic,sans-serif;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">'+
+      '人に教えることの効果 <span id="eff-arrow">▼</span></button>'+
+    '<div id="eff-body" style="display:none;background:#edf9f0;border:1px solid var(--grn2);border-radius:var(--r16);padding:1rem;margin-bottom:1rem;font-size:13px;color:var(--grntext2);line-height:2">'+
+      '・説明するには、自分が理解していないとできない。<br>'+
+      '・説明しようとすると、ぼんやりしていた部分が見えてくる。<br>'+
+      '・学習科学（ラーニング・ピラミッド）では、「人に教える」が一番記憶に残って定着するといわれている。'+
+    '</div>'+
+    '<div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:6px">☆ 教える人は誰でもOK！</div>'+
+    '<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">（友達、先生、おうちの人、飼ってるペット、、、、）</div>'+
+    '<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ その人の「分からない」に寄り添って、説明してみよう！</div>'+
+    '<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem">'+
+      '<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:10px">何人に説明できた？</div>'+
+      '<div style="display:flex;align-items:center;gap:12px">'+
+        '<input type="number" id="teach-count" min="0" max="99" value="0" style="width:72px;font-size:24px;font-weight:700;text-align:center;border:1.5px solid var(--grn2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--grntext)">'+
+        '<span style="font-size:16px;color:#1a1a2e">人</span>'+
+        '<button onclick="addTeach(1)" style="padding:8px 16px;border-radius:999px;border:none;background:var(--grn3);color:#fff;font-size:18px;font-weight:700;cursor:pointer">+</button>'+
+      '</div>'+
+    '</div>';
+}
+function c1(){
+  return '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">📚 ほかの問題にも挑戦</div>'+
+    '<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">'+
+      '☆ 同じ単元の別の問題で、もう一度力試しをしてみよう！<br>'+
+      '☆ 違う問題を解くことで、理解がさらに深まるよ。</div>'+
+    '<button class="primary-btn" onclick="retryNewTest()">別の問題で、もう一度力試しテストをする →</button>';
+}
+function c2(){
+  const prev=window._taTime||null;
+  return '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">⏱ タイムアタックに挑戦</div>'+
+    '<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">'+
+      '☆ ストップウォッチ（スマホのタイマーなど）を用意しよう！<br>'+
+      '☆ スタートを押したらすぐ問題が始まるよ。全問解き終わったらタイムを記録しよう。<br>'+
+      '☆ 速く解けるようになると、試験でも余裕が生まれるよ！</div>'+
+    (prev?'<div style="background:#edf9f0;border:1px solid var(--grn2);border-radius:var(--r16);padding:10px 14px;margin-bottom:1rem;font-size:13px;color:var(--grntext2)">'+
+      '⏱ 前回のタイム：<strong style="font-size:16px;color:var(--grntext)">'+prev+'</strong></div>':'')+
+    '<button class="primary-btn" onclick="startTA()" style="margin-bottom:0">⏱ タイマーを用意したらスタート！</button>';
+}
+function startTA(){
+  window._taMode=true;
+  TEST1.sort(()=>Math.random()-0.5);
+  t1={cur:0,ev:Array(TEST1.length).fill(null),done:false};
+  goPhase(0);
+}
+function c3(){
+  const qs=[
+    {q:'連続する3つの整数の和が、常に3の倍数になることを文字式を使って証明せよ。',
+     h:'💡 真ん中の整数をnとおいて、3つの整数をnを使って表してみよう。',
+     a:'連続する3つの整数を n−1, n, n+1 とおく。<br>和=(n−1)+n+(n+1)=3n<br>3nは3の倍数だから、連続する3つの整数の和は必ず3の倍数になる。■',
+     level:'★★'},
+    {q:'十の位がa、一の位がbの2桁の整数と、十の位と一の位を入れ替えた数の差を文字式で表し、9の倍数になることを証明せよ。',
+     h:'💡 2桁の整数は 10a+b と表せるよ。入れ替えた数は？',
+     a:'もとの数=10a+b、入れ替えた数=10b+a<br>差=(10a+b)−(10b+a)=9a−9b=9(a−b)<br>9(a−b)は9の倍数だから、差は必ず9の倍数になる。■',
+     level:'★★'},
+    {q:'a km の道のりを行きは時速4km、帰りは時速6kmで往復した。往復の平均の速さを文字式で表せ。',
+     h:'💡 平均の速さ＝合計距離÷合計時間。行きと帰りそれぞれの時間をaで表してみよう。',
+     a:'行きの時間=<span class="frac"><span>a</span><span>4</span></span>時間、帰りの時間=<span class="frac"><span>a</span><span>6</span></span>時間<br>往復の距離=2a km<br>合計時間=<span class="frac"><span>a</span><span>4</span></span>+<span class="frac"><span>a</span><span>6</span></span>=<span class="frac"><span>5a</span><span>12</span></span><br>平均の速さ=2a÷(<span class="frac"><span>5a</span><span>12</span></span>)=<strong><span class="frac"><span>24</span><span>5</span></span>=4.8 <span class="frac"><span>km</span><span>h</span></span></strong><br>（aの値によらず一定になる！）',
+     level:'★★★'},
+    {q:'濃度a%の食塩水200gと、濃度b%の食塩水300gを混ぜたとき、できる食塩水の濃度を文字式で表せ。',
+     h:'💡 食塩の量＝食塩水の量×濃度÷100。それぞれの食塩の量を足してから、濃度を計算しよう。',
+     a:'食塩の量：200×<span class="frac"><span>a</span><span>100</span></span>+300×<span class="frac"><span>b</span><span>100</span></span>=2a+3b(g)<br>食塩水の量：500g<br>濃度=<strong><span class="frac"><span>2a+3b</span><span>5</span></span> (%)</strong>',
+     level:'★★★'},
+    {q:'nを整数とするとき、n²+n は必ず偶数になることを証明せよ。',
+     h:'💡 n²+n を因数分解してみよう。連続する整数の積になるよ。',
+     a:'n²+n=n(n+1)<br>nとn+1は連続する整数なので、一方は必ず偶数。<br>よってn(n+1)は必ず偶数になる。■<br><br>【別解】nが偶数→n=2k: n(n+1)=2k(2k+1)（偶数）<br>nが奇数→n=2k+1: n(n+1)=(2k+1)(2k+2)=2(2k+1)(k+1)（偶数）',
+     level:'★★★'},
+  ];
+  const checks=window._devChecks||Array(5).fill(false);
+  window._devChecks=checks;
+  let html=
+    '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:0.75rem">🚀 もう一歩先の発展問題</div>'+ 
+    '<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ 教科書をちょっと超えた問題！できたらチェックして教えて！</div>';
+  qs.forEach((q,i)=>{
+    html+=
+      '<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem;margin-bottom:0.75rem">'+ 
+        '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">'+ 
+          '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;margin-top:2px">'+ 
+            '<input type="checkbox" id="dev'+i+'" '+(checks[i]?'checked':'')+' onchange="devCheck('+i+')" style="width:18px;height:18px;accent-color:var(--grn3);cursor:pointer"></label>'+ 
+          '<div>'+ 
+            '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--grn);color:var(--grntext);margin-right:6px">'+q.level+'</span>'+ 
+            '<span style="font-size:13px;font-weight:700;color:#1a1a2e;line-height:1.7">Q'+(i+1)+'. '+q.q+'</span></div></div>'+ 
+        '<div style="display:flex;gap:8px;margin-bottom:6px">'+ 
+          '<button onclick="toggleHint('+i+')" style="flex:1;text-align:left;padding:8px 12px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:var(--grn);font-size:12px;font-weight:700;color:var(--grntext);cursor:pointer;font-family:Zen Maru Gothic,sans-serif;display:flex;justify-content:space-between">💡 ヒントを見る <span id="hintarr'+i+'">▼</span></button>'+ 
+          '<button onclick="toggleDev('+i+')" style="flex:1;text-align:left;padding:8px 12px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:#edf9f0;font-size:12px;font-weight:700;color:var(--grntext2);cursor:pointer;font-family:Zen Maru Gothic,sans-serif;display:flex;justify-content:space-between">答えと解説 <span id="devarr'+i+'">▼</span></button>'+ 
+        '</div>'+ 
+        '<div id="hintbody'+i+'" style="display:none;background:var(--grn);border:1px solid var(--grn2);border-radius:var(--r16);padding:0.75rem 1rem;margin-bottom:6px;font-size:13px;color:var(--grntext);line-height:1.8">'+q.h+'</div>'+ 
+        '<div id="devans'+i+'" style="display:none;background:#edf9f0;border:1px solid var(--grn2);border-radius:var(--r16);padding:1rem;font-size:12px;color:var(--grntext2);line-height:1.9">'+q.a+'</div>'+ 
+      '</div>';
+  });
+  return html;
+}
+function devCheck(i){if(!window._devChecks)window._devChecks=Array(5).fill(false);window._devChecks[i]=document.getElementById('dev'+i).checked;}
+function toggleDev(i){const b=document.getElementById('devans'+i),a=document.getElementById('devarr'+i);if(!b)return;const open=b.style.display==='block';b.style.display=open?'none':'block';if(a)a.textContent=open?'▼':'▲';}
+function toggleHint(i){const b=document.getElementById('hintbody'+i),a=document.getElementById('hintarr'+i);if(!b)return;const open=b.style.display==='block';b.style.display=open?'none':'block';if(a)a.textContent=open?'▼':'▲';}
+function c4(){
+  return '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">🔁 基礎に戻って確認</div>'+
+    '<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">'+
+      '☆ 満点でも、「なんとなく解けた」部分がないか確認しよう！<br>'+
+      '☆ STEP 0のルール表をもう一度見て、言葉で説明できるか確かめてみよう。</div>'+
+    '<button class="primary-btn" onclick="st.step=0;goPhase(2)">STEP 0 のルール確認へ →</button>';
+}
+function c5(){
+  return '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">☕ 休憩する</div>'+
+    '<div style="font-size:14px;font-weight:700;color:#1a1a2e;line-height:1.8;margin-bottom:0.5rem">'+
+      '今日の目標は達成！ゆっくり休もう。<br>頑張った脳には休憩が必要！<br>記憶は休んでる間に整理されるよ。</div>'+
+    '<div style="font-size:12px;color:#aaa;line-height:1.9;margin-bottom:1.25rem">'+
+      '深呼吸する / 空を見る / 水を飲む / 少し伸びやマッサージをする / 首を回す / 少し目を閉じてみる... など。どれも大事な時間✨</div>'+
+    '<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem;margin-bottom:0.75rem">'+
+      '<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:10px">何分休憩する？（最大15分）</div>'+
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'+
+        '<input type="number" id="rest-min" min="1" max="15" value="5" '+
+          'style="width:72px;font-size:24px;font-weight:700;text-align:center;border:1.5px solid var(--grn2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--grntext)" '+
+          'oninput="if(this.value>15)this.value=15;if(this.value<1)this.value=1">'+
+        '<span style="font-size:16px;color:#1a1a2e;font-weight:700">分</span>'+
+        '<button onclick="startRest()" id="rest-start-btn" style="padding:10px 20px;border-radius:999px;border:none;background:var(--grn3);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:Zen Maru Gothic,sans-serif">スタート ▶</button>'+
+      '</div>'+
+      '<div id="rest-timer" style="display:none;text-align:center">'+
+        '<div id="rest-display" style="font-size:52px;font-weight:700;font-family:JetBrains Mono,monospace;color:var(--grntext);margin-bottom:8px">05:00</div>'+
+        '<div style="display:flex;gap:8px;justify-content:center">'+
+          '<button onclick="pauseRest()" id="rest-pause-btn" style="padding:8px 18px;border-radius:999px;border:1.5px solid var(--grn2);background:#fff;font-size:13px;font-weight:700;cursor:pointer;color:var(--grntext);font-family:Zen Maru Gothic,sans-serif">⏸ 一時停止</button>'+
+          '<button onclick="stopRest()" style="padding:8px 18px;border-radius:999px;border:1.5px solid #ddd;background:#fff;font-size:13px;cursor:pointer;color:#888;font-family:Zen Maru Gothic,sans-serif">✕ やめる</button>'+
+        '</div>'+
+      '</div>'+
+      '<div id="rest-done" style="display:none;text-align:center;padding:1rem">'+
+        '<div style="font-size:32px;margin-bottom:8px">🌿</div>'+
+        '<div style="font-size:28px;font-weight:700;color:var(--grntext);margin-bottom:8px">終了！</div>'+
+        '<div style="font-size:14px;color:var(--grntext2);line-height:1.8">気持ちを切り替えて<br>次の課題に挑戦しよう！</div>'+
+      '</div>'+
+    '</div>';
+}
+let _restTimer=null;
+let _restRemain=0;
+let _restPaused=false;
+function startRest(){
+  const min=Math.min(15,Math.max(1,parseInt(document.getElementById('rest-min').value)||5));
+  _restRemain=min*60;
+  _restPaused=false;
+  document.getElementById('rest-start-btn').style.display='none';
+  document.getElementById('rest-min').disabled=true;
+  document.getElementById('rest-timer').style.display='block';
+  updateRestDisplay();
+  if(_restTimer)clearInterval(_restTimer);
+  _restTimer=setInterval(()=>{
+    if(_restPaused)return;
+    _restRemain--;
+    updateRestDisplay();
+    if(_restRemain<=0){
+      clearInterval(_restTimer);
+      document.getElementById('rest-timer').style.display='none';
+      document.getElementById('rest-done').style.display='block';
+    }
+  },1000);
+}
+function updateRestDisplay(){
+  const el=document.getElementById('rest-display');
+  if(!el)return;
+  const m=Math.floor(_restRemain/60);
+  const s=_restRemain%60;
+  el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+}
+function pauseRest(){
+  _restPaused=!_restPaused;
+  const btn=document.getElementById('rest-pause-btn');
+  if(btn)btn.textContent=_restPaused?'▶ 再開':'⏸ 一時停止';
+}
+function stopRest(){
+  if(_restTimer)clearInterval(_restTimer);
+  document.getElementById('rest-timer').style.display='none';
+  document.getElementById('rest-start-btn').style.display='inline-flex';
+  document.getElementById('rest-min').disabled=false;
+}
+function toggleEffect(){
+  const b=document.getElementById('eff-body');
+  const a=document.getElementById('eff-arrow');
+  if(!b)return;
+  const open=b.style.display==='block';
+  b.style.display=open?'none':'block';
+  if(a)a.textContent=open?'▼':'▲';
+}
+function addTeach(n){
+  const inp=document.getElementById('teach-count');
+  if(!inp)return;
+  inp.value=Math.max(0,parseInt(inp.value||0)+n);
+}
+function pickOXTest(i,nfn){
+  const s=_ox['test'];if(!s)return;
+  const state=phase===0?t1:t2;
+  const ok=s[i].ok;
+  state.ev[state.cur]=ok?'ok':'ng';
+  s.forEach((_,j)=>{
+    const b=document.getElementById('txb'+j);if(!b)return;
+    if(s[j].ok)b.className='choice-btn choice-correct';
+    else if(j===i&&!ok)b.className='choice-btn choice-wrong';
+    b.onclick=null;
+  });
+  const res=document.getElementById('txres');
+  if(res){res.className='ox-result '+(ok?'ox-correct':'ox-wrong');res.textContent=ok?'✓ 正解！':'✗ 不正解';}
+  document.getElementById('txans').className='ans-box show';
+  document.getElementById('txnav').style.display='block';
+}
+function revTest(){document.getElementById('tans').className='ans-box show';document.getElementById('tev').className='eval-wrap show';document.getElementById('trb').style.display='none';}
+function dkTest(nfn){const st=phase===0?t1:t2;st.ev[st.cur]='ng';revTest();document.getElementById('te-ng').className='e-btn e-ng sel';document.getElementById('tnb').disabled=false;}
+function evTest(v,nfn){const s=phase===0?t1:t2;s.ev[s.cur]=v;['ok','half','ng'].forEach(k=>document.getElementById('te-'+k).className='e-btn e-'+k+(v===k?' sel':''));document.getElementById('tnb').disabled=false;}
+function nextT1(){t1.cur<TEST1.length-1?t1.cur++:t1.done=true;renderApp();}
+function nextT2(){t2.cur<TEST2.length-1?t2.cur++:t2.done=true;renderApp();}
+function renderTAResult(el,state){
+  const ok=state.ev.filter(v=>v==='ok').length;
+  const prev=window._taTime||null;
+  el.innerHTML=
+    '<div class="done-wrap" style="text-align:center">'+
+      '<div style="font-size:48px;margin-bottom:0.5rem">⏱</div>'+
+      '<div style="font-size:20px;font-weight:700;color:var(--grntext);margin-bottom:0.5rem">タイムアタック完了！</div>'+
+      mkStat(state.ev)+
+      (prev?'<div style="background:#edf9f0;border:1px solid var(--grn2);border-radius:var(--r16);padding:10px 14px;margin-bottom:1rem;font-size:13px;color:var(--grntext2)">⏱ 前回のタイム：<strong style="font-size:16px;color:var(--grntext)">'+prev+'</strong></div>':'')+
+      '<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem;margin-bottom:1rem;text-align:left">'+
+        '<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:10px">⏱ 今回のタイムを入力しよう</div>'+
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">'+
+          '<input type="number" id="ta-min" min="0" max="59" placeholder="分" style="width:64px;font-size:20px;font-weight:700;text-align:center;border:1.5px solid var(--grn2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--grntext)">'+
+          '<span style="font-size:16px;font-weight:700">:</span>'+
+          '<input type="number" id="ta-sec" min="0" max="59" placeholder="秒" style="width:64px;font-size:20px;font-weight:700;text-align:center;border:1.5px solid var(--grn2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--grntext)">'+
+          '<span style="font-size:13px;color:var(--grntext2)">分：秒</span>'+
+        '</div>'+
+        '<div id="ta-compare"></div>'+
+        '<button class="primary-btn" onclick="saveTA()">このタイムを記録する</button>'+
+      '</div>'+
+      '<div class="done-btns">'+
+        '<button class="secondary-btn" onclick="startTA()">もう一度タイムアタック</button>'+
+        '<button class="secondary-btn" onclick="t1={cur:0,ev:Array(TEST1.length).fill(null),done:false};goPhase(0)">通常テストに戻る</button>'+
+      '</div>'+
+    '</div>';
+}
+function saveTA(){
+  const m=parseInt(document.getElementById('ta-min').value)||0;
+  const s=parseInt(document.getElementById('ta-sec').value)||0;
+  if(m===0&&s===0)return;
+  const timeStr=m+'分'+s+'秒';
+  const prev=window._taTime||null;
+  const cmp=document.getElementById('ta-compare');
+  if(prev&&cmp){
+    // 比較
+    const [pm,ps]=prev.replace('分',':').replace('秒','').split(':').map(Number);
+    const prevSec=pm*60+ps;
+    const nowSec=m*60+s;
+    const diff=prevSec-nowSec;
+    if(diff>0){
+      cmp.innerHTML='<div style="background:#d8f3e0;border-radius:var(--r16);padding:8px 12px;margin-bottom:8px;font-size:13px;font-weight:700;color:#1a4d28">🎉 前回より '+Math.floor(diff/60)+'分'+diff%60+'秒 速くなった！</div>';
+    } else if(diff<0){
+      cmp.innerHTML='<div style="background:#faeeda;border-radius:var(--r16);padding:8px 12px;margin-bottom:8px;font-size:13px;color:#633806">もう少し！前回より '+(Math.floor(Math.abs(diff)/60))+'分'+Math.abs(diff)%60+'秒 おそかったよ。</div>';
+    } else {
+      cmp.innerHTML='<div style="background:#edf9f0;border-radius:var(--r16);padding:8px 12px;margin-bottom:8px;font-size:13px;color:var(--grntext2)">前回と同じタイム！</div>';
+    }
+  }
+  window._taTime=timeStr;
+  const btn=document.querySelector('#ta-compare')?.nextElementSibling;
+  if(btn)btn.textContent='✓ 記録済み（'+timeStr+'）';
+}
+function retryNewTest(){
+  // TEST1の問題を再シャッフルして最初から
+  TEST1.sort(()=>Math.random()-0.5);
+  t1={cur:0,ev:Array(TEST1.length).fill(null),done:false};
+  goPhase(0);
+}
+function resetT2(){t2={cur:0,ev:Array(TEST2.length).fill(null),done:false};renderApp();}
+
+// ===== 自己分析 =====
+function renderSA(){
+  const el=document.getElementById('app');
+  const ready=sa.q1.size>0&&sa.q2.size>0&&sa.q3!==null;
+  el.innerHTML=`
+    <div class="msg-box">💎 間違いは宝物。どこでつまずいたかを知ることが成長の第一歩！</div>
+    ${mkRows(TEST1,t1.ev)}
+    <div class="sa-q">Q1. △や✕の原因（複数OK）</div>
+    <div class="sa-opts">${[
+      '言葉をそのまま式に直すのが苦手',
+      '複数の操作が絡む式の作り方が分からない',
+      '文章から等式・不等式を作るのが苦手',
+      '速さ・時間・距離の関係が分からない',
+      '割合・%の式の作り方が分からない',
+      'やり方は分かるけどミスが多い'
+    ].map((t,i)=>`<button class="sa-btn${sa.q1.has(i)?' sel':''}" onclick="saQ(1,${i})">${t}</button>`).join('')}</div>
+    <div class="sa-q">Q2. とくに困った問題（複数OK）</div>
+    <div class="sa-opts">${[
+      '単純な言葉→式（aの3倍など）',
+      '複合的な言葉→式（aの3倍より5大きいなど）',
+      '代金・過不足・面積の文章題',
+      '速さの文章題',
+      '割合の文章題'
+    ].map((t,i)=>`<button class="sa-btn${sa.q2.has(i)?' sel':''}" onclick="saQ(2,${i})">${t}</button>`).join('')}</div>
+    <div class="sa-q">Q3. 次にやるべきSTEP</div>
+    <div class="sa-opts">${[
+      'STEP 0 — ルールと言葉→式の確認',
+      'STEP 1 — 単純な言葉→式の練習',
+      'STEP 2 — 複合的な言葉→式の練習',
+      'STEP 3 — 文章題（代金・速さ・割合）',
+      'STEP 4 — 全パターンごちゃまぜ'
+    ].map((t,i)=>`<button class="sa-btn${sa.q3===i?' sel':''}" onclick="saQ(3,${i})">${t}</button>`).join('')}</div>
+    <button class="primary-btn" onclick="saGo()" ${ready?'':'disabled style="opacity:0.35;cursor:default"'}>このSTEPの練習を始める →</button>`;
+}
+function saQ(qn,i){
+  if(qn===1){sa.q1.has(i)?sa.q1.delete(i):sa.q1.add(i);}
+  else if(qn===2){sa.q2.has(i)?sa.q2.delete(i):sa.q2.add(i);}
+  else{sa.q3=i;}
+  renderSA();
+}
+function saGo(){if(!sa.q1.size||!sa.q2.size||sa.q3===null)return;st.step=sa.q3;goPhase(2);}
+
+// ===== STEP練習 =====
+function renderSTEP(){
+  const el=document.getElementById('app');
+  el.innerHTML=`
+    <div class="msg-box">⬆️ レベルアップの時間！自分のペースでじっくり進もう。</div>
+    <div class="step-nav">
+      ${[['STEP 0','ルール確認'],['STEP 1','単純な式'],['STEP 2','複合的な式'],['STEP 3','文章題'],['STEP 4','ごちゃまぜ']].map((s,i)=>
+        `<button class="snav${st.step===i?' active':''}" onclick="switchST(${i})">${s[0]}<span>${s[1]}</span></button>`).join('')}
+    </div>
+    <div id="sc"></div>`;
+  renderSC();
+}
+function switchST(i){st.step=i;renderSTEP();}
+function renderSC(){
+  const el=document.getElementById('sc');
+  if(st.step===0)renderS0(el);
+  else if(st.step===1)renderS1(el);
+  else if(st.step===2)renderS2(el);
+  else if(st.step===3)renderS3(el);
+  else renderS4(el);
+}
+
+// STEP0 ルール確認
+function renderS0(el){
+  const sections=[
+    {title:'📖 文字式のルール確認',items:[
+      {label:'×の省略',         rule:'文字どうし・数と文字のかけ算は×を省く。数を文字の前に書く。', ex:'a×3=3a　　x×y=xy'},
+      {label:'1・−1の省略',     rule:'1×x=x、−1×x=−x（1は書かない）',                           ex:'1×a=a　　−1×b=−b'},
+      {label:'÷は分数に',        rule:'わり算は分数の形で書く。',                                   ex:'x÷3='+fr('x','3')+'　　a÷b='+fr('a','b')},
+    ]},
+    {title:'💬 言葉と式の対応',items:[
+      {label:'〜倍',             rule:'「aの3倍」→ かけ算',                                       ex:'aの3倍 = 3a'},
+      {label:'より大きい・小さい',rule:'「xより5大きい」→ たし算　「yより3小さい」→ ひき算',      ex:'xより5大きい = x+5　　yより3小さい = y−3'},
+      {label:'〜等分・〜分の1', rule:'「aを4等分した1つ」「bの5分の1」→ わり算（分数）',          ex:'aを4等分 = '+fr('a','4')+'　　bの5分の1 = '+fr('b','5')},
+      {label:'和・差・積・商',  rule:'和=たし算、差=ひき算、積=かけ算、商=わり算',                 ex:'xとyの和 = x+y　　aとbの積 = ab'},
+    ]},
+    {title:'⚡ 速さ・割合の表し方',items:[
+      {label:'速さの3公式',      rule:'距離=速さ×時間　速さ=距離÷時間　時間=距離÷速さ',           ex:'時速akm でb時間 → 距離=ab km'},
+      {label:'割引き',           rule:'a割引き = (10−a)割の値段 = 定価×<span class="frac"><span>10−a</span><span>10</span></span>',               ex:'定価x円の2割引き = 0.8x円'},
+      {label:'割増し',           rule:'a割増し = (10+a)割の値段 = 定価×<span class="frac"><span>10+a</span><span>10</span></span>',               ex:'定価x円の3割増し = 1.3x円'},
+      {label:'濃度',             rule:'食塩の量 = 食塩水の量 × 濃度/100',                         ex:'濃度a%の食塩水xg → 食塩='+fr('ax','100')+' g'},
+    ]},
+    {title:'🔢 不等号の使い方',items:[
+      {label:'以上・以下',       rule:'「a以上」→ a≧　「a以下」→ a≦（等号が含まれる！）',        ex:'x≧5（5以上）　　x≦10（10以下）'},
+      {label:'より大きい・未満', rule:'「aより大きい」→ a<　「a未満」→ a<（等号を含まない）',     ex:'x>5（5より大きい）　　x<10（10未満）'},
+      {label:'文章→不等式',     rule:'「代金が500円以下」→ 代金≦500',                             ex:'ab≦500（代金abが500円以下）'},
+    ]},
+  ];
+  el.innerHTML=
+    '<div class="msg-box">📖 ルールと例題を確認しよう。覚えたら STEP 1 へ！</div>'+
+    sections.map(sec=>
+      `<div style="margin-bottom:1rem">
+        <div style="font-size:13px;font-weight:700;color:var(--grntext);margin-bottom:8px;padding:6px 12px;background:var(--grn);border-radius:999px;display:inline-block">${sec.title}</div>
+        ${sec.items.map(it=>`
+          <div class="q-card" style="margin-bottom:8px">
+            <div class="q-num-badge">📖 ${it.label}</div>
+            <div style="font-size:12px;color:var(--grntext2);background:#edf9f0;border-radius:var(--r16);padding:8px 12px;margin-bottom:8px;line-height:1.7">${it.rule}</div>
+            <div style="font-size:13px;font-family:JetBrains Mono,monospace;color:#1a1a2e;line-height:2">${it.ex}</div>
+          </div>`).join('')}
+      </div>`
+    ).join('')+
+    '<button class="primary-btn" onclick="switchST(1)">ルールを確認できた！STEP 1 へ →</button>';
+}
+
+function ruleRef(sections){
+  const all={
+    basic:`<div class="rule-sec">
+      <div class="rule-sec-title">文字式のルール</div>
+      <div class="rule-row"><span class="rule-label">×の省略</span><span class="rule-ex">a×3=3a　x×y=xy</span></div>
+      <div class="rule-row"><span class="rule-label">÷は分数に</span><span class="rule-ex">x÷3=${fr('x','3')}　a÷b=${fr('a','b')}</span></div>
+      <div class="rule-row"><span class="rule-label">1・−1の省略</span><span class="rule-ex">1×x=x　−1×x=−x</span></div>
+    </div>`,
+    word:`<div class="rule-sec">
+      <div class="rule-sec-title">言葉と式の対応</div>
+      <div class="rule-row"><span class="rule-label">〜倍</span><span class="rule-ex">aの3倍=3a</span></div>
+      <div class="rule-row"><span class="rule-label">より大きい/小さい</span><span class="rule-ex">xより5大きい=x+5　yより3小さい=y−3</span></div>
+      <div class="rule-row"><span class="rule-label">〜等分・〜分の1</span><span class="rule-ex">aを4等分=${fr('a','4')}　bの5分の1=${fr('b','5')}</span></div>
+      <div class="rule-row"><span class="rule-label">和・差・積・商</span><span class="rule-ex">xとyの和=x+y　aとbの積=ab</span></div>
+    </div>`,
+    speed:`<div class="rule-sec">
+      <div class="rule-sec-title">速さの3公式</div>
+      <div class="rule-row"><span class="rule-label">距離</span><span class="rule-ex">距離=速さ×時間</span></div>
+      <div class="rule-row"><span class="rule-label">速さ</span><span class="rule-ex">速さ=距離÷時間</span></div>
+      <div class="rule-row"><span class="rule-label">時間</span><span class="rule-ex">時間=距離÷速さ</span></div>
+    </div>`,
+    ratio:`<div class="rule-sec">
+      <div class="rule-sec-title">割合</div>
+      <div class="rule-row"><span class="rule-label">割引き</span><span class="rule-ex">2割引き=0.8倍　3割引き=0.7倍</span></div>
+      <div class="rule-row"><span class="rule-label">割増し</span><span class="rule-ex">3割増し=1.3倍　2割増し=1.2倍</span></div>
+      <div class="rule-row"><span class="rule-label">濃度</span><span class="rule-ex">食塩=食塩水×濃度/100</span></div>
+    </div>`,
+    ineq:`<div class="rule-sec">
+      <div class="rule-sec-title">不等号</div>
+      <div class="rule-row"><span class="rule-label">以上・以下</span><span class="rule-ex">a以上→≧a　a以下→≦a（等号含む）</span></div>
+      <div class="rule-row"><span class="rule-label">より大きい・未満</span><span class="rule-ex">aより大きい→>a　a未満→<a（等号なし）</span></div>
+    </div>`,
+    price:`<div class="rule-sec">
+      <div class="rule-sec-title">代金・過不足</div>
+      <div class="rule-row"><span class="rule-label">代金</span><span class="rule-ex">代金=単価×個数</span></div>
+      <div class="rule-row"><span class="rule-label">おつり</span><span class="rule-ex">おつり=払った金額−代金</span></div>
+    </div>`,
+  };
+  const body=sections.map(k=>all[k]||'').join('');
+  return `<div class="rule-toggle" onclick="toggleRule()">📖 ルール表を見る <span id="rule-arrow">▼</span></div>
+  <div class="rule-body" id="rule-body">${body}</div>`;
+}
+function toggleRule(){
+  const b=document.getElementById('rule-body');
+  const a=document.getElementById('rule-arrow');
+  if(!b)return;
+  b.classList.toggle('open');
+  if(a)a.textContent=b.classList.contains('open')?'▲':'▼';
+}
+// STEP1
+function renderS1(el){
+  if(!st.s1qs.length)st.s1qs=sh(PS1).slice(0,8);
+  if(st.s1done){el.innerHTML=mkDone('✏️','STEP 1 完了！',st.s1qs,st.s1ev,
+    `<button class="primary-btn" onclick="switchST(2)">STEP 2 へ進む →</button>
+     <button class="secondary-btn" onclick="rst('s1',8)">もう一度</button>`);return;}
+  el.innerHTML=ruleRef(['basic','word']);
+  renderNCard(el,st.s1qs[st.s1cur],st.s1cur,8,'s1');
+}
+
+// STEP2
+function renderS2(el){
+  if(!st.s2qs.length)st.s2qs=sh(PS2).slice(0,8);
+  if(st.s2done){el.innerHTML=mkDone('📝','STEP 2 完了！',st.s2qs,st.s2ev,
+    `<button class="primary-btn" onclick="switchST(3)">STEP 3 へ進む →</button>
+     <button class="secondary-btn" onclick="rst('s2',8)">もう一度</button>`);return;}
+  el.innerHTML=ruleRef(['word','basic']);
+  renderNCard(el,st.s2qs[st.s2cur],st.s2cur,8,'s2');
+}
+
+// STEP3
+const S3PATS=[
+  {label:'代金・過不足・面積', pool:PS3A, ex:'1個x円のりんごを5個買った代金'},
+  {label:'速さ',               pool:PS3B, ex:'時速akm でb時間走った距離'},
+  {label:'割合',               pool:PS3C, ex:'定価a円の商品を2割引きで買ったときの値段'},
+];
+function renderS3(el){
+  if(st.s3pat===null){
+    el.innerHTML=ruleRef(['price','speed','ratio','ineq'])+'<div class="q-card"><div class="q-num-badge">✏️ STEP 3 — パターンを選ぼう</div>'+
+      '<div class="pat-grid1">'+
+      S3PATS.map((pt,i)=>`<div class="pat-card" onclick="pickS3(${i})"><div class="pat-name">${pt.label}</div><div class="pat-ex">${pt.ex}</div></div>`).join('')+
+      '</div></div>';
+    return;
+  }
+  if(st.s3done){el.innerHTML=mkDone('📖',S3PATS[st.s3pat].label+' 完了！',st.s3qs,st.s3ev,
+    `<button class="primary-btn" onclick="st.s3pat=null;st.s3done=false;st.s3qs=[];renderSTEP()">別のパターンを練習する</button>
+     <button class="primary-btn" onclick="switchST(4)">STEP 4 へ進む →</button>
+     <button class="secondary-btn" onclick="rst('s3',8)">もう一度</button>`);return;}
+  const q=st.s3qs[st.s3cur];
+  const s3rules=[['price','ineq'],['speed','ineq'],['ratio','ineq']];
+  el.innerHTML=ruleRef(s3rules[st.s3pat]||['price']);
+  if(q.choices)renderOXCard(el,q,st.s3cur,8,'s3');
+  else renderNCard(el,q,st.s3cur,8,'s3');
+}
+function pickS3(i){st.s3pat=i;st.s3cur=0;st.s3ev=Array(8).fill(null);st.s3done=false;st.s3qs=sh(S3PATS[i].pool).slice(0,8);renderSTEP();}
+
+// STEP4
+function renderS4(el){
+  if(!st.s4qs.length)st.s4qs=sh([...PS1,...PS2,...PS3A,...PS3B,...PS3C]).slice(0,15);
+  if(st.s4done){el.innerHTML=mkDone('🔀','STEP 4 完了！',st.s4qs,st.s4ev,
+    `<button class="primary-btn" onclick="goPhase(3)">再テストに挑戦する →</button>
+     <button class="secondary-btn" onclick="rst('s4',15)">もう一度</button>`);return;}
+  const q=st.s4qs[st.s4cur];
+  if(q.choices)renderOXCard(el,q,st.s4cur,15,'s4');
+  else renderNCard(el,q,st.s4cur,15,'s4');
+}
+
+function rst(k,len){st[k+'cur']=0;st[k+'ev']=Array(len).fill(null);st[k+'done']=false;renderSTEP();}
+
+// 通常カード
+function renderNCard(el,q,cur,total,key){
+  const isLast=cur===total-1;
+  el.innerHTML+=pipHtml(total,cur)+`
+    <div class="q-card">
+      <div class="q-num-badge">✏️ 問題${cur+1} / ${total}</div>
+      <div class="q-formula">${q.q}</div>
+      <div class="q-direction">を文字式で表せ — 紙に書いてから確認しよう！</div>
+      <button class="reveal-btn" id="rb${key}" onclick="revN('${key}')">👀 答えを見る</button>
+      <button class="dontknow-btn" onclick="dkN('${key}',${total})">🤔 分からない</button>
+      <div class="ans-box" id="ab${key}"><div class="ans-label">答え</div><div class="ans-val">${q.a}</div><div class="ans-hint">💡 ${q.hint}</div></div>
+      <div class="eval-wrap" id="ew${key}">
+        <div class="eval-q">自分の答えはどうだった？</div>
+        <div class="eval-row">
+          <button class="e-btn e-ok" id="eo${key}" onclick="evN('${key}','ok',${total})">◯ できた</button>
+          <button class="e-btn e-half" id="eh${key}" onclick="evN('${key}','half',${total})">△ 一部</button>
+          <button class="e-btn e-ng" id="en${key}" onclick="evN('${key}','ng',${total})">✕ 間違い</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav-row"><span class="nav-count">${cur+1} / ${total} 問目</span>
+      <button class="next-btn" id="nb${key}" onclick="nxN('${key}',${total})" disabled>${isLast?'結果を見る →':'次の問題 →'}</button></div>`;
+}
+function revN(k){document.getElementById('ab'+k).className='ans-box show';document.getElementById('ew'+k).className='eval-wrap show';document.getElementById('rb'+k).style.display='none';}
+function dkN(k,t){st[k+'ev'][st[k+'cur']]='ng';revN(k);document.getElementById('en'+k).className='e-btn e-ng sel';document.getElementById('nb'+k).disabled=false;}
+function evN(k,v,t){st[k+'ev'][st[k+'cur']]=v;['ok','half','ng'].forEach(n=>document.getElementById('e'+n[0]+k).className='e-btn e-'+n+(v===n?' sel':''));document.getElementById('nb'+k).disabled=false;}
+function nxN(k,t){st[k+'cur']<t-1?st[k+'cur']++:st[k+'done']=true;renderSTEP();}
+
+// 選択肢カード
+function renderOXCard(el,q,cur,total,key){
+  const shuffled=sh(q.choices.map((c,i)=>({c,ok:i===0})));
+  _ox[key]=shuffled;
+  const isLast=cur===total-1;
+  el.innerHTML+=pipHtml(total,cur)+`
+    <div class="q-card">
+      <div class="q-num-badge">✏️ 問題${cur+1} / ${total}</div>
+      <div class="q-formula">${q.q}</div>
+      <div class="q-direction">正しい式を選べ</div>
+      <div class="choice-grid">
+        ${shuffled.map((it,i)=>`<button class="choice-btn" id="oxb${i}" onclick="pickOX('${key}',${i},${total})">${it.c}</button>`).join('')}
+      </div>
+      <div id="oxres${key}"></div>
+      <div class="ans-box" id="ab${key}"><div class="ans-hint">💡 ${q.hint}</div></div>
+      <div id="ewnav${key}" style="display:none">
+        <div class="nav-row"><span class="nav-count">${cur+1} / ${total} 問目</span>
+          <button class="next-btn" onclick="nxN('${key}',${total})">${isLast?'結果を見る →':'次の問題 →'}</button></div>
+      </div>
+    </div>`;
+}
+function pickOX(key,i,total){
+  const s=_ox[key];if(!s)return;
+  const ok=s[i].ok;
+  st[key+'ev'][st[key+'cur']]=ok?'ok':'ng';
+  s.forEach((_,j)=>{
+    const b=document.getElementById('oxb'+j);if(!b)return;
+    if(s[j].ok)b.className='choice-btn choice-correct';
+    else if(j===i&&!ok)b.className='choice-btn choice-wrong';
+    b.onclick=null;
+  });
+  const res=document.getElementById('oxres'+key);
+  if(res){res.className='ox-result '+(ok?'ox-correct':'ox-wrong');res.textContent=ok?'✓ 正解！':'✗ 不正解';}
+  document.getElementById('ab'+key).className='ans-box show';
+  document.getElementById('ewnav'+key).style.display='block';
+}
+
+renderApp();
+</script>
+</body>
+</html>

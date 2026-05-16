@@ -99,6 +99,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#f0f5fd;min-height:100v
 /* √記号 */
 .sq{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-weight:700}
 .sq-bar{border-top:2px solid currentColor;padding:0 2px;margin-left:1px}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:0.85em;line-height:1.3;margin:0 2px}.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 3px;text-align:center}.frac>span:last-child{padding:0 3px;text-align:center}
 </style>
 </head>
 <body>
@@ -366,9 +367,202 @@ function testDoneHtml(qs,evals,btnLabel,btnFn){
 }
 
 /* ======= PHASE 0 ======= */
+
+function stepDoneHtml(icon,title,qs,evals,btns){
+  const labels={ok:'◯',half:'△',ng:'✕'},bc={ok:'rb-ok',half:'rb-half',ng:'rb-ng'};
+  let ok=evals.filter(v=>v==='ok').length,half=evals.filter(v=>v==='half').length,ng=evals.filter(v=>v==='ng').length;
+  return '<div class="done-wrap" style="text-align:left">'+
+    '<div style="text-align:center;margin-bottom:1.25rem"><div class="done-icon">'+icon+'</div><div class="done-title">'+title+'</div></div>'+
+    '<div class="stat-row">'+
+      '<div class="stat-c"><div class="stat-n" style="color:#27500a">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
+      '<div class="stat-c"><div class="stat-n" style="color:#ba7517">'+half+'</div><div class="stat-l">△ 一部</div></div>'+
+      '<div class="stat-c"><div class="stat-n" style="color:#d4537e">'+ng+'</div><div class="stat-l">✕ 間違い</div></div>'+
+    '</div>'+
+    '<div class="result-rows">'+
+      qs.map((q,i)=>'<div class="rrow"><span class="rformula">'+q.q+'</span><span class="rbadge '+bc[evals[i]||'ng']+'">'+labels[evals[i]||'ng']+'</span></div>').join('')+
+    '</div>'+
+    '<div class="msg-box" style="font-size:12px">💭 △・✕の問題をもう一度見て、どこで間違えたか考えてみよう。</div>'+
+    '<div class="done-btns">'+btns+'</div>'+
+  '</div>';
+}
+
+
+
+// ===== 目標達成機能 =====
+const GOAL='平方根を使いこなせるようになろう！';
+const NEXT_OPTIONS=[
+  {icon:'\uD83D\uDC68\u200D\uD83C\uDFEB', label:'説明してみる・教える'},
+  {icon:'\uD83D\uDCDA', label:'ほかの問題にも挑戦'},
+  {icon:'\u231B', label:'タイムアタックに挑戦'},
+  {icon:'\uD83D\uDE80', label:'計算練習に挑戦！'},
+  {icon:'\uD83D\uDD01', label:'基礎に戻って確認'},
+  {icon:'\u2615', label:'休憩する'},
+];
+function renderGoalAchieved(el){
+  [0,1,2,3].forEach(function(i){
+    var ph=document.getElementById('phase'+i);
+    var tb=document.getElementById('tab'+i);
+    if(ph)ph.style.display=i===0?'block':'none';
+    if(tb)tb.className='ptab'+(i===0?' active':'');
+  });
+  var btnStyle='padding:14px 8px;border-radius:var(--r16);border:1.5px solid var(--card-border);background:#fff;font-size:13px;font-weight:700;color:var(--grntext);cursor:pointer;font-family:Zen Maru Gothic,sans-serif;transition:all 0.15s;text-align:center;line-height:1.5;width:100%';
+  var optBtns=NEXT_OPTIONS.map(function(opt,i){
+    return '<button onclick="showNextOption('+i+')" style="'+btnStyle+'" onmouseover="this.style.background=\'var(--grn)\'" onmouseout="this.style.background=\'#fff\'"><div style="font-size:24px;margin-bottom:4px">'+opt.icon+'</div>'+opt.label+'</button>';
+  }).join('');
+  el.innerHTML=
+    '<div class="done-wrap" style="text-align:center">'+
+    '<div style="font-size:48px;margin-bottom:0.5rem">\uD83C\uDFC6</div>'+
+    '<div style="font-size:22px;font-weight:700;color:var(--grntext);margin-bottom:4px">\u76EE\u6A19\u9054\u6210\uFF01</div>'+
+    '<div style="font-size:15px;color:var(--grntext2);margin-bottom:1.25rem;font-weight:700">'+GOAL+'</div>'+
+    '<div style="background:var(--grn);border-radius:var(--r16);padding:1rem;margin-bottom:1.25rem;border:1px solid var(--grn2);text-align:left">'+
+    '<div style="font-size:13px;color:var(--grntext2);line-height:1.8">\uD83C\uDF1F \u5168\u554F\u6B63\u89E3\uFF01\u3059\u3070\u3089\u3057\u3044\uFF01<br>\u6B21\u306F\u4F55\u3092\u3059\u308B\uFF1F</div>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+optBtns+'</div>'+
+    '</div>'+
+    '<div id="next-detail"></div>';
+}
+function showNextOption(i){
+  var el=document.getElementById('next-detail');if(!el)return;
+  var fns=[c0,c1,c2,c3,c4,c5];
+  if(fns[i])el.innerHTML='<div class="q-card" style="margin-top:1rem">'+fns[i]()+'</div>';
+}
+function c3(){
+  var h='';
+  h+='<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">\uD83D\uDE80 計算練習に挑戦！</div>';
+  h+='<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆計算練習（基本編）にもチャレンジしよう！</div>';
+  h+='<button class="primary-btn" onclick="window.location.href=\'index.html\'">\u5185\u5BB9\u9078\u629E\u753B\u9762\u3078 \u2192</button>';
+  return h;
+}
+function c0_teach(){
+  var h='<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">\uD83D\uDC68\u200D\uD83C\uDFEB \u8AAC\u660E\u3057\u3066\u307F\u308B\u30FB\u6559\u3048\u308B</div>';
+  h+='<div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:0.75rem">\u2606 \u6559\u3048\u308B\u3053\u3068\u3067\u3001\u81EA\u5206\u306E\u7406\u89E3\u304C\u30B0\u30C3\u3068\u6DF1\u307E\u308B\uFF01</div>';
+  h+='<button onclick="toggleEffect()" style="width:100%;text-align:left;padding:10px 14px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:var(--grn);font-size:13px;font-weight:700;color:var(--grntext);cursor:pointer;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">\u4EBA\u306B\u6559\u3048\u308B\u3053\u3068\u306E\u52B9\u679C <span id="eff-arrow">\u25BC</span></button>';
+  h+='<div id="eff-body" style="display:none;background:#edf9f0;border:1px solid var(--grn2);border-radius:var(--r16);padding:1rem;margin-bottom:1rem;font-size:13px;color:var(--grntext2);line-height:2">';
+  h+='\u30FB\u8AAC\u660E\u3059\u308B\u306B\u306F\u3001\u81EA\u5206\u304C\u7406\u89E3\u3057\u3066\u3044\u306A\u3044\u3068\u3067\u304D\u306A\u3044\u3002<br>';
+  h+='\u30FB\u8AAC\u660E\u3057\u3088\u3046\u3068\u3059\u308B\u3068\u3001\u307C\u3093\u3084\u308A\u3057\u3066\u3044\u305F\u90E8\u5206\u304C\u898B\u3048\u3066\u304F\u308B\u3002<br>';
+  h+='\u30FB\u5B66\u7FD2\u79D1\u5B66\uFF08\u30E9\u30FC\u30CB\u30F3\u30B0\u30FB\u30D4\u30E9\u30DF\u30C3\u30C9\uFF09\u3067\u306F\u3001\u300C\u4EBA\u306B\u6559\u3048\u308B\u300D\u304C\u4E00\u756A\u8A18\u61B6\u306B\u6B8B\u3063\u3066\u5B9A\u7740\u3059\u308B\u3068\u3044\u308F\u308C\u3066\u3044\u308B\u3002';
+  h+='</div>';
+  h+='<div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:6px">\u2606 \u6559\u3048\u308B\u4EBA\u306F\u8AB0\u3067\u3082OK\uFF01</div>';
+  h+='<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">\uFF08\u53CB\u9054\u3001\u5148\u751F\u3001\u304A\u3046\u3061\u306E\u4EBA\u3001\u98FC\u3063\u3066\u308B\u30DA\u30C3\u30C8\u3001\u3001\u3001\u3001\uFF09</div>';
+  h+='<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">\u2606 \u305D\u306E\u4EBA\u306E\u300C\u5206\u304B\u3089\u306A\u3044\u300D\u306B\u5BC4\u308A\u6DFB\u3063\u3066\u3001\u8AAC\u660E\u3057\u3066\u307F\u3088\u3046\uFF01</div>';
+  h+='<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem">';
+  h+='<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:10px">\u4F55\u4EBA\u306B\u8AAC\u660E\u3067\u304D\u305F\uFF1F</div>';
+  h+='<div style="display:flex;align-items:center;gap:12px">';
+  h+='<input type="number" id="teach-count" min="0" max="99" value="0" style="width:72px;font-size:24px;font-weight:700;text-align:center;border:1.5px solid var(--grn2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--grntext)">';
+  h+='<span style="font-size:16px;color:#1a1a2e">\u4EBA</span>';
+  h+='<button onclick="addTeach(1)" style="padding:8px 16px;border-radius:999px;border:none;background:var(--grn3);color:#fff;font-size:18px;font-weight:700;cursor:pointer">+</button>';
+  h+='</div></div>';
+  return h;
+}
+function c0(){return c0_teach();}
+function c1(){
+  var h='<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">\uD83D\uDCDA \u307B\u304B\u306E\u554F\u984C\u306B\u3082\u6311\u6226</div>';
+  h+='<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">\u2606 \u540C\u3058\u5358\u5143\u306E\u5225\u306E\u554F\u984C\u3067\u3001\u3082\u3046\u4E00\u5EA6\u529B\u8A66\u3057\u3092\u3057\u3066\u307F\u3088\u3046\uFF01<br>\u2606 \u9055\u3046\u554F\u984C\u3092\u89E3\u304F\u3053\u3068\u3067\u3001\u7406\u89E3\u304C\u3055\u3089\u306B\u6DF1\u307E\u308B\u3088\u3002</div>';
+  h+='<button class="primary-btn" onclick="retryNewTest()">\u5225\u306E\u554F\u984C\u3067\u3001\u3082\u3046\u4E00\u5EA6\u529B\u8A66\u3057\u30C6\u30B9\u30C8\u3092\u3059\u308B \u2192</button>';
+  return h;
+}
+function c2(){
+  var prev=window._taTime||null;
+  var h='<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">\u231B \u30BF\u30A4\u30E0\u30A2\u30BF\u30C3\u30AF\u306B\u6311\u6226</div>';
+  h+='<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">\u2606 \u30B9\u30C8\u30C3\u30D7\u30A6\u30A9\u30C3\u30C1\uFF08\u30B9\u30DE\u30DB\u306E\u30BF\u30A4\u30DE\u30FC\u306A\u3069\uFF09\u3092\u7528\u610F\u3057\u3088\u3046\uFF01<br>\u2606 \u30B9\u30BF\u30FC\u30C8\u3092\u62BC\u3057\u305F\u3089\u3059\u3050\u554F\u984C\u304C\u59CB\u307E\u308B\u3088\u3002<br>\u2606 \u901F\u304F\u89E3\u3051\u308B\u3088\u3046\u306B\u306A\u308B\u3068\u3001\u8A66\u9A13\u3067\u3082\u4F59\u88D5\u304C\u751F\u307E\u308C\u308B\u3088\uFF01</div>';
+  if(prev)h+='<div style="background:#edf9f0;border:1px solid var(--grn2);border-radius:var(--r16);padding:10px 14px;margin-bottom:1rem;font-size:13px;color:var(--grntext2)">\u231B \u524D\u56DE\u306E\u30BF\u30A4\u30E0\uFF1A<strong style="font-size:16px;color:var(--grntext)">'+prev+'</strong></div>';
+  h+='<button class="primary-btn" onclick="startTA()">\u231B \u30BF\u30A4\u30DE\u30FC\u3092\u7528\u610F\u3057\u305F\u3089\u30B9\u30BF\u30FC\u30C8\uFF01</button>';
+  return h;
+}
+function c4(){
+  var h='<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">\uD83D\uDD01 \u57FA\u790E\u306B\u623B\u3063\u3066\u78BA\u8A8D</div>';
+  h+='<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">\u2606 \u6E80\u70B9\u3067\u3082\u300C\u306A\u3093\u3068\u306A\u304F\u89E3\u3051\u305F\u300D\u90E8\u5206\u304C\u306A\u3044\u304B\u78BA\u8A8D\u3057\u3088\u3046\uFF01<br>\u2606 STEP\u7DF4\u7FD2\u306B\u623B\u3063\u3066\u3001\u3082\u3046\u4E00\u5EA6\u78BA\u304B\u3081\u3066\u307F\u3088\u3046\u3002</div>';
+  h+='<button class="primary-btn" onclick="switchPhase(2)">STEP\u7DF4\u7FD2\u3078\u623B\u308B \u2192</button>';
+  return h;
+}
+function c5(){
+  var h='<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">\u2615 \u4F11\u61A9\u3059\u308B</div>';
+  h+='<div style="font-size:14px;font-weight:700;color:#1a1a2e;line-height:1.8;margin-bottom:0.5rem">\u4ECA\u65E5\u306E\u76EE\u6A19\u306F\u9054\u6210\uFF01\u3086\u3063\u304F\u308A\u4F11\u3082\u3046\u3002<br>\u982D\u5F35\u3063\u305F\u8133\u306B\u306F\u4F11\u61A9\u304C\u5FC5\u8981\uFF01<br>\u8A18\u61B6\u306F\u4F11\u3093\u3067\u308B\u9593\u306B\u6574\u7406\u3055\u308C\u308B\u3088\u3002</div>';
+  h+='<div style="font-size:12px;color:#aaa;line-height:1.9;margin-bottom:1.25rem">\u6DF1\u547C\u5438\u3059\u308B / \u7A7A\u3092\u898B\u308B / \u6C34\u3092\u98F2\u3080 / \u5C11\u3057\u4F38\u3073\u3084\u30DE\u30C3\u30B5\u30FC\u30B8 / \u9996\u3092\u56DE\u3059 / \u5C11\u3057\u76EE\u3092\u9596\u3058\u3066\u307F\u308B... \u306A\u3069\u3002\u3069\u308C\u3082\u5927\u4E8B\u306A\u6642\u9593\u2728</div>';
+  h+='<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem">';
+  h+='<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:10px">\u4F55\u5206\u4F11\u61A9\u3059\u308B\uFF1F\uFF08\u6700\u592715\u5206\uFF09</div>';
+  h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">';
+  h+='<input type="number" id="rest-min" min="1" max="15" value="5" style="width:72px;font-size:24px;font-weight:700;text-align:center;border:1.5px solid var(--grn2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--grntext)" oninput="if(this.value>15)this.value=15;if(this.value<1)this.value=1">';
+  h+='<span style="font-size:16px;color:#1a1a2e;font-weight:700">\u5206</span>';
+  h+='<button onclick="startRest()" id="rest-start-btn" style="padding:10px 20px;border-radius:999px;border:none;background:var(--grn3);color:#fff;font-size:14px;font-weight:700;cursor:pointer">\u30B9\u30BF\u30FC\u30C8 \u25B6</button>';
+  h+='</div><div id="rest-timer" style="display:none;text-align:center">';
+  h+='<div id="rest-display" style="font-size:52px;font-weight:700;font-family:JetBrains Mono,monospace;color:var(--grntext);margin-bottom:8px">05:00</div>';
+  h+='<div style="display:flex;gap:8px;justify-content:center">';
+  h+='<button onclick="pauseRest()" id="rest-pause-btn" style="padding:8px 18px;border-radius:999px;border:1.5px solid var(--grn2);background:#fff;font-size:13px;font-weight:700;cursor:pointer;color:var(--grntext)">\u23F8 \u4E00\u6642\u505C\u6B62</button>';
+  h+='<button onclick="stopRest()" style="padding:8px 18px;border-radius:999px;border:1.5px solid #ddd;background:#fff;font-size:13px;cursor:pointer;color:#888">\u2715 \u3084\u3081\u308B</button>';
+  h+='</div></div>';
+  h+='<div id="rest-done" style="display:none;text-align:center;padding:1rem">';
+  h+='<div style="font-size:32px;margin-bottom:8px">\uD83C\uDF3F</div>';
+  h+='<div style="font-size:28px;font-weight:700;color:var(--grntext);margin-bottom:8px">\u7D42\u4E86\uFF01</div>';
+  h+='<div style="font-size:14px;color:var(--grntext2);line-height:1.8">\u6C17\u6301\u3061\u3092\u5207\u308A\u66FF\u3048\u3066<br>\u6B21\u306E\u8AB2\u984C\u306B\u6311\u6226\u3057\u3088\u3046\uFF01</div>';
+  h+='</div></div>';
+  return h;
+}
+var _restTimer=null,_restRemain=0,_restPaused=false;
+function startTA(){window._taMode=true;TEST1.sort(function(){return Math.random()-0.5;});p0.evals=Array(TEST1.length).fill(null);p0.cur=0;p0.done=false;switchPhase(0);}
+function startRest(){
+  var min=Math.min(15,Math.max(1,parseInt(document.getElementById('rest-min').value)||5));
+  _restRemain=min*60;_restPaused=false;
+  document.getElementById('rest-start-btn').style.display='none';
+  document.getElementById('rest-min').disabled=true;
+  document.getElementById('rest-timer').style.display='block';
+  updateRestDisplay();
+  if(_restTimer)clearInterval(_restTimer);
+  _restTimer=setInterval(function(){
+    if(_restPaused)return;_restRemain--;updateRestDisplay();
+    if(_restRemain<=0){clearInterval(_restTimer);document.getElementById('rest-timer').style.display='none';document.getElementById('rest-done').style.display='block';}
+  },1000);
+}
+function updateRestDisplay(){var el=document.getElementById('rest-display');if(!el)return;var m=Math.floor(_restRemain/60),s=_restRemain%60;el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;}
+function pauseRest(){_restPaused=!_restPaused;var btn=document.getElementById('rest-pause-btn');if(btn)btn.textContent=_restPaused?'\u25B6 \u518D\u958B':'\u23F8 \u4E00\u6642\u505C\u6B62';}
+function stopRest(){if(_restTimer)clearInterval(_restTimer);document.getElementById('rest-timer').style.display='none';document.getElementById('rest-start-btn').style.display='inline-flex';document.getElementById('rest-min').disabled=false;}
+function toggleEffect(){var b=document.getElementById('eff-body'),a=document.getElementById('eff-arrow');if(!b)return;var open=b.style.display==='block';b.style.display=open?'none':'block';if(a)a.textContent=open?'\u25B2':'\u25BC';}
+function addTeach(n){var inp=document.getElementById('teach-count');if(!inp)return;inp.value=Math.max(0,parseInt(inp.value||0)+n);}
+function retryNewTest(){TEST1.sort(function(){return Math.random()-0.5;});p0.evals=Array(TEST1.length).fill(null);p0.cur=0;p0.done=false;switchPhase(0);}
+function renderTAResult(el,state){
+  var prev=window._taTime||null;
+  var h='<div class="done-wrap" style="text-align:center"><div style="font-size:48px;margin-bottom:0.5rem">\u231B</div>';
+  h+='<div style="font-size:20px;font-weight:700;color:var(--grntext);margin-bottom:0.5rem">\u30BF\u30A4\u30E0\u30A2\u30BF\u30C3\u30AF\u5B8C\u4E86\uFF01</div>';
+  h+='<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem;margin-bottom:1rem;text-align:left">';
+  h+='<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:10px">\u231B \u4ECA\u56DE\u306E\u30BF\u30A4\u30E0\u3092\u5165\u529B\u3057\u3088\u3046</div>';
+  h+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">';
+  h+='<input type="number" id="ta-min" min="0" max="59" placeholder="\u5206" style="width:64px;font-size:20px;font-weight:700;text-align:center;border:1.5px solid var(--grn2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--grntext)">';
+  h+='<span style="font-size:16px;font-weight:700">:</span>';
+  h+='<input type="number" id="ta-sec" min="0" max="59" placeholder="\u79D2" style="width:64px;font-size:20px;font-weight:700;text-align:center;border:1.5px solid var(--grn2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--grntext)">';
+  h+='<span style="font-size:13px;color:var(--grntext2)">\u5206\uFF1A\u79D2</span></div>';
+  if(prev)h+='<div style="background:#edf9f0;border:1px solid var(--grn2);border-radius:var(--r16);padding:10px;margin-bottom:8px;font-size:13px;color:var(--grntext2)">\u231B \u524D\u56DE\uFF1A<strong>'+prev+'</strong></div>';
+  h+='<div id="ta-compare"></div><button class="primary-btn" onclick="saveTA()">\u3053\u306E\u30BF\u30A4\u30E0\u3092\u8A18\u9332\u3059\u308B</button></div>';
+  h+='<div class="done-btns"><button class="secondary-btn" onclick="startTA()">\u3082\u3046\u4E00\u5EA6\u30BF\u30A4\u30E0\u30A2\u30BF\u30C3\u30AF</button>';
+  h+='<button class="secondary-btn" onclick="p0.evals=Array(TEST1.length).fill(null);p0.cur=0;p0.done=false;switchPhase(0)">\u901A\u5E38\u30C6\u30B9\u30C8\u306B\u623B\u308B</button></div></div>';
+  el.innerHTML=h;
+}
+function saveTA(){
+  var m=parseInt(document.getElementById('ta-min').value)||0,s=parseInt(document.getElementById('ta-sec').value)||0;
+  if(m===0&&s===0)return;
+  var timeStr=m+'\u5206'+s+'\u79D2',prev=window._taTime||null,cmp=document.getElementById('ta-compare');
+  if(prev&&cmp){
+    var pts=prev.replace('\u5206',':').replace('\u79D2','').split(':');
+    var pm=parseInt(pts[0])||0,ps2=parseInt(pts[1])||0;
+    var diff=(pm*60+ps2)-(m*60+s);
+    if(diff>0)cmp.innerHTML='<div style="background:#d8f3e0;border-radius:var(--r16);padding:8px 12px;margin-bottom:8px;font-size:13px;font-weight:700;color:#1a4d28">\uD83C\uDF89 \u524D\u56DE\u3088\u308A '+Math.floor(diff/60)+'\u5206'+diff%60+'\u79D2 \u901F\u304F\u306A\u3063\u305F\uFF01</div>';
+    else if(diff<0)cmp.innerHTML='<div style="background:#faeeda;border-radius:var(--r16);padding:8px 12px;margin-bottom:8px;font-size:13px;color:#633806">\u3082\u3046\u5C11\u3057\uFF01\u524D\u56DE\u3088\u308A '+Math.floor(Math.abs(diff)/60)+'\u5206'+Math.abs(diff)%60+'\u79D2 \u304A\u305D\u304B\u3063\u305F\u3088\u3002</div>';
+    else cmp.innerHTML='<div style="background:#edf9f0;border-radius:var(--r16);padding:8px 12px;margin-bottom:8px;font-size:13px;color:var(--grntext2)">\u524D\u56DE\u3068\u540C\u3058\u30BF\u30A4\u30E0\uFF01</div>';
+  }
+  window._taTime=timeStr;
+  var btn=document.querySelector('#ta-compare');
+  if(btn&&btn.nextElementSibling)btn.nextElementSibling.textContent='\u2713 \u8A18\u9332\u6E08\u307F\uFF08'+timeStr+'\uFF09';
+}
+function devCheck(i){if(!window._devChecks)window._devChecks=Array(5).fill(false);window._devChecks[i]=document.getElementById('dev'+i).checked;}
+function toggleDev(i){var b=document.getElementById('devans'+i),a=document.getElementById('devarr'+i);if(!b)return;var open=b.style.display==='block';b.style.display=open?'none':'block';if(a)a.textContent=open?'\u25B2':'\u25BC';}
+function toggleHint(i){var b=document.getElementById('hintbody'+i),a=document.getElementById('hintarr'+i);if(!b)return;var open=b.style.display==='block';b.style.display=open?'none':'block';if(a)a.textContent=open?'\u25B2':'\u25BC';}
+
 function renderP0(){
   const el=document.getElementById('phase0');
-  if(p0.done){el.innerHTML=testDoneHtml(TEST1,p0.evals,'自己分析へ進む →',()=>switchPhase(1));return;}
+  if(p0.done){
+    if(window._taMode){window._taMode=false;renderTAResult(el,p0);return;}
+    if(p0.evals.every(v=>v==='ok')){renderGoalAchieved(el);return;}
+    el.innerHTML=testDoneHtml(TEST1,p0.evals,'自己分析へ進む →',()=>switchPhase(1));return;
+  }
   el.innerHTML=testCard(TEST1[p0.cur],p0.cur,TEST1.length,'0','revealP0','dkP0','setE0','nextP0','📝');
 }
 function revealP0(){revealTest('0');}
@@ -488,7 +682,7 @@ function renderS1(el){
     let ok=p2.s1evals.filter(v=>v==='ok').length,half=p2.s1evals.filter(v=>v==='half').length,ng=p2.s1evals.filter(v=>v==='ng').length;
     const msgs=['もう少し！もう一度やってみよう。','いい感じ！STEP 2 へ進もう。','よくできました！','完璧！'];
     const mi=ok<=4?0:ok<=9?1:ok<=13?2:3;
-    el.innerHTML='<div class="done-wrap"><div class="done-icon">√</div><div class="done-title">STEP 1 完了！</div><div class="done-score">◯'+ok+' △'+half+' ✕'+ng+'</div><div class="done-msg">'+msgs[mi]+'</div><div class="done-btns"><button class="primary-btn" onclick="switchStep(2)">STEP 2 へ進む →</button><button class="secondary-btn" onclick="resetS1()">STEP 1 をもう一度やる</button></div></div>';
+    el.innerHTML=stepDoneHtml('√','STEP 1 完了！',STEP1_QS,p2.s1evals,'<button class="primary-btn" onclick="switchStep(2)">STEP 2 へ進む →</button><button class="secondary-btn" onclick="resetS1()">STEP 1 をもう一度やる</button>');
     return;
   }
   const q=STEP1_QS[p2.s1cur];
@@ -539,7 +733,7 @@ function renderS2(el){
     let ok=p2.s2evals.filter(v=>v==='ok').length,half=p2.s2evals.filter(v=>v==='half').length,ng=p2.s2evals.filter(v=>v==='ng').length;
     const msgs=['もう少し！もう一度やってみよう。','いい感じ！STEP 3 へ進もう。','よくできました！','完璧！'];
     const mi=ok<=4?0:ok<=9?1:ok<=13?2:3;
-    el.innerHTML='<div class="done-wrap"><div class="done-icon">📊</div><div class="done-title">STEP 2 完了！</div><div class="done-score">◯'+ok+' △'+half+' ✕'+ng+'</div><div class="done-msg">'+msgs[mi]+'</div><div class="done-btns"><button class="primary-btn" onclick="switchStep(3)">STEP 3 へ進む →</button><button class="secondary-btn" onclick="resetS2()">STEP 2 をもう一度やる</button></div></div>';
+    el.innerHTML=stepDoneHtml('📊','STEP 2 完了！',STEP2_QS,p2.s2evals,'<button class="primary-btn" onclick="switchStep(3)">STEP 3 へ進む →</button><button class="secondary-btn" onclick="resetS2()">STEP 2 をもう一度やる</button>');
     return;
   }
   const q=STEP2_QS[p2.s2cur];
@@ -591,7 +785,7 @@ function renderS3(el){
     let ok=p2.s3evals.filter(v=>v==='ok').length,half=p2.s3evals.filter(v=>v==='half').length,ng=p2.s3evals.filter(v=>v==='ng').length;
     const msgs=['もう少し！STEP 1・2 で苦手なところを確認しよう。','いい感じ！再テストに挑戦しよう。','よくできました！','完璧！'];
     const mi=ok<=4?0:ok<=9?1:ok<=13?2:3;
-    el.innerHTML='<div class="done-wrap"><div class="done-icon">🔀</div><div class="done-title">STEP 3 完了！</div><div class="done-score">◯'+ok+' △'+half+' ✕'+ng+'</div><div class="done-msg">'+msgs[mi]+'</div><div class="done-btns"><button class="primary-btn" onclick="switchPhase(3)">再テストに挑戦する →</button><button class="secondary-btn" onclick="resetS3()">STEP 3 をもう一度やる</button></div></div>';
+    el.innerHTML=stepDoneHtml('🔀','STEP 3 完了！',STEP3_QS,p2.s3evals,'<button class="primary-btn" onclick="switchPhase(3)">再テストに挑戦する →</button><button class="secondary-btn" onclick="resetS3()">STEP 3 をもう一度やる</button>');
     return;
   }
   const q=STEP3_QS[p2.s3cur];
@@ -624,6 +818,7 @@ function resetS3(){p2.s3cur=0;p2.s3evals=Array(15).fill(null);p2.s3done=false;re
 function renderP3(){
   const el=document.getElementById('phase3');
   if(p3.done){
+    if(p3.evals.every(v=>v==='ok')){renderGoalAchieved(el);return;}
     let ok=0,half=0,ng=0;
     p3.evals.forEach(v=>{if(v==='ok')ok++;else if(v==='half')half++;else ng++;});
     const msgs=['まだ難しいところが残っています。STEP 0 でルールを確認しよう。','着実に伸びています！もう一息。','大きく伸びています！','完璧！'];

@@ -127,6 +127,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#f0f5fd;min-height:100v
 .sa-btn{text-align:left;padding:11px 14px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:#fff;font-size:13px;color:#1a1a2e;cursor:pointer;line-height:1.5;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
 .sa-btn:hover{background:var(--grn)}
 .sa-btn.sel{background:var(--grn);border-color:var(--grn3);color:var(--grntext);font-weight:700}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:0.85em;line-height:1.3;margin:0 2px}.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 3px;text-align:center}.frac>span:last-child{padding:0 3px;text-align:center}
 </style>
 </head>
 <body>
@@ -379,9 +380,33 @@ function testDoneHtml(qs,evals,btnLabel,btnFn){
 }
 
 /* ======= PHASE 0 力試しテスト ======= */
+
+function stepDoneHtml(icon,title,qs,evals,btns){
+  const labels={ok:'◯',half:'△',ng:'✕'},bc={ok:'rb-ok',half:'rb-half',ng:'rb-ng'};
+  let ok=evals.filter(v=>v==='ok').length,half=evals.filter(v=>v==='half').length,ng=evals.filter(v=>v==='ng').length;
+  return '<div class="done-wrap" style="text-align:left">'+
+    '<div style="text-align:center;margin-bottom:1.25rem"><div class="done-icon">'+icon+'</div><div class="done-title">'+title+'</div></div>'+
+    '<div class="stat-row">'+
+      '<div class="stat-c"><div class="stat-n" style="color:#27500a">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
+      '<div class="stat-c"><div class="stat-n" style="color:#ba7517">'+half+'</div><div class="stat-l">△ 一部</div></div>'+
+      '<div class="stat-c"><div class="stat-n" style="color:#d4537e">'+ng+'</div><div class="stat-l">✕ 間違い</div></div>'+
+    '</div>'+
+    '<div class="result-rows">'+
+      qs.map((q,i)=>'<div class="rrow"><span class="rformula">'+q.q+'</span><span class="rbadge '+bc[evals[i]||'ng']+'">'+labels[evals[i]||'ng']+'</span></div>').join('')+
+    '</div>'+
+    '<div class="msg-box" style="font-size:12px">💭 △・✕の問題をもう一度見て、どこで間違えたか考えてみよう。</div>'+
+    '<div class="done-btns">'+btns+'</div>'+
+  '</div>';
+}
+
+
 function renderP0(){
   const el=document.getElementById('phase0');
-  if(p0.done){el.innerHTML=testDoneHtml(TEST1,p0.evals,'自己分析へ進む →',()=>switchPhase(1));return;}
+  if(p0.done){
+    if(window._taMode){window._taMode=false;renderTAResult(el,p0);return;}
+    if(p0.evals.every(v=>v==='ok')){renderGoalAchieved(el);return;}
+    el.innerHTML=testDoneHtml(TEST1,p0.evals,'自己分析へ進む →',()=>switchPhase(1));return;
+  }
   el.innerHTML=testCard(TEST1[p0.cur],p0.cur,TEST1.length,'0','revealP0','dkP0','setE0','nextP0','📝');
 }
 function revealP0(){revealTest('0');}
@@ -477,7 +502,7 @@ function renderS1(el){
   if(p2.done){
     const msgs=['もう少し！もう一度やってみよう。','いい感じ！STEP 2 へ進もう。','よくできました！','完璧！'];
     const mi=p2.score<=2?0:p2.score<=4?1:p2.score<=6?2:3;
-    el.innerHTML='<div class="done-wrap"><div class="done-icon">⭐</div><div class="done-title">STEP 1 完了！</div><div class="done-score">'+p2.score+' / '+STEP1_QS.length+'</div><div class="done-msg">'+msgs[mi]+'</div><div class="done-btns"><button class="primary-btn" onclick="switchStep(2)">STEP 2 へ進む →</button><button class="secondary-btn" onclick="resetS1()">STEP 1 をもう一度やる</button></div></div>';
+    el.innerHTML=stepDoneHtml('⭐','STEP 1 完了！',STEP1_QS.slice(0,p2.cur+1),Array(p2.cur+1).fill(null).map((_,i)=>i<p2.cur?'ok':'ng'),'<button class="primary-btn" onclick="switchStep(2)">STEP 2 へ進む →</button><button class="secondary-btn" onclick="resetS1()">STEP 1 をもう一度やる</button>');
     return;
   }
   const q=STEP1_QS[p2.cur];
@@ -549,14 +574,11 @@ function renderS2(el){
   }
   if(p2.s2done){
     let ok=p2.s2evals.filter(v=>v==='ok').length,half=p2.s2evals.filter(v=>v==='half').length,ng=p2.s2evals.filter(v=>v==='ng').length;
-    el.innerHTML='<div class="done-wrap"><div class="done-icon">✏️</div><div class="done-title">'+STEP2_PATTERNS[p2.s2pat].label+' 完了！</div>'+
-      '<div class="done-score">◯'+ok+' △'+half+' ✕'+ng+'</div>'+
-      '<div class="done-msg">'+(ok>=4?'よくできました！':'もう一度やってみよう。')+'</div>'+
-      '<div class="done-btns">'+
-        '<button class="primary-btn" onclick="p2.s2pat=null;p2.s2done=false;renderP2()">別のパターンを練習する</button>'+
-        '<button class="primary-btn" style="margin-top:0" onclick="switchStep(3)">STEP 3 へ進む →</button>'+
-        '<button class="secondary-btn" onclick="resetS2()">このパターンをもう一度</button>'+
-      '</div></div>';
+    if(!p2.s2qs)p2.s2qs=[];
+    el.innerHTML=stepDoneHtml('✏️',STEP2_PATTERNS[p2.s2pat].label+' 完了！',p2.s2qs,p2.s2evals,
+      '<button class="primary-btn" onclick="p2.s2pat=null;p2.s2done=false;p2.s2qs=[];renderP2()">別のパターンを練習する</button>'+
+      '<button class="primary-btn" style="margin-top:0" onclick="switchStep(3)">STEP 3 へ進む →</button>'+
+      '<button class="secondary-btn" onclick="resetS2()">このパターンをもう一度</button>');
     return;
   }
   const pool=shuffle(STEP2_PATTERNS[p2.s2pat].pool);
@@ -584,7 +606,7 @@ function renderS2(el){
     '<div class="nav-row"><span class="nav-count">'+(p2.s2cur+1)+' / 6 問目</span>'+
       '<button class="next-btn" id="nbs2" onclick="nextS2()" disabled>'+(p2.s2cur===5?'結果を見る →':'次の問題 →')+'</button></div>';
 }
-function selectPat(i){p2.s2pat=i;p2.s2cur=0;p2.s2evals=[];p2.s2done=false;renderP2();}
+function selectPat(i){p2.s2pat=i;p2.s2cur=0;p2.s2evals=[];p2.s2done=false;p2.s2qs=[];renderP2();}
 function revealS2(){document.getElementById('abs2').className='ans-box show';document.getElementById('ews2').className='eval-wrap show';document.getElementById('rbs2').style.display='none';document.getElementById('dks2').style.display='none';}
 function dkS2(){p2.s2evals[p2.s2cur]='ng';revealS2();['ok','half','ng'].forEach(k=>document.getElementById('e'+k+'s2').className='e-btn e-'+k+(k==='ng'?' sel':''));document.getElementById('nbs2').disabled=false;}
 function setES2(v){p2.s2evals[p2.s2cur]=v;['ok','half','ng'].forEach(k=>document.getElementById('e'+k+'s2').className='e-btn e-'+k+(v===k?' sel':''));document.getElementById('nbs2').disabled=false;}
@@ -598,7 +620,7 @@ function renderS3(el){
     let ok=p2.s3evals.filter(v=>v==='ok').length,half=p2.s3evals.filter(v=>v==='half').length,ng=p2.s3evals.filter(v=>v==='ng').length;
     const msgs=['もう少し！STEP 2 で苦手パターンを練習しよう。','いい感じ！再テストに挑戦しよう。','よくできました！','完璧！'];
     const mi=ok<=4?0:ok<=9?1:ok<=13?2:3;
-    el.innerHTML='<div class="done-wrap"><div class="done-icon">🔀</div><div class="done-title">STEP 3 完了！</div><div class="done-score">◯'+ok+' △'+half+' ✕'+ng+'</div><div class="done-msg">'+msgs[mi]+'</div><div class="done-btns"><button class="primary-btn" onclick="switchPhase(3)">再テストに挑戦する →</button><button class="secondary-btn" onclick="resetS3()">STEP 3 をもう一度やる</button></div></div>';
+    el.innerHTML=stepDoneHtml('🔀','STEP 3 完了！',STEP3_QS,p2.s3evals,'<button class="primary-btn" onclick="switchPhase(3)">再テストに挑戦する →</button><button class="secondary-btn" onclick="resetS3()">STEP 3 をもう一度やる</button>');
     return;
   }
   const q=STEP3_QS[p2.s3cur];
@@ -635,6 +657,7 @@ function resetS3(){p2.s3cur=0;p2.s3evals=Array(15).fill(null);p2.s3done=false;re
 function renderP3(){
   const el=document.getElementById('phase3');
   if(p3.done){
+    if(p3.evals.every(v=>v==='ok')){renderGoalAchieved(el);return;}
     const labels={ok:'◯',half:'△',ng:'✕'};
     const bc={ok:'rb-ok',half:'rb-half',ng:'rb-ng'};
     let ok=0,half=0,ng=0;

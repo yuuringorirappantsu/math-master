@@ -19,17 +19,25 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#f0f5fd;min-height:100v
   --r20:20px;--r16:16px;
   --card-border:#93bef0;
 }
+
+/* 戻るボタン */
 .back-link{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--card-border);border-radius:999px;padding:6px 14px;font-size:12px;color:var(--grntext2);cursor:pointer;margin-bottom:1rem;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif;font-weight:500;text-decoration:none}
 .back-link:hover{background:var(--grn)}
+
+/* ヘッダー */
 .top-header{background:var(--grn);border-radius:24px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:14px;border:1.5px solid var(--grn2)}
 .top-icon{width:48px;height:48px;border-radius:50%;background:var(--grn3);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;flex-shrink:0}
 .top-title{font-size:18px;font-weight:700;color:var(--grntext)}
 .top-sub{font-size:12px;color:var(--grntext2);margin-top:2px}
 .top-badge{display:inline-block;background:#fff;border:1px solid var(--grn2);border-radius:999px;font-size:10px;font-weight:700;color:var(--grntext2);padding:2px 10px;margin-top:4px}
+
+/* フェーズタブ */
 .phase-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:1.25rem}
 .ptab{padding:9px 4px;border-radius:999px;border:none;background:#c5d8f7;font-size:12px;color:#1a4a9e;cursor:pointer;text-align:center;line-height:1.35;transition:all 0.18s;font-family:'Zen Maru Gothic',sans-serif;font-weight:400}
 .ptab span{display:block;font-size:10px;margin-top:2px;opacity:0.85}
 .ptab.active{background:var(--grn3);color:#fff;font-weight:700}
+
+/* カード */
 .q-card{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:1.25rem;margin-bottom:1rem}
 .q-num-badge{display:inline-flex;align-items:center;gap:5px;background:var(--grn);color:var(--grntext);font-size:11px;font-weight:700;padding:3px 12px;border-radius:999px;margin-bottom:10px}
 .q-formula{font-size:22px;font-weight:700;font-family:'JetBrains Mono',monospace;color:#1a1a2e;margin-bottom:4px}
@@ -63,7 +71,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#f0f5fd;min-height:100v
 .formula-ref-title{font-size:11px;color:var(--grntext2);margin-bottom:8px;font-weight:700}
 .frow{display:flex;align-items:baseline;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--grn2);font-size:12px}
 .frow:last-child{border-bottom:none}
-.fname{font-weight:700;color:var(--grntext);min-width:80px}
+.fname{font-weight:700;color:var(--grntext);min-width:68px}
 .fexpr{font-family:'JetBrains Mono',monospace;color:var(--grntext2)}
 .choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .choice-btn{padding:12px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:#fff;font-size:13px;color:#1a1a2e;cursor:pointer;text-align:left;line-height:1.5;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
@@ -83,6 +91,9 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#f0f5fd;min-height:100v
 .snav{padding:8px 4px;border-radius:999px;border:none;background:#c5d8f7;font-size:12px;color:#1a4a9e;cursor:pointer;text-align:center;line-height:1.35;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
 .snav span{display:block;font-size:10px;margin-top:2px;opacity:0.8}
 .snav.active{background:var(--grn3);color:#fff;font-weight:700}
+.ph-card{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:2rem 1.5rem;text-align:center}
+.ph-icon{width:56px;height:56px;border-radius:50%;background:var(--grn);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 1rem}
+.ph-desc{font-size:13px;color:#1a4a9e;line-height:1.7;margin-bottom:1.25rem}
 .done-wrap{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:1.5rem}
 .done-icon{width:64px;height:64px;border-radius:50%;background:var(--grn);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 1rem}
 .done-title{font-size:18px;font-weight:700;color:#1a1a2e;margin-bottom:6px;text-align:center}
@@ -108,9 +119,15 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#f0f5fd;min-height:100v
 .msg-box{font-size:13px;color:var(--grntext2);line-height:1.7;padding:10px 14px;background:var(--grn);border-radius:var(--r16);margin-bottom:1rem;border:1px solid var(--grn2)}
 .sa-q{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:10px;line-height:1.5;margin-top:1rem}
 .sa-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:0.5rem}
+.pattern-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+.pat-card{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:0.75rem;cursor:pointer;transition:all 0.15s;text-align:left}
+.pat-card:hover{background:var(--grn)}
+.pat-name{font-size:12px;font-weight:700;color:var(--grntext);margin-bottom:2px}
+.pat-ex{font-size:11px;color:var(--grntext2);font-family:'JetBrains Mono',monospace}
 .sa-btn{text-align:left;padding:11px 14px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:#fff;font-size:13px;color:#1a1a2e;cursor:pointer;line-height:1.5;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
 .sa-btn:hover{background:var(--grn)}
 .sa-btn.sel{background:var(--grn);border-color:var(--grn3);color:var(--grntext);font-weight:700}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:0.85em;line-height:1.3;margin:0 2px}.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 3px;text-align:center}.frac>span:last-child{padding:0 3px;text-align:center}
 </style>
 </head>
 <body>
@@ -354,7 +371,7 @@ function testDoneHtml(qs,evals,btnLabel,btnFn){
     '<div style="text-align:center;margin-bottom:1.25rem"><div class="done-icon">📋</div><div class="done-title">テスト完了！</div></div>'+
     '<div class="result-rows">'+qs.map((q,i)=>'<div class="rrow"><span class="rformula">'+q.q+'</span><span class="rbadge '+bc[evals[i]||'ng']+'">'+labels[evals[i]||'ng']+'</span></div>').join('')+'</div>'+
     '<div class="stat-row">'+
-      '<div class="stat-c"><div class="stat-n" style="color:#0d2e6b">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
+      '<div class="stat-c"><div class="stat-n" style="color:#27500a">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
       '<div class="stat-c"><div class="stat-n" style="color:#ba7517">'+half+'</div><div class="stat-l">△ 一部</div></div>'+
       '<div class="stat-c"><div class="stat-n" style="color:#d4537e">'+ng+'</div><div class="stat-l">✕ 間違い</div></div>'+
     '</div>'+
@@ -365,7 +382,10 @@ function testDoneHtml(qs,evals,btnLabel,btnFn){
 /* ======= PHASE 0 ======= */
 function renderP0(){
   const el=document.getElementById('phase0');
-  if(p0.done){el.innerHTML=testDoneHtml(TEST1,p0.evals,'自己分析へ進む →',()=>switchPhase(1));return;}
+  if(p0.done){
+    if(p0.evals.every(v=>v==='ok')){renderGoalAchieved(el);return;}
+    el.innerHTML=testDoneHtml(TEST1,p0.evals,'自己分析へ進む →',()=>switchPhase(1));return;
+  }
   el.innerHTML=testCard(TEST1[p0.cur],p0.cur,TEST1.length,'0','revealP0','dkP0','setE0','nextP0','📝');
 }
 function revealP0(){revealTest('0');}
@@ -479,7 +499,7 @@ function renderS0(el){
     items.map(it=>
       '<div class="q-card" style="margin-bottom:0.75rem">'+
         '<div class="q-num-badge">📖 '+it.label+'</div>'+
-        '<div style="font-family:JetBrains Mono,monospace;font-size:12px;color:var(--grntext2);background:#e8f0fd;border-radius:var(--r16);padding:8px 12px;margin-bottom:10px">'+it.formula+'</div>'+
+        '<div style="font-family:JetBrains Mono,monospace;font-size:12px;color:var(--grntext2);background:#edf9f0;border-radius:var(--r16);padding:8px 12px;margin-bottom:10px">'+it.formula+'</div>'+
         '<div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">'+
           '<span style="font-family:JetBrains Mono,monospace;font-size:14px;color:#1a1a2e">'+it.q+'</span>'+
           '<span style="color:#aaa;font-size:12px">→</span>'+
@@ -582,6 +602,7 @@ function resetS2(){p2.s2cur=0;p2.s2evals=Array(15).fill(null);p2.s2done=false;re
 function renderP3(){
   const el=document.getElementById('phase3');
   if(p3.done){
+    if(p3.evals.every(v=>v==='ok')){renderGoalAchieved(el);return;}
     const labels={ok:'◯',half:'△',ng:'✕'};
     let ok=0,half=0,ng=0;
     p3.evals.forEach(v=>{if(v==='ok')ok++;else if(v==='half')half++;else ng++;});
@@ -591,7 +612,7 @@ function renderP3(){
     const t2ok=patStart.map(s=>{let c=0;for(let i=s;i<s+2;i++)if(p3.evals[i]==='ok')c++;return c;});
     let compareRows=patterns.map((name,pi)=>{
       const before=t1ok[pi],after=t2ok[pi];
-      const arrow=after>before?'<span style="color:#0d2e6b;font-weight:700">↑ アップ</span>':after===before?'<span style="color:#888">→ 同じ</span>':'<span style="color:#d4537e;font-weight:700">↓ ダウン</span>';
+      const arrow=after>before?'<span style="color:#27500a;font-weight:700">↑ アップ</span>':after===before?'<span style="color:#888">→ 同じ</span>':'<span style="color:#d4537e;font-weight:700">↓ ダウン</span>';
       return '<div class="rrow"><span style="font-size:13px;color:#1a1a2e;flex:1">'+name+'</span><span class="rbadge rb-half" style="min-width:42px;text-align:center">'+before+'/2</span><span style="color:#aaa;font-size:12px;margin:0 4px">→</span><span class="rbadge rb-ok" style="min-width:42px;text-align:center">'+after+'/2</span><span style="margin-left:8px;font-size:12px">'+arrow+'</span></div>';
     }).join('');
     const msgs=['まだ難しいところが残っています。焦らず練習を続けましょう。','着実に伸びています！苦手なSTEPに戻って練習しよう。','大きく伸びています！','完璧！'];
@@ -600,7 +621,7 @@ function renderP3(){
       '<div class="done-wrap" style="text-align:left">'+
         '<div style="text-align:center;margin-bottom:1.25rem"><div class="done-icon">🎉</div><div class="done-title">再テスト 完了！</div></div>'+
         '<div class="stat-row">'+
-          '<div class="stat-c"><div class="stat-n" style="color:#0d2e6b">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
+          '<div class="stat-c"><div class="stat-n" style="color:#27500a">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
           '<div class="stat-c"><div class="stat-n" style="color:#ba7517">'+half+'</div><div class="stat-l">△ 一部</div></div>'+
           '<div class="stat-c"><div class="stat-n" style="color:#d4537e">'+ng+'</div><div class="stat-l">✕ 間違い</div></div>'+
         '</div>'+
@@ -642,6 +663,121 @@ function nextP3(){if(p3.cur<TEST2.length-1){p3.cur++;renderP3();}else{p3.done=tr
 function resetP3(){p3.evals=Array(8).fill(null);p3.cur=0;p3.done=false;renderP3();}
 
 renderP0();
+function c0_teach(){
+  var h='<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">\uD83D\uDC68\u200D\uD83C\uDFEB \u8AAC\u660E\u3057\u3066\u307F\u308B\u30FB\u6559\u3048\u308B</div>';
+  h+='<div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:0.75rem">\u2606 \u6559\u3048\u308B\u3053\u3068\u3067\u3001\u81EA\u5206\u306E\u7406\u89E3\u304C\u30B0\u30C3\u3068\u6DF1\u307E\u308B\uFF01</div>';
+  h+='<button onclick="toggleEffect()" style="width:100%;text-align:left;padding:10px 14px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:var(--grn);font-size:13px;font-weight:700;color:var(--grntext);cursor:pointer;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">\u4EBA\u306B\u6559\u3048\u308B\u3053\u3068\u306E\u52B9\u679C <span id="eff-arrow">\u25BC</span></button>';
+  h+='<div id="eff-body" style="display:none;background:#edf9f0;border:1px solid var(--grn2);border-radius:var(--r16);padding:1rem;margin-bottom:1rem;font-size:13px;color:var(--grntext2);line-height:2">';
+  h+='\u30FB\u8AAC\u660E\u3059\u308B\u306B\u306F\u3001\u81EA\u5206\u304C\u7406\u89E3\u3057\u3066\u3044\u306A\u3044\u3068\u3067\u304D\u306A\u3044\u3002<br>';
+  h+='\u30FB\u8AAC\u660E\u3057\u3088\u3046\u3068\u3059\u308B\u3068\u3001\u307C\u3093\u3084\u308A\u3057\u3066\u3044\u305F\u90E8\u5206\u304C\u898B\u3048\u3066\u304F\u308B\u3002<br>';
+  h+='\u30FB\u5B66\u7FD2\u79D1\u5B66\uFF08\u30E9\u30FC\u30CB\u30F3\u30B0\u30FB\u30D4\u30E9\u30DF\u30C3\u30C9\uFF09\u3067\u306F\u3001\u300C\u4EBA\u306B\u6559\u3048\u308B\u300D\u304C\u4E00\u756A\u8A18\u61B6\u306B\u6B8B\u3063\u3066\u5B9A\u7740\u3059\u308B\u3068\u3044\u308F\u308C\u3066\u3044\u308B\u3002';
+  h+='</div>';
+  h+='<div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:6px">\u2606 \u6559\u3048\u308B\u4EBA\u306F\u8AB0\u3067\u3082OK\uFF01</div>';
+  h+='<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">\uFF08\u53CB\u9054\u3001\u5148\u751F\u3001\u304A\u3046\u3061\u306E\u4EBA\u3001\u98FC\u3063\u3066\u308B\u30DA\u30C3\u30C8\u3001\u3001\u3001\u3001\uFF09</div>';
+  h+='<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">\u2606 \u305D\u306E\u4EBA\u306E\u300C\u5206\u304B\u3089\u306A\u3044\u300D\u306B\u5BC4\u308A\u6DFB\u3063\u3066\u3001\u8AAC\u660E\u3057\u3066\u307F\u3088\u3046\uFF01</div>';
+  h+='<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem">';
+  h+='<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:10px">\u4F55\u4EBA\u306B\u8AAC\u660E\u3067\u304D\u305F\uFF1F</div>';
+  h+='<div style="display:flex;align-items:center;gap:12px">';
+  h+='<input type="number" id="teach-count" min="0" max="99" value="0" style="width:72px;font-size:24px;font-weight:700;text-align:center;border:1.5px solid var(--grn2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--grntext)">';
+  h+='<span style="font-size:16px;color:#1a1a2e">\u4EBA</span>';
+  h+='<button onclick="addTeach(1)" style="padding:8px 16px;border-radius:999px;border:none;background:var(--grn3);color:#fff;font-size:18px;font-weight:700;cursor:pointer">+</button>';
+  h+='</div></div>';
+  return h;
+}
+
+function c0(){return c0_teach();}
+
+function c5(){
+  var h='<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">\u2615 \u4F11\u61A9\u3059\u308B</div>';
+  h+='<div style="font-size:14px;font-weight:700;color:#1a1a2e;line-height:1.8;margin-bottom:0.5rem">\u4ECA\u65E5\u306E\u76EE\u6A19\u306F\u9054\u6210\uFF01\u3086\u3063\u304F\u308A\u4F11\u3082\u3046\u3002<br>\u982D\u5F35\u3063\u305F\u8133\u306B\u306F\u4F11\u61A9\u304C\u5FC5\u8981\uFF01<br>\u8A18\u61B6\u306F\u4F11\u3093\u3067\u308B\u9593\u306B\u6574\u7406\u3055\u308C\u308B\u3088\u3002</div>';
+  h+='<div style="font-size:12px;color:#aaa;line-height:1.9;margin-bottom:1.25rem">\u6DF1\u547C\u5438\u3059\u308B / \u7A7A\u3092\u898B\u308B / \u6C34\u3092\u98F2\u3080 / \u5C11\u3057\u4F38\u3073\u3084\u30DE\u30C3\u30B5\u30FC\u30B8 / \u9996\u3092\u56DE\u3059 / \u5C11\u3057\u76EE\u3092\u9596\u3058\u3066\u307F\u308B... \u306A\u3069\u3002\u3069\u308C\u3082\u5927\u4E8B\u306A\u6642\u9593\u2728</div>';
+  h+='<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem">';
+  h+='<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:10px">\u4F55\u5206\u4F11\u61A9\u3059\u308B\uFF1F\uFF08\u6700\u592715\u5206\uFF09</div>';
+  h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">';
+  h+='<input type="number" id="rest-min" min="1" max="15" value="5" style="width:72px;font-size:24px;font-weight:700;text-align:center;border:1.5px solid var(--grn2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--grntext)" oninput="if(this.value>15)this.value=15;if(this.value<1)this.value=1">';
+  h+='<span style="font-size:16px;color:#1a1a2e;font-weight:700">\u5206</span>';
+  h+='<button onclick="startRest()" id="rest-start-btn" style="padding:10px 20px;border-radius:999px;border:none;background:var(--grn3);color:#fff;font-size:14px;font-weight:700;cursor:pointer">\u30B9\u30BF\u30FC\u30C8 \u25B6</button>';
+  h+='</div><div id="rest-timer" style="display:none;text-align:center">';
+  h+='<div id="rest-display" style="font-size:52px;font-weight:700;font-family:JetBrains Mono,monospace;color:var(--grntext);margin-bottom:8px">05:00</div>';
+  h+='<div style="display:flex;gap:8px;justify-content:center">';
+  h+='<button onclick="pauseRest()" id="rest-pause-btn" style="padding:8px 18px;border-radius:999px;border:1.5px solid var(--grn2);background:#fff;font-size:13px;font-weight:700;cursor:pointer;color:var(--grntext)">\u23F8 \u4E00\u6642\u505C\u6B62</button>';
+  h+='<button onclick="stopRest()" style="padding:8px 18px;border-radius:999px;border:1.5px solid #ddd;background:#fff;font-size:13px;cursor:pointer;color:#888">\u2715 \u3084\u3081\u308B</button>';
+  h+='</div></div>';
+  h+='<div id="rest-done" style="display:none;text-align:center;padding:1rem">';
+  h+='<div style="font-size:32px;margin-bottom:8px">\uD83C\uDF3F</div>';
+  h+='<div style="font-size:28px;font-weight:700;color:var(--grntext);margin-bottom:8px">\u7D42\u4E86\uFF01</div>';
+  h+='<div style="font-size:14px;color:var(--grntext2);line-height:1.8">\u6C17\u6301\u3061\u3092\u5207\u308A\u66FF\u3048\u3066<br>\u6B21\u306E\u8AB2\u984C\u306B\u6311\u6226\u3057\u3088\u3046\uFF01</div>';
+  h+='</div></div>';
+  return h;
+}
+
+var _restTimer=null,_restRemain=0,_restPaused=false;
+
+function toggleEffect(){var b=document.getElementById('eff-body'),a=document.getElementById('eff-arrow');if(!b)return;var open=b.style.display==='block';b.style.display=open?'none':'block';if(a)a.textContent=open?'\u25B2':'\u25BC';}
+
+
+function startRest(){
+  var min=Math.min(15,Math.max(1,parseInt(document.getElementById('rest-min').value)||5));
+  _restRemain=min*60;_restPaused=false;
+  document.getElementById('rest-start-btn').style.display='none';
+  document.getElementById('rest-min').disabled=true;
+  document.getElementById('rest-timer').style.display='block';
+  updateRestDisplay();
+  if(_restTimer)clearInterval(_restTimer);
+  _restTimer=setInterval(function(){
+    if(_restPaused)return;_restRemain--;updateRestDisplay();
+    if(_restRemain<=0){clearInterval(_restTimer);document.getElementById('rest-timer').style.display='none';document.getElementById('rest-done').style.display='block';}
+  },1000);
+}
+
+function updateRestDisplay(){var el=document.getElementById('rest-display');if(!el)return;var m=Math.floor(_restRemain/60),s=_restRemain%60;el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;}
+
+function pauseRest(){_restPaused=!_restPaused;var btn=document.getElementById('rest-pause-btn');if(btn)btn.textContent=_restPaused?'\u25B6 \u518D\u958B':'\u23F8 \u4E00\u6642\u505C\u6B62';}
+
+function stopRest(){if(_restTimer)clearInterval(_restTimer);document.getElementById('rest-timer').style.display='none';document.getElementById('rest-start-btn').style.display='inline-flex';document.getElementById('rest-min').disabled=false;}
+
+const GOAL='展開を使いこなせるようになろう！';
+const NEXT_OPTIONS=[
+  {icon:'👨‍🏫', label:'説明してみる・教える'},
+  {icon:'📚', label:'ほかの問題にも挑戦'},
+  {icon:'⏱', label:'タイムアタックに挑戦'},
+  {icon:'🚀', label:'応用問題に挑戦！'},
+  {icon:'🔁', label:'基礎に戻って確認'},
+  {icon:'☕', label:'休憩する'},
+];
+function renderGoalAchieved(el){
+  [0,1,2,3].forEach(function(i){
+    var ph=document.getElementById('phase'+i);
+    var tb=document.getElementById('tab'+i);
+    if(ph)ph.style.display=i===0?'block':'none';
+    if(tb)tb.className='ptab'+(i===0?' active':'');
+  });
+  var btnStyle='padding:14px 8px;border-radius:var(--r16);border:1.5px solid var(--card-border);background:#fff;font-size:13px;font-weight:700;color:var(--grntext);cursor:pointer;font-family:Zen Maru Gothic,sans-serif;transition:all 0.15s;text-align:center;line-height:1.5;width:100%';
+  var optBtns=NEXT_OPTIONS.map(function(opt,i){
+    return '<button onclick="showNextOption('+i+')" style="'+btnStyle+'" onmouseover="this.style.background=\'var(--grn)\'" onmouseout="this.style.background=\'#fff\'"><div style="font-size:24px;margin-bottom:4px">'+opt.icon+'</div>'+opt.label+'</button>';
+  }).join('');
+  el.innerHTML=
+    '<div class="done-wrap" style="text-align:center">'+
+    '<div style="font-size:48px;margin-bottom:0.5rem">🏆</div>'+
+    '<div style="font-size:22px;font-weight:700;color:var(--grntext);margin-bottom:4px">目標達成！</div>'+
+    '<div style="font-size:15px;color:var(--grntext2);margin-bottom:1.25rem;font-weight:700">'+GOAL+'</div>'+
+    '<div style="background:var(--grn);border-radius:var(--r16);padding:1rem;margin-bottom:1.25rem;border:1px solid var(--grn2);text-align:left">'+
+    '<div style="font-size:13px;color:var(--grntext2);line-height:1.8">🌟 全問正解！すばらしい！<br>次は何をする？</div>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+optBtns+'</div>'+
+    '</div>'+
+    '<div id="next-detail"></div>';
+}
+function showNextOption(i){
+  var el=document.getElementById('next-detail');if(!el)return;
+  var fns=[c0,c1,c2,c3,c4,c5];
+  if(fns[i])el.innerHTML='<div class="q-card" style="margin-top:1rem">'+fns[i]()+'</div>';
+}
+function c1(){return '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">📚 ほかの問題にも挑戦</div><div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ 同じ単元の別の問題で、もう一度力試しをしてみよう！</div><button class="primary-btn" onclick="TEST1.sort(()=>Math.random()-0.5);p0.evals=Array(TEST1.length).fill(null);p0.cur=0;p0.done=false;switchPhase(0);">別の問題でもう一度 →</button>';}
+function c2(){var prev=window._taTime||null;var h='<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">⏱ タイムアタックに挑戦</div><div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ ストップウォッチを用意しよう！<br>☆ スタートを押したらすぐ問題が始まるよ。</div>';if(prev)h+='<div style="background:#e8f0fd;border:1px solid var(--grn2);border-radius:var(--r16);padding:10px;margin-bottom:1rem;font-size:13px;color:var(--grntext2)">⏱ 前回：<strong style="color:var(--grntext)">'+prev+'</strong></div>';h+='<button class="primary-btn" onclick="TEST1.sort(()=>Math.random()-0.5);p0.evals=Array(TEST1.length).fill(null);p0.cur=0;p0.done=false;switchPhase(0);">⏱ スタート！</button>';return h;}
+function c3(){return '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">🚀 応用問題に挑戦！</div><div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ 展開の応用問題にもチャレンジしてみよう！<br>☆ 内容選択から「展開（応用）」を選んでみよう。</div><button class="primary-btn" onclick="window.location.href=\'index.html\'">内容選択画面へ →</button>';}
+function c4(){return '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">🔁 基礎に戻って確認</div><div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ 満点でも「なんとなく解けた」部分がないか確認しよう！</div><button class="primary-btn" onclick="switchPhase(2)">STEP練習へ戻る →</button>';}
+
 </script>
 </body>
 </html>
