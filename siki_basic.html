@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>式の計算（中2）— まちがいLABO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Zen Maru Gothic',sans-serif;background:#f2faf4;min-height:100vh;padding:1.5rem 1rem}
+.container{max-width:640px;margin:0 auto}
+:root{
+  --grn:#d8f3e0;--grn2:#aee4bc;--grn3:#52b069;--grn4:#368a4a;
+  --grntext:#1a4d28;--grntext2:#2d7a42;
+  --peach:#faeeda;--peachtext:#633806;
+  --rose:#fbeaf0;--rosetext:#72243e;
+  --sage:#eaf3de;--sagetext:#27500a;
+  --r20:20px;--r16:16px;--card-border:#aee4bc;
+}
+.back-link{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--card-border);border-radius:999px;padding:6px 14px;font-size:12px;color:var(--grntext2);cursor:pointer;margin-bottom:1rem;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif;font-weight:500;text-decoration:none}
+.back-link:hover{background:var(--grn)}
+.top-header{background:var(--grn);border-radius:24px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:14px;border:1.5px solid var(--grn2)}
+.top-icon{width:48px;height:48px;border-radius:50%;background:var(--grn3);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;flex-shrink:0}
+.top-title{font-size:18px;font-weight:700;color:var(--grntext)}
+.top-sub{font-size:12px;color:var(--grntext2);margin-top:2px}
+.top-badge{display:inline-block;background:#fff;border:1px solid var(--grn2);border-radius:999px;font-size:10px;font-weight:700;color:var(--grntext2);padding:2px 10px;margin-top:4px}
+.phase-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:1.25rem}
+.ptab{padding:9px 4px;border-radius:999px;border:none;background:#c8ecd1;font-size:12px;color:#1a4d28;cursor:pointer;text-align:center;line-height:1.35;transition:all 0.18s;font-family:'Zen Maru Gothic',sans-serif;font-weight:400}
+.ptab span{display:block;font-size:10px;margin-top:2px;opacity:0.85}
+.ptab.active{background:var(--grn3);color:#fff;font-weight:700}
+.q-card{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:1.25rem;margin-bottom:1rem}
+.q-num-badge{display:inline-flex;align-items:center;gap:5px;background:var(--grn);color:var(--grntext);font-size:11px;font-weight:700;padding:3px 12px;border-radius:999px;margin-bottom:10px}
+.q-formula{font-size:22px;font-weight:700;font-family:'JetBrains Mono',monospace;color:#1a1a2e;margin-bottom:4px;line-height:1.45;word-break:keep-all}
+.q-direction{font-size:13px;color:var(--grntext2);margin-bottom:1rem}
+.pip-row{display:flex;gap:5px;margin-bottom:1.25rem}
+.pip{flex:1;height:8px;border-radius:999px}
+.reveal-btn{display:inline-flex;align-items:center;gap:6px;background:var(--grn);color:var(--grntext);border:1.5px solid var(--grn2);border-radius:999px;padding:8px 18px;font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif;font-weight:500}
+.reveal-btn:hover{background:var(--grn2)}
+.dontknow-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#888;border:1.5px solid #ddd;border-radius:999px;padding:8px 18px;font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif;font-weight:500;margin-left:8px}
+.ans-box{background:var(--grn);border-radius:var(--r16);padding:1rem;margin-top:10px;display:none;border:1px solid var(--grn2)}
+.ans-box.show{display:block}
+.ans-label{font-size:11px;color:var(--grntext2);margin-bottom:4px;font-weight:700}
+.ans-val{font-size:17px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--grntext);margin-bottom:6px}
+.ans-hint{font-size:12px;color:var(--grntext2);line-height:2}
+.eval-wrap{margin-top:1rem;display:none}
+.eval-wrap.show{display:block}
+.eval-q{font-size:13px;color:var(--grntext2);margin-bottom:8px}
+.eval-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.e-btn{padding:10px 6px;border-radius:var(--r16);border:1.5px solid var(--card-border);background:#fff;font-size:14px;font-weight:700;cursor:pointer;text-align:center;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
+.e-btn:hover{background:var(--grn)}
+.e-ok.sel{background:var(--sage);border-color:#639922;color:var(--sagetext)}
+.e-half.sel{background:var(--peach);border-color:#ba7517;color:var(--peachtext)}
+.e-ng.sel{background:var(--rose);border-color:#d4537e;color:var(--rosetext)}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}
+.nav-count{font-size:12px;color:var(--grntext2)}
+.next-btn{display:inline-flex;align-items:center;gap:6px;background:var(--grn3);color:#fff;border:none;border-radius:999px;padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
+.next-btn:hover{background:var(--grn4)}
+.next-btn:disabled{opacity:0.3;cursor:default}
+.step-nav{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:1.25rem}
+.snav{padding:8px 3px;border-radius:999px;border:none;background:#c8ecd1;font-size:11px;color:var(--grntext2);cursor:pointer;text-align:center;line-height:1.35;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
+.snav span{display:block;font-size:10px;margin-top:2px;opacity:0.8}
+.snav.active{background:var(--grn3);color:#fff;font-weight:700}
+.sub-nav{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+.subbtn{padding:10px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:#fff;font-size:13px;font-weight:700;color:var(--grntext);cursor:pointer;text-align:center;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
+.subbtn:hover{background:var(--grn)}
+.subbtn.active{background:var(--grn3);color:#fff;border-color:var(--grn3)}
+.formula-ref{background:var(--grn);border-radius:var(--r16);padding:1rem 1.25rem;margin-bottom:1.25rem;border:1px solid var(--grn2)}
+.formula-ref-title{font-size:11px;color:var(--grntext2);margin-bottom:8px;font-weight:700}
+.frow{display:flex;align-items:baseline;gap:8px;padding:8px 0;border-bottom:0.5px solid var(--grn2);font-size:12px;line-height:1.8}
+.frow:last-child{border-bottom:none}
+.fname{font-weight:700;color:var(--grntext);min-width:110px;flex-shrink:0}
+.fexpr{font-family:'JetBrains Mono',monospace;color:var(--grntext2)}
+.rule-card{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem;margin-bottom:0.75rem}
+.rule-title{font-size:13px;font-weight:700;color:var(--grntext);margin-bottom:6px}
+.rule-ex{font-size:13px;font-family:'JetBrains Mono',monospace;color:#1a1a2e;line-height:1.8}
+.rule-note{font-size:11px;color:var(--grntext2);margin-top:4px;line-height:1.6}
+.done-wrap{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:1.5rem}
+.done-icon{width:64px;height:64px;border-radius:50%;background:var(--grn);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 1rem}
+.done-title{font-size:18px;font-weight:700;color:#1a1a2e;margin-bottom:6px;text-align:center}
+.done-btns{display:flex;flex-direction:column;gap:8px}
+.primary-btn{width:100%;padding:12px;border-radius:999px;border:none;background:var(--grn3);color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
+.primary-btn:hover{background:var(--grn4)}
+.secondary-btn{width:100%;padding:11px;border-radius:999px;border:1.5px solid var(--grn2);background:#fff;color:#1a1a2e;font-size:14px;cursor:pointer;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif;font-weight:500}
+.secondary-btn:hover{background:var(--grn)}
+.result-rows{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:0.75rem 1rem;margin-bottom:1rem}
+.rrow{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:0.5px solid var(--grn);font-size:13px}
+.rrow:last-child{border-bottom:none}
+.rformula{font-family:'JetBrains Mono',monospace;flex:1;color:#1a1a2e;font-size:12px;word-break:keep-all;line-height:1.5}
+.rbadge{padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+.rb-ok{background:var(--sage);color:var(--sagetext)}
+.rb-half{background:var(--peach);color:var(--peachtext)}
+.rb-ng{background:var(--rose);color:var(--rosetext)}
+.stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1rem}
+.stat-c{background:var(--grn);border-radius:var(--r16);padding:0.75rem;text-align:center}
+.stat-n{font-size:22px;font-weight:700;margin-bottom:2px}
+.stat-l{font-size:11px;color:var(--grntext2)}
+.msg-box{font-size:13px;color:var(--grntext2);line-height:1.7;padding:10px 14px;background:var(--grn);border-radius:var(--r16);margin-bottom:1rem;border:1px solid var(--grn2)}
+.sa-q{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:10px;line-height:1.5;margin-top:1rem}
+.sa-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:0.5rem}
+.sa-btn{text-align:left;padding:11px 14px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:#fff;font-size:13px;color:#1a1a2e;cursor:pointer;line-height:1.5;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif}
+.sa-btn:hover{background:var(--grn)}
+.sa-btn.sel{background:var(--grn);border-color:var(--grn3);color:var(--grntext);font-weight:700}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:0.85em;line-height:1.3;margin:0 2px}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 3px;text-align:center}
+.frac>span:last-child{padding:0 3px;text-align:center}
+</style>
+</head>
+<body>
+<div class="container">
+<a class="back-link" href="index.html">← まちがいLABO トップへ</a>
+<div class="top-header">
+  <div class="top-icon">式</div>
+  <div>
+    <div class="top-title">式の計算</div>
+    <div class="top-sub">力試し → 分析 → 練習 → 再テスト</div>
+    <span class="top-badge">中2・基本編</span>
+  </div>
+</div>
+<div class="phase-tabs">
+  <button class="ptab active" id="tab0" onclick="switchPhase(0)">力試し<span>テスト</span></button>
+  <button class="ptab" id="tab1" onclick="switchPhase(1)">自己<span>分析</span></button>
+  <button class="ptab" id="tab2" onclick="switchPhase(2)">STEP<span>練習</span></button>
+  <button class="ptab" id="tab3" onclick="switchPhase(3)">再<span>テスト</span></button>
+</div>
+<div id="phase0"></div>
+<div id="phase1" style="display:none"></div>
+<div id="phase2" style="display:none"></div>
+<div id="phase3" style="display:none"></div>
+</div>
+<script>
+function shuffle(a){return [...a].sort(()=>Math.random()-0.5);}
+
+// ===== 問題プール =====
+// P1: 同類項をまとめる
+const POOL_P1=[
+  {q:'3a + 2b + 4a',         a:'7a+2b',          hint:'aどうしをまとめる'},
+  {q:'5x − 3y + 2x − y',     a:'7x−4y',          hint:'xどうし・yどうしをまとめる'},
+  {q:'2a + 3 − 5a + 1',      a:'−3a+4',          hint:'aどうし・数どうしをまとめる'},
+  {q:'7x − 4y − 3x + 2y',    a:'4x−2y',          hint:'同類項をまとめる'},
+  {q:'6x + y − 2x + 3y',     a:'4x+4y',          hint:'同類項をまとめる'},
+  {q:'−2a + 5b + 3a − 7b',   a:'a−2b',           hint:'aどうし・bどうしをまとめる'},
+  {q:'x² + 3x − 2x² + x',    a:'−x²+4x',         hint:'x²とxは別の同類項'},
+  {q:'2a² + 3a − a² + a',    a:'a²+4a',          hint:'a²とaは別の同類項'},
+  {q:'4a²b − 2ab² + a²b',    a:'5a²b−2ab²',      hint:'a²bとab²は別の同類項'},
+  {q:'3xy + 2x − xy + 5x',   a:'2xy+7x',         hint:'xyとxは別の同類項'},
+  {q:'8x − 5y + 3y − 4x',    a:'4x−2y',          hint:'同類項をまとめる'},
+  {q:'−3a + 2b + 5a − 4b',   a:'2a−2b',          hint:'符号に注意'},
+  {q:'5ab + 2a − 3ab + a',   a:'2ab+3a',         hint:'abとaは別の同類項'},
+  {q:'4x²y − 3xy² + 2x²y',   a:'6x²y−3xy²',      hint:'x²yとxy²は別の同類項'},
+  {q:'a + 2b − 3c − 2a + b', a:'−a+3b−3c',       hint:'文字ごとにまとめる'},
+];
+
+// P2: 多項式の加法・減法（かっこあり）
+const POOL_P2=[
+  {q:'(3x+2y) + (x+y)',          a:'4x+3y',          hint:'同類項をまとめる'},
+  {q:'(5a−2b) + (a+3b)',         a:'6a+b',           hint:'aどうし・bどうしをまとめる'},
+  {q:'(4x+y) − (2x−y)',          a:'2x+2y',          hint:'−(2x−y)=−2x+y'},
+  {q:'(3a−b) − (a−2b)',          a:'2a+b',           hint:'−(a−2b)=−a+2b'},
+  {q:'(2x²+3x) + (x²−5x)',       a:'3x²−2x',         hint:'x²どうし・xどうしをまとめる'},
+  {q:'(a+2b−1) + (3a−b+4)',      a:'4a+b+3',         hint:'同類項それぞれをまとめる'},
+  {q:'(5x−3y) − (2x+y)',         a:'3x−4y',          hint:'−(2x+y)=−2x−y'},
+  {q:'(6a+2b−1) − (3a−b+2)',     a:'3a+3b−3',        hint:'引く式の符号を全部逆に'},
+  {q:'(x²−2x+1) − (x²+x−3)',     a:'−3x+4',          hint:'x²どうしが消える'},
+  {q:'(4a−3b+c) + (−a+2b−2c)',   a:'3a−b−c',         hint:'同類項それぞれをまとめる'},
+  {q:'(3x+y) + (x−2y) − (2x−y)', a:'2x',             hint:'yが消える'},
+  {q:'(2a−b) − (a+b) + (3a+2b)', a:'4a',             hint:'bが消える'},
+  {q:'(a²+2ab) − (3ab−b²)',      a:'a²−ab+b²',       hint:'abどうしをまとめる'},
+  {q:'(5x−2y+3) − (2x+y−4)',     a:'3x−3y+7',        hint:'引く式の符号を全部逆に'},
+  {q:'(7a+3b) − (2a−b) − (a+2b)',a:'4a+2b',          hint:'順番にかっこを外す'},
+];
+
+// P3: 単項式の乗法・除法
+const POOL_P3=[
+  {q:'2a × 3b',                a:'6ab',             hint:'係数どうし・文字どうしをかける'},
+  {q:'(−3x) × 4y',             a:'−12xy',           hint:'符号に注意'},
+  {q:'5a × (−2a)',             a:'−10a²',           hint:'a×a=a²'},
+  {q:'2x² × 3x',               a:'6x³',             hint:'x²×x=x³'},
+  {q:'(2a)²',                  a:'4a²',             hint:'2²×a²=4a²'},
+  {q:'(−3x)²',                 a:'9x²',             hint:'(−3)²=9'},
+  {q:'(−2a)³',                 a:'−8a³',            hint:'(−2)³=−8'},
+  {q:'6ab ÷ 2a',               a:'3b',              hint:'÷2a → ×<span class="frac"><span>1</span><span>2a</span></span> に直す → <span class="frac"><span>6ab</span><span>2a</span></span> で約分'},
+  {q:'12x²y ÷ (−3xy)',         a:'−4x',             hint:'÷(−3xy) → ×<span class="frac"><span>1</span><span>−3xy</span></span> に直す → <span class="frac"><span>12x²y</span><span>−3xy</span></span> で約分。符号に注意'},
+  {q:'(−8a²b) ÷ 4ab',          a:'−2a',             hint:'÷4ab → ×<span class="frac"><span>1</span><span>4ab</span></span> に直す → <span class="frac"><span>−8a²b</span><span>4ab</span></span> で約分'},
+  {q:'(−a)³ × (−2b)',          a:'2a³b',            hint:'(−a)³=−a³、負×負=正'},
+];
+
+// P4: いろいろな計算（×数・÷数・分配法則）
+const POOL_P4=[
+  {q:'2(x+3y)',                a:'2x+6y',           hint:'2をかっこの中全部にかける'},
+  {q:'−3(a−2b)',               a:'−3a+6b',          hint:'−3をかっこの中全部にかける'},
+  {q:'(4x+6y) ÷ 2',            a:'2x+3y',           hint:'÷2 → ×<span class="frac"><span>1</span><span>2</span></span> に直して、<span class="frac"><span>4x+6y</span><span>2</span></span>。各項を約分'},
+  {q:'(9a−6b) ÷ (−3)',         a:'−3a+2b',          hint:'÷(−3) → ×<span class="frac"><span>1</span><span>−3</span></span> に直して、<span class="frac"><span>9a−6b</span><span>−3</span></span>。符号に注意'},
+  {q:'2(x+y) + 3(x−y)',        a:'5x−y',            hint:'それぞれ分配してからまとめる'},
+  {q:'3(2a−b) − 2(a+b)',       a:'4a−5b',           hint:'−2(a+b)=−2a−2b'},
+  {q:'4(x−2y) − 3(x−y)',       a:'x−5y',            hint:'分配してから同類項をまとめる'},
+  {q:'5(x+2y) − 3(2x+y)',      a:'−x+7y',           hint:'分配してから同類項をまとめる'},
+  {q:'2(a²+a−1) + 3(a²−a+2)',  a:'5a²−a+4',         hint:'a²どうし・aどうし・数どうし'},
+  {q:'−2(x−3y) + 4(x+y)',      a:'2x+10y',          hint:'−2(x−3y)=−2x+6y'},
+  {q:'3(2x+y−1) − 2(x+y+2)',   a:'4x+y−7',          hint:'分配してからまとめる'},
+  {q:'(8a+12b) ÷ 4',           a:'2a+3b',           hint:'÷4 → ×<span class="frac"><span>1</span><span>4</span></span> に直して、<span class="frac"><span>8a+12b</span><span>4</span></span>。各項を約分'},
+  {q:'(10x−5y) ÷ (−5)',        a:'−2x+y',           hint:'÷(−5) → ×<span class="frac"><span>1</span><span>−5</span></span> に直して、<span class="frac"><span>10x−5y</span><span>−5</span></span>。符号に注意'},
+  {q:'2(3a−b) − (a−5b)',       a:'5a+3b',           hint:'−(a−5b)=−a+5b'},
+  {q:'4(x+y) − 2(x−2y) + (y−x)',a:'x+9y',           hint:'順番に分配してまとめる'},
+];
+
+// テスト（各パターンから2問ずつ・計8問）
+const TEST1=shuffle([
+  ...shuffle(POOL_P1).slice(0,2),
+  ...shuffle(POOL_P2).slice(0,2),
+  ...shuffle(POOL_P3).slice(0,2),
+  ...shuffle(POOL_P4).slice(0,2),
+]);
+const TEST2=shuffle([
+  ...shuffle(POOL_P1).slice(5,7),
+  ...shuffle(POOL_P2).slice(5,7),
+  ...shuffle(POOL_P3).slice(5,7),
+  ...shuffle(POOL_P4).slice(5,7),
+]);
+
+let p0={evals:Array(8).fill(null),cur:0,done:false};
+let p1={q1:new Set(),q2:new Set(),q3:null};
+let p2={step:0,
+  s1qs:[],s1cur:0,s1ev:Array(8).fill(null),s1done:false,
+  s2sub:0,s2qs:[],s2cur:0,s2ev:Array(6).fill(null),s2done:false,
+  s3sub:0,s3qs:[],s3cur:0,s3ev:Array(6).fill(null),s3done:false,
+  s4qs:[],s4cur:0,s4ev:Array(10).fill(null),s4done:false};
+let p3={evals:Array(8).fill(null),cur:0,done:false};
+
+function switchPhase(n){
+  [0,1,2,3].forEach(i=>{
+    document.getElementById('phase'+i).style.display=i===n?'block':'none';
+    document.getElementById('tab'+i).className='ptab'+(i===n?' active':'');
+  });
+  if(n===0)renderP0();
+  if(n===1)renderP1();
+  if(n===2)renderP2();
+  if(n===3)renderP3();
+}
+
+function pipHtml(total,cur){
+  return '<div class="pip-row">'+Array(total).fill(0).map((_,i)=>{
+    let bg=i<cur?'#52b069':i===cur?'#aee4bc':'#c8ecd1';
+    return '<div class="pip" style="background:'+bg+'"></div>';
+  }).join('')+'</div>';
+}
+
+function testDoneHtml(qs,ev,btnLabel,btnFn){
+  const L={ok:'◯',half:'△',ng:'✕'},C={ok:'rb-ok',half:'rb-half',ng:'rb-ng'};
+  let ok=0,half=0,ng=0;
+  ev.forEach(v=>{if(v==='ok')ok++;else if(v==='half')half++;else ng++;});
+  return '<div class="done-wrap">'+
+    '<div style="text-align:center;margin-bottom:1.25rem"><div class="done-icon">📋</div><div class="done-title">テスト完了！</div></div>'+
+    '<div class="result-rows">'+qs.map((q,i)=>'<div class="rrow"><span class="rformula">'+q.q+'</span><span class="rbadge '+C[ev[i]||'ng']+'">'+L[ev[i]||'ng']+'</span></div>').join('')+'</div>'+
+    '<div class="stat-row">'+
+      '<div class="stat-c"><div class="stat-n" style="color:#1a4d28">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
+      '<div class="stat-c"><div class="stat-n" style="color:#ba7517">'+half+'</div><div class="stat-l">△ 一部</div></div>'+
+      '<div class="stat-c"><div class="stat-n" style="color:#d4537e">'+ng+'</div><div class="stat-l">✕ 間違い</div></div>'+
+    '</div>'+
+    '<button class="primary-btn" onclick="('+btnFn.toString()+')()">'+btnLabel+'</button>'+
+  '</div>';
+}
+
+function stepDoneHtml(icon,title,qs,ev,btns){
+  const L={ok:'◯',half:'△',ng:'✕'},C={ok:'rb-ok',half:'rb-half',ng:'rb-ng'};
+  let ok=ev.filter(v=>v==='ok').length,half=ev.filter(v=>v==='half').length,ng=ev.filter(v=>v==='ng').length;
+  return '<div class="done-wrap">'+
+    '<div style="text-align:center;margin-bottom:1.25rem"><div class="done-icon">'+icon+'</div><div class="done-title">'+title+'</div></div>'+
+    '<div class="stat-row">'+
+      '<div class="stat-c"><div class="stat-n" style="color:#1a4d28">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
+      '<div class="stat-c"><div class="stat-n" style="color:#ba7517">'+half+'</div><div class="stat-l">△ 一部</div></div>'+
+      '<div class="stat-c"><div class="stat-n" style="color:#d4537e">'+ng+'</div><div class="stat-l">✕ 間違い</div></div>'+
+    '</div>'+
+    '<div class="result-rows">'+qs.map((q,i)=>'<div class="rrow"><span class="rformula">'+q.q+'</span><span class="rbadge '+C[ev[i]||'ng']+'">'+L[ev[i]||'ng']+'</span></div>').join('')+'</div>'+
+    '<div class="msg-box" style="font-size:12px">💭 △・✕の問題をもう一度見て、どこで間違えたか考えてみよう。</div>'+
+    '<div class="done-btns">'+btns+'</div></div>';
+}
+
+function testCard(q,cur,total,pfx){
+  const isLast=cur===total-1;
+  return pipHtml(total,cur)+
+    '<div class="q-card">'+
+      '<div class="q-num-badge">📝 問題'+(cur+1)+' / '+total+'</div>'+
+      '<div class="q-formula">'+q.q+'</div>'+
+      '<div class="q-direction">を計算せよ — まず紙に解いてみよう！</div>'+
+      '<button class="reveal-btn" id="rb'+pfx+'" onclick="revT(\''+pfx+'\')">👀 答えを見る</button>'+
+      '<button class="dontknow-btn" id="dk'+pfx+'" onclick="dkT(\''+pfx+'\')">🤔 分からない</button>'+
+      '<div class="ans-box" id="ab'+pfx+'"><div class="ans-label">答え</div><div class="ans-val">'+q.a+'</div><div class="ans-hint">💡 '+q.hint+'</div></div>'+
+      '<div class="eval-wrap" id="ew'+pfx+'"><div class="eval-q">自分の答えはどうだった？</div><div class="eval-row">'+
+        '<button class="e-btn e-ok" id="eo'+pfx+'" onclick="evT(\''+pfx+'\',\'ok\')">◯ できた</button>'+
+        '<button class="e-btn e-half" id="eh'+pfx+'" onclick="evT(\''+pfx+'\',\'half\')">△ 一部</button>'+
+        '<button class="e-btn e-ng" id="en'+pfx+'" onclick="evT(\''+pfx+'\',\'ng\')">✕ 間違い</button>'+
+      '</div></div>'+
+    '</div>'+
+    '<div class="nav-row"><span class="nav-count">'+(cur+1)+' / '+total+' 問目</span>'+
+      '<button class="next-btn" id="nb'+pfx+'" onclick="nxT(\''+pfx+'\')" disabled>'+(isLast?'結果を見る →':'次の問題 →')+'</button></div>';
+}
+
+function revT(pfx){
+  document.getElementById('ab'+pfx).className='ans-box show';
+  document.getElementById('ew'+pfx).className='eval-wrap show';
+  document.getElementById('rb'+pfx).style.display='none';
+  document.getElementById('dk'+pfx).style.display='none';
+}
+function dkT(pfx){
+  const s=pfx==='0'?p0:p3;
+  s.evals[s.cur]='ng';
+  revT(pfx);
+  document.getElementById('en'+pfx).className='e-btn e-ng sel';
+  document.getElementById('nb'+pfx).disabled=false;
+}
+function evT(pfx,v){
+  const s=pfx==='0'?p0:p3;
+  s.evals[s.cur]=v;
+  ['ok','half','ng'].forEach(k=>document.getElementById('e'+k[0]+pfx).className='e-btn e-'+k+(v===k?' sel':''));
+  document.getElementById('nb'+pfx).disabled=false;
+}
+function nxT(pfx){
+  const s=pfx==='0'?p0:p3;
+  const qs=pfx==='0'?TEST1:TEST2;
+  if(s.cur<qs.length-1){s.cur++;}else{s.done=true;}
+  pfx==='0'?renderP0():renderP3();
+}
+
+// ===== PHASE 0 力試しテスト =====
+function renderP0(){
+  const el=document.getElementById('phase0');
+  if(p0.done){
+    if(p0.evals.every(v=>v==='ok')){renderGoalAchieved(el);return;}
+    el.innerHTML=testDoneHtml(TEST1,p0.evals,'自己分析へ進む →',()=>switchPhase(1));
+    return;
+  }
+  el.innerHTML='<div class="msg-box">📍 テストは自分の現在地を知るためのもの。正直に◯△✕をつけよう！</div>'+
+    testCard(TEST1[p0.cur],p0.cur,TEST1.length,'0');
+}
+
+// ===== PHASE 1 自己分析 =====
+function renderP1(){
+  const el=document.getElementById('phase1');
+  const L={ok:'◯',half:'△',ng:'✕'},C={ok:'rb-ok',half:'rb-half',ng:'rb-ng'};
+  const rows=TEST1.map((q,i)=>'<div class="rrow"><span class="rformula">'+q.q+'</span><span class="rbadge '+C[p0.evals[i]||'ng']+'">'+L[p0.evals[i]||'ng']+'</span></div>').join('');
+  const causes=['同類項のまとめ方が分からない','加減でかっこを外すのが苦手','単項式の乗除（累乗）が苦手','分配法則を使う計算が苦手','分かっているけどミスが多い'];
+  const topics=['同類項をまとめる','多項式の加法・減法','単項式の乗法・除法','いろいろな計算（分配法則）'];
+  const steps=['STEP 0 — ルール確認','STEP 1 — 同類項','STEP 2 — 多項式の加減・単項式の乗除','STEP 3 — いろいろな計算（分配法則）','STEP 4 — 全パターン混合'];
+  el.innerHTML=
+    '<div class="msg-box">💎 間違いは宝物。どこでつまずいたかを知ることが成長の第一歩！</div>'+
+    '<div class="result-rows">'+rows+'</div>'+
+    '<div class="sa-q">Q1. △や✕の原因（複数OK）</div>'+
+    '<div class="sa-opts">'+causes.map((t,i)=>'<button class="sa-btn'+(p1.q1.has(i)?' sel':'')+'" onclick="saQ1('+i+')">'+t+'</button>').join('')+'</div>'+
+    '<div class="sa-q">Q2. とくに困った問題（複数OK）</div>'+
+    '<div class="sa-opts">'+topics.map((t,i)=>'<button class="sa-btn'+(p1.q2.has(i)?' sel':'')+'" onclick="saQ2('+i+')">'+t+'</button>').join('')+'</div>'+
+    '<div class="sa-q">Q3. 次にやるべきSTEP</div>'+
+    '<div class="sa-opts">'+steps.map((t,i)=>'<button class="sa-btn'+(p1.q3===i?' sel':'')+'" onclick="saQ3('+i+')">'+t+'</button>').join('')+'</div>'+
+    '<button class="primary-btn" onclick="saGo()" '+(saReady()?'':'disabled style="opacity:0.35;cursor:default"')+'>このSTEPの練習を始める →</button>';
+}
+function saQ1(i){p1.q1.has(i)?p1.q1.delete(i):p1.q1.add(i);renderP1();}
+function saQ2(i){p1.q2.has(i)?p1.q2.delete(i):p1.q2.add(i);renderP1();}
+function saQ3(i){p1.q3=i;renderP1();}
+function saReady(){return p1.q1.size>0&&p1.q2.size>0&&p1.q3!==null;}
+function saGo(){if(!saReady())return;p2.step=p1.q3;switchPhase(2);}
+
+// ===== PHASE 2 STEP練習 =====
+function ruleRef(items){
+  const all={
+    dourui:{name:'同類項', expr:'3a+5a=8a（係数をたす）'},
+    minus: {name:'−( )を外す', expr:'−(a−b)=−a+b'},
+    mul:   {name:'単項式×単項式', expr:'2a×3b=6ab、a×a=a²'},
+    pow:   {name:'累乗', expr:'(−2a)²=4a²、(−2a)³=−8a³'},
+    div:   {name:'÷ → ×分数で', expr:'6ab÷2a = 6ab×<span class="frac"><span>1</span><span>2a</span></span> = <span class="frac"><span>6ab</span><span>2a</span></span> = 3b'},
+    dist:  {name:'分配法則', expr:'a(b+c)=ab+ac'},
+  };
+  let h='<div class="formula-ref"><div class="formula-ref-title">📖 この問題に関係するルール</div>';
+  items.forEach(k=>{
+    const r=all[k];
+    h+='<div class="frow"><span class="fname">'+r.name+'</span><span class="fexpr">'+r.expr+'</span></div>';
+  });
+  h+='</div>';
+  return h;
+}
+
+function renderP2(){
+  const el=document.getElementById('phase2');
+  const labels=[['STEP 0','ルール確認'],['STEP 1','同類項'],['STEP 2','加減・乗除'],['STEP 3','分配法則'],['STEP 4','混合']];
+  el.innerHTML='<div class="msg-box">⬆️ レベルアップの時間！自分のペースでじっくり進もう。</div>'+
+    '<div class="step-nav">'+
+    labels.map((s,i)=>'<button class="snav'+(p2.step===i?' active':'')+'" onclick="switchStep('+i+')">'+s[0]+'<span>'+s[1]+'</span></button>').join('')+
+    '</div><div id="sc"></div>';
+  renderSC();
+}
+function switchStep(i){p2.step=i;renderP2();}
+function renderSC(){
+  const el=document.getElementById('sc');
+  if(p2.step===0)renderS0(el);
+  else if(p2.step===1)renderS1(el);
+  else if(p2.step===2)renderS2(el);
+  else if(p2.step===3)renderS3(el);
+  else renderS4(el);
+}
+
+// STEP 0: ルール確認
+function renderS0(el){
+  const rules=[
+    {title:'① 同類項をまとめる',ex:'3a + 5a = 8a\n2x + 3y − x + y = x + 4y',note:'同じ文字（同じ次数）の係数どうしを計算。x²とxは別の同類項'},
+    {title:'② かっこを外す（加法・減法）',ex:'(2x+3) + (x−1) = 3x + 2\n(2x+3) − (x−1) = x + 4',note:'引くときは符号が全部逆になる'},
+    {title:'③ −( ) の展開',ex:'−(a − 3) = −a + 3\n−(2x + y) = −2x − y',note:'−をかっこの中全部にかける'},
+    {title:'④ 単項式×単項式',ex:'2a × 3b = 6ab\n5x × (−2x) = −10x²',note:'係数どうし・文字どうしをかける。同じ文字は累乗に'},
+    {title:'⑤ 累乗のある計算',ex:'(2a)² = 4a²\n(−3x)² = 9x²\n(−2a)³ = −8a³',note:'指数は係数・文字どちらにもかかる。負の数の偶数乗は正、奇数乗は負'},
+    {title:'⑥ 単項式÷単項式（×に直して分数で）',ex:'6ab ÷ 2a = 6ab × <span class="frac"><span>1</span><span>2a</span></span> = <span class="frac"><span>6ab</span><span>2a</span></span> = 3b\n12x²y ÷ (−3xy) = <span class="frac"><span>12x²y</span><span>−3xy</span></span> = −4x',note:'÷ → ×(逆数) に直して、分数にまとめてから約分。符号にも注意。'},
+    {title:'⑦ 分配法則（多項式×数）',ex:'2(x + 3y) = 2x + 6y\n−3(a − 2b) = −3a + 6b',note:'かっこの中の全部にかける'},
+  ];
+  el.innerHTML='<div class="msg-box">📖 まず7つのルールを確認しよう！例題を見て、理解できたら次のSTEPへ。</div>'+
+    rules.map(r=>'<div class="rule-card"><div class="rule-title">'+r.title+'</div><div class="rule-ex">'+r.ex.replace(/\n/g,'<br>')+'</div><div class="rule-note">💡 '+r.note+'</div></div>').join('')+
+    '<button class="primary-btn" onclick="switchStep(1)">STEP 1 へ進む →</button>';
+}
+
+// STEP 1: 文字式の表し方
+function renderS1(el){
+  if(!p2.s1qs.length)p2.s1qs=shuffle(POOL_P1);
+  const qs=p2.s1qs; const total=Math.min(qs.length,8);
+  if(p2.s1done){
+    el.innerHTML=stepDoneHtml('✏️','STEP 1 完了！',qs.slice(0,p2.s1cur+1),p2.s1ev.slice(0,p2.s1cur+1),
+      '<button class="primary-btn" onclick="switchStep(2)">STEP 2 へ進む →</button>'+
+      '<button class="secondary-btn" onclick="p2.s1qs=[];p2.s1cur=0;p2.s1ev=Array(8).fill(null);p2.s1done=false;renderP2()">もう一度</button>');
+    return;
+  }
+  el.innerHTML=ruleRef(['dourui'])+'<div class="msg-box">✏️ 同類項をまとめる練習をしよう！</div>'+renderQCard(qs[p2.s1cur],p2.s1cur,total,'s1');
+}
+
+// STEP 2: 多項式の加減 or 単項式の乗除（サブ選択）
+function renderS2(el){
+  const subLabels=['多項式の加法・減法','単項式の乗法・除法'];
+  el.innerHTML='<div class="msg-box">📐 どちらを練習する？</div>'+
+    '<div class="sub-nav">'+
+    subLabels.map((s,i)=>'<button class="subbtn'+(p2.s2sub===i?' active':'')+'" onclick="setS2sub('+i+')">'+s+'</button>').join('')+
+    '</div><div id="s2content"></div>';
+  renderS2content();
+}
+function setS2sub(i){
+  p2.s2sub=i; p2.s2qs=[];p2.s2cur=0;p2.s2ev=Array(6).fill(null);p2.s2done=false;
+  renderP2();
+}
+function renderS2content(){
+  const scel=document.getElementById('s2content');
+  if(!scel)return;
+  const pool=p2.s2sub===0?POOL_P2:POOL_P3;
+  if(!p2.s2qs.length)p2.s2qs=shuffle(pool);
+  const qs=p2.s2qs; const total=6;
+  if(p2.s2done){
+    scel.innerHTML=stepDoneHtml('📐','STEP 2 完了！',qs.slice(0,p2.s2cur+1),p2.s2ev.slice(0,p2.s2cur+1),
+      '<button class="primary-btn" onclick="switchStep(3)">STEP 3 へ進む →</button>'+
+      '<button class="secondary-btn" onclick="setS2sub('+0+')">もう一度</button>');
+    return;
+  }
+  scel.innerHTML=ruleRef(p2.s2sub===0?['dourui','minus']:['mul','pow','div'])+renderQCard(qs[p2.s2cur],p2.s2cur,total,'s2c');
+}
+
+// STEP 3: いろいろな計算（分配法則）
+function renderS3(el){
+  if(!p2.s3qs.length)p2.s3qs=shuffle(POOL_P4);
+  const qs=p2.s3qs; const total=6;
+  if(p2.s3done){
+    el.innerHTML=stepDoneHtml('🔀','STEP 3 完了！',qs.slice(0,p2.s3cur+1),p2.s3ev.slice(0,p2.s3cur+1),
+      '<button class="primary-btn" onclick="switchStep(4)">STEP 4 へ進む →</button>'+
+      '<button class="secondary-btn" onclick="p2.s3qs=[];p2.s3cur=0;p2.s3ev=Array(6).fill(null);p2.s3done=false;renderP2()">もう一度</button>');
+    return;
+  }
+  el.innerHTML=ruleRef(['dist','dourui','minus'])+'<div class="msg-box">🔀 分配法則を使った計算を練習しよう！</div>'+renderQCard(qs[p2.s3cur],p2.s3cur,total,'s3c');
+}
+
+// STEP 4: 全パターン混合
+function renderS4(el){
+  if(!p2.s4qs.length)p2.s4qs=shuffle([...POOL_P1,...POOL_P2,...POOL_P3,...POOL_P4]);
+  const qs=p2.s4qs; const total=10;
+  if(p2.s4done){
+    el.innerHTML=stepDoneHtml('🎯','STEP 4 完了！',qs.slice(0,p2.s4cur+1),p2.s4ev.slice(0,p2.s4cur+1),
+      '<button class="primary-btn" onclick="switchPhase(3)">再テストに挑戦する →</button>'+
+      '<button class="secondary-btn" onclick="p2.s4qs=[];p2.s4cur=0;p2.s4ev=Array(10).fill(null);p2.s4done=false;renderP2()">もう一度</button>');
+    return;
+  }
+  el.innerHTML=ruleRef(['dourui','minus','mul','pow','div','dist'])+
+    '<div class="msg-box">🎯 全パターンごちゃまぜ！どのルールか考えながら解こう。</div>'+
+    renderQCard(qs[p2.s4cur],p2.s4cur,total,'s4');
+}
+
+
+
+// STEP汎用カード
+function renderQCard(q,cur,total,key,stateEl,isSub){
+  const isLast=cur>=total-1;
+  return pipHtml(total,cur)+
+    '<div class="q-card">'+
+      '<div class="q-num-badge">✏️ 問題'+(cur+1)+' / '+total+'</div>'+
+      '<div class="q-formula">'+q.q+'</div>'+
+      '<div class="q-direction">を計算せよ</div>'+
+      '<button class="reveal-btn" id="rb'+key+'" onclick="revS(\''+key+'\')">👀 答えを見る</button>'+
+      '<button class="dontknow-btn" onclick="dkS(\''+key+'\')">🤔 分からない</button>'+
+      '<div class="ans-box" id="ab'+key+'"><div class="ans-label">答え</div><div class="ans-val">'+q.a+'</div><div class="ans-hint">💡 '+q.hint+'</div></div>'+
+      '<div class="eval-wrap" id="ew'+key+'"><div class="eval-q">自分の答えはどうだった？</div><div class="eval-row">'+
+        '<button class="e-btn e-ok" id="eo'+key+'" onclick="evS(\''+key+'\',\'ok\')">◯ できた</button>'+
+        '<button class="e-btn e-half" id="eh'+key+'" onclick="evS(\''+key+'\',\'half\')">△ 一部</button>'+
+        '<button class="e-btn e-ng" id="en'+key+'" onclick="evS(\''+key+'\',\'ng\')">✕ 間違い</button>'+
+      '</div></div>'+
+    '</div>'+
+    '<div class="nav-row"><span class="nav-count">'+(cur+1)+' / '+total+' 問目</span>'+
+      '<button class="next-btn" id="nb'+key+'" onclick="nxS(\''+key+'\')" disabled>'+(isLast?'結果を見る →':'次の問題 →')+'</button></div>';
+}
+function revS(k){
+  document.getElementById('ab'+k).className='ans-box show';
+  document.getElementById('ew'+k).className='eval-wrap show';
+  document.getElementById('rb'+k).style.display='none';
+}
+function dkS(k){
+  const el=document.getElementById('sc');
+  const info=getStepInfo(k);
+  if(!info)return;
+  info.ev[info.cur]='ng';
+  revS(k);
+  document.getElementById('en'+k).className='e-btn e-ng sel';
+  document.getElementById('nb'+k).disabled=false;
+}
+function evS(k,v){
+  const el=document.getElementById('sc');
+  const info=getStepInfo(k);
+  if(!info)return;
+  info.ev[info.cur]=v;
+  ['ok','half','ng'].forEach(n=>document.getElementById('e'+n[0]+k).className='e-btn e-'+n+(v===n?' sel':''));
+  document.getElementById('nb'+k).disabled=false;
+}
+function nxS(k){
+  const el=document.getElementById('sc');
+  const info=getStepInfo(k);
+  if(!info)return;
+  if(info.cur<info.total-1){info.setCur(info.cur+1);}else{info.setDone();}
+  renderP2();
+}
+function getStepInfo(k){
+  if(k==='s1') return {ev:p2.s1ev,cur:p2.s1cur,total:Math.min(p2.s1qs.length,8),setCur:c=>p2.s1cur=c,setDone:()=>p2.s1done=true};
+  if(k==='s2c') return {ev:p2.s2ev,cur:p2.s2cur,total:6,setCur:c=>p2.s2cur=c,setDone:()=>p2.s2done=true};
+  if(k==='s3c') return {ev:p2.s3ev,cur:p2.s3cur,total:6,setCur:c=>p2.s3cur=c,setDone:()=>p2.s3done=true};
+  if(k==='s4') return {ev:p2.s4ev,cur:p2.s4cur,total:10,setCur:c=>p2.s4cur=c,setDone:()=>p2.s4done=true};
+  return null;
+}
+
+// ===== PHASE 3 再テスト =====
+function renderP3(){
+  const el=document.getElementById('phase3');
+  if(p3.done){
+    if(p3.evals.every(v=>v==='ok')){renderGoalAchieved(el);return;}
+    let ok=0,half=0,ng=0;
+    p3.evals.forEach(v=>{if(v==='ok')ok++;else if(v==='half')half++;else ng++;});
+    const msgs=['まだ難しいところが残っています。STEPに戻って練習しよう。','着実に伸びています！もう一息。','大きく伸びています！','完璧！'];
+    const mi=ok<=2?0:ok<=4?1:ok<=6?2:3;
+    const L={ok:'◯',half:'△',ng:'✕'},C={ok:'rb-ok',half:'rb-half',ng:'rb-ng'};
+    const rows=TEST2.map((q,i)=>'<div class="rrow"><span class="rformula">'+q.q+'</span><span class="rbadge '+C[p3.evals[i]||'ng']+'">'+L[p3.evals[i]||'ng']+'</span></div>').join('');
+    el.innerHTML='<div class="done-wrap">'+
+      '<div style="text-align:center;margin-bottom:1.25rem"><div class="done-icon">🎉</div><div class="done-title">再テスト完了！</div></div>'+
+      '<div class="stat-row">'+
+        '<div class="stat-c"><div class="stat-n" style="color:#1a4d28">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
+        '<div class="stat-c"><div class="stat-n" style="color:#ba7517">'+half+'</div><div class="stat-l">△ 一部</div></div>'+
+        '<div class="stat-c"><div class="stat-n" style="color:#d4537e">'+ng+'</div><div class="stat-l">✕ 間違い</div></div>'+
+      '</div>'+
+      '<div class="result-rows">'+rows+'</div>'+
+      '<div class="msg-box">'+msgs[mi]+'</div>'+
+      '<div class="done-btns">'+
+        (ok>=6?'<button class="primary-btn" onclick="window.location.href=\'index.html\'">まちがいLABO トップへ →</button>':
+               '<button class="primary-btn" onclick="switchPhase(1)">もう一度自己分析して練習する →</button>')+
+        '<button class="secondary-btn" onclick="p3.evals=Array(TEST2.length).fill(null);p3.cur=0;p3.done=false;renderP3()">もう一度再テストする</button>'+
+      '</div></div>';
+    return;
+  }
+  el.innerHTML='<div class="msg-box">📍 練習の成果を確かめよう！</div>'+
+    testCard(TEST2[p3.cur],p3.cur,TEST2.length,'3');
+}
+
+// ===== 目標達成機能 =====
+const GOAL='式の計算（中2）を使いこなせるようになろう！';
+const NEXT_OPTIONS=[
+  {icon:'👨‍🏫',label:'説明してみる・教える'},
+  {icon:'📚',label:'ほかの問題にも挑戦'},
+  {icon:'⏱',label:'タイムアタックに挑戦'},
+  {icon:'🚀',label:'分数・小数編に挑戦！'},
+  {icon:'🔁',label:'基礎に戻って確認'},
+  {icon:'☕',label:'休憩する'},
+];
+function renderGoalAchieved(el){
+  [0,1,2,3].forEach(function(i){
+    var ph=document.getElementById('phase'+i);
+    var tb=document.getElementById('tab'+i);
+    if(ph)ph.style.display=i===0?'block':'none';
+    if(tb)tb.className='ptab'+(i===0?' active':'');
+  });
+  var btnStyle='padding:14px 8px;border-radius:var(--r16);border:1.5px solid var(--card-border);background:#fff;font-size:13px;font-weight:700;color:var(--grntext);cursor:pointer;font-family:Zen Maru Gothic,sans-serif;transition:all 0.15s;text-align:center;line-height:1.5;width:100%';
+  var optBtns=NEXT_OPTIONS.map(function(opt,i){
+    return '<button onclick="showNextOption('+i+')" style="'+btnStyle+'" onmouseover="this.style.background=\'var(--grn)\'" onmouseout="this.style.background=\'#fff\'"><div style="font-size:24px;margin-bottom:4px">'+opt.icon+'</div>'+opt.label+'</button>';
+  }).join('');
+  el.innerHTML=
+    '<div class="done-wrap" style="text-align:center">'+
+    '<div style="font-size:48px;margin-bottom:0.5rem">🏆</div>'+
+    '<div style="font-size:22px;font-weight:700;color:var(--grntext);margin-bottom:4px">目標達成！</div>'+
+    '<div style="font-size:15px;color:var(--grntext2);margin-bottom:1.25rem;font-weight:700">'+GOAL+'</div>'+
+    '<div style="background:var(--grn);border-radius:var(--r16);padding:1rem;margin-bottom:1.25rem;border:1px solid var(--grn2);text-align:left">'+
+    '<div style="font-size:13px;color:var(--grntext2);line-height:1.8">🌟 全問正解！すばらしい！<br>次は何をする？</div>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+optBtns+'</div>'+
+    '</div>'+
+    '<div id="next-detail"></div>';
+}
+function showNextOption(i){
+  var el=document.getElementById('next-detail');if(!el)return;
+  var fns=[c0,c1,c2,c3,c4,c5];
+  if(fns[i])el.innerHTML='<div class="q-card" style="margin-top:1rem">'+fns[i]()+'</div>';
+}
+function c0(){
+  var h='';
+  h+='<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">👨‍🏫 説明してみる・教える</div>';
+  h+='<div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:0.75rem">☆ 教えることで、自分の理解がグッと深まる！</div>';
+  h+='<button onclick="toggleEffect()" style="width:100%;text-align:left;padding:10px 14px;border-radius:var(--r16);border:1.5px solid var(--grn2);background:var(--grn);font-size:13px;font-weight:700;color:var(--grntext);cursor:pointer;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">人に教えることの効果 <span id="eff-arrow">▼</span></button>';
+  h+='<div id="eff-body" style="display:none;background:#edf9f0;border:1px solid var(--grn2);border-radius:var(--r16);padding:1rem;margin-bottom:1rem;font-size:13px;color:var(--grntext2);line-height:2">';
+  h+='・説明するには、自分が理解していないとできない。<br>';
+  h+='・説明しようとすると、ぼんやりしていた部分が見えてくる。<br>';
+  h+='・学習科学（ラーニング・ピラミッド）では、「人に教える」が一番記憶に残って定着するといわれている。';
+  h+='</div>';
+  h+='<div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:6px">☆ 教える人は誰でもOK！</div>';
+  h+='<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">（友達、先生、おうちの人、飼ってるペット、、、、）</div>';
+  h+='<div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ その人の「分からない」に寄り添って、説明してみよう！</div>';
+  h+='<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem">';
+  h+='<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:10px">何人に説明できた？</div>';
+  h+='<div style="display:flex;align-items:center;gap:12px">';
+  h+='<input type="number" id="teach-count" min="0" max="99" value="0" style="width:72px;font-size:24px;font-weight:700;text-align:center;border:1.5px solid var(--grn2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--grntext)">';
+  h+='<span style="font-size:16px;color:#1a1a2e">人</span>';
+  h+='<button onclick="addTeach(1)" style="padding:8px 16px;border-radius:999px;border:none;background:var(--grn3);color:#fff;font-size:18px;font-weight:700;cursor:pointer">+</button>';
+  h+='</div></div>';
+  return h;
+}
+function toggleEffect(){
+  var b=document.getElementById('eff-body'),a=document.getElementById('eff-arrow');
+  if(!b)return;
+  var open=b.style.display==='block';
+  b.style.display=open?'none':'block';
+  if(a)a.textContent=open?'▼':'▲';
+}
+function addTeach(n){
+  var inp=document.getElementById('teach-count');
+  if(!inp)return;
+  inp.value=Math.max(0,parseInt(inp.value||0)+n);
+}
+function c1(){return '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">📚 ほかの問題にも挑戦</div><div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ 同じ単元の別の問題で、もう一度力試しをしてみよう！</div><button class="primary-btn" onclick="TEST1.sort(()=>Math.random()-0.5);p0.evals=Array(TEST1.length).fill(null);p0.cur=0;p0.done=false;switchPhase(0);">別の問題でもう一度 →</button>';}
+function c2(){var prev=window._taTime||null;var h='<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">⏱ タイムアタックに挑戦</div><div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ ストップウォッチを用意しよう！<br>☆ スタートを押したらすぐ問題が始まるよ。</div>';if(prev)h+='<div style="background:var(--grn);border:1px solid var(--grn2);border-radius:var(--r16);padding:10px;margin-bottom:1rem;font-size:13px;color:var(--grntext2)">⏱ 前回：<strong style="color:var(--grntext)">'+prev+'</strong></div>';h+='<button class="primary-btn" onclick="TEST1.sort(()=>Math.random()-0.5);p0.evals=Array(TEST1.length).fill(null);p0.cur=0;p0.done=false;switchPhase(0);">⏱ スタート！</button>';return h;}
+function c3(){return '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">🚀 文字式の利用・証明に挑戦！</div><div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ 偶数・奇数や連続する整数の性質を、文字式で説明してみよう！</div><button class="primary-btn" onclick="window.location.href=\'index.html\'">内容選択画面へ →</button>';}
+function c4(){return '<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">🔁 基礎に戻って確認</div><div style="font-size:13px;color:var(--grntext2);line-height:1.8;margin-bottom:1rem">☆ 満点でも「なんとなく解けた」部分がないか確認しよう！</div><button class="primary-btn" onclick="switchPhase(2)">STEP練習へ戻る →</button>';}
+var _restTimer=null,_restRemain=0,_restPaused=false;
+function c5(){
+  var h='';
+  h+='<div style="font-size:16px;font-weight:700;color:var(--grntext);margin-bottom:1rem">☕ 休憩する</div>';
+  h+='<div style="font-size:14px;font-weight:700;color:#1a1a2e;line-height:1.8;margin-bottom:0.5rem">今日の目標は達成！ゆっくり休もう。<br>頑張った脳には休憩が必要！<br>記憶は休んでいる間に整理されるよ。</div>';
+  h+='<div style="font-size:12px;color:#aaa;line-height:1.9;margin-bottom:1.25rem">深呼吸する / 空を見る / 水を飲む / 少し伸びやマッサージをする... などどれも大事な時間✨</div>';
+  h+='<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem">';
+  h+='<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:10px">何分休憩する？（最大15分）</div>';
+  h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">';
+  h+='<input type="number" id="rest-min" min="1" max="15" value="5" style="width:72px;font-size:24px;font-weight:700;text-align:center;border:1.5px solid var(--grn2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--grntext)" oninput="if(this.value>15)this.value=15;if(this.value<1)this.value=1">';
+  h+='<span style="font-size:16px;color:#1a1a2e;font-weight:700">分</span>';
+  h+='<button onclick="startRest()" id="rest-start-btn" style="padding:10px 20px;border-radius:999px;border:none;background:var(--grn3);color:#fff;font-size:14px;font-weight:700;cursor:pointer">スタート ▶</button>';
+  h+='</div>';
+  h+='<div id="rest-timer" style="display:none;text-align:center">';
+  h+='<div id="rest-display" style="font-size:52px;font-weight:700;font-family:JetBrains Mono,monospace;color:var(--grntext);margin-bottom:8px">05:00</div>';
+  h+='<div style="display:flex;gap:8px;justify-content:center">';
+  h+='<button onclick="pauseRest()" id="rest-pause-btn" style="padding:8px 18px;border-radius:999px;border:1.5px solid var(--grn2);background:#fff;font-size:13px;font-weight:700;cursor:pointer;color:var(--grntext)">⏸ 一時停止</button>';
+  h+='<button onclick="stopRest()" style="padding:8px 18px;border-radius:999px;border:1.5px solid #ddd;background:#fff;font-size:13px;cursor:pointer;color:#888">✕ やめる</button>';
+  h+='</div></div>';
+  h+='<div id="rest-done" style="display:none;text-align:center;padding:1rem">';
+  h+='<div style="font-size:32px;margin-bottom:8px">🌿</div>';
+  h+='<div style="font-size:28px;font-weight:700;color:var(--grntext);margin-bottom:8px">終了！</div>';
+  h+='<div style="font-size:14px;color:var(--grntext2);line-height:1.8">気持ちを切り替えて<br>次の課題に挑戦しよう！</div>';
+  h+='</div></div>';
+  return h;
+}
+function startRest(){
+  var min=Math.min(15,Math.max(1,parseInt(document.getElementById('rest-min').value)||5));
+  _restRemain=min*60; _restPaused=false;
+  document.getElementById('rest-start-btn').style.display='none';
+  document.getElementById('rest-min').disabled=true;
+  document.getElementById('rest-timer').style.display='block';
+  updateRestDisplay();
+  if(_restTimer)clearInterval(_restTimer);
+  _restTimer=setInterval(function(){
+    if(_restPaused)return;
+    _restRemain--;
+    updateRestDisplay();
+    if(_restRemain<=0){
+      clearInterval(_restTimer);
+      document.getElementById('rest-timer').style.display='none';
+      document.getElementById('rest-done').style.display='block';
+    }
+  },1000);
+}
+function updateRestDisplay(){
+  var el=document.getElementById('rest-display');
+  if(!el)return;
+  var m=Math.floor(_restRemain/60),s=_restRemain%60;
+  el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+}
+function pauseRest(){
+  _restPaused=!_restPaused;
+  var btn=document.getElementById('rest-pause-btn');
+  if(btn)btn.textContent=_restPaused?'▶ 再開':'⏸ 一時停止';
+}
+function stopRest(){
+  if(_restTimer)clearInterval(_restTimer);
+  document.getElementById('rest-timer').style.display='none';
+  document.getElementById('rest-start-btn').style.display='inline-flex';
+  document.getElementById('rest-min').disabled=false;
+}
+
+renderP0();
+</script>
+</body>
+</html>
