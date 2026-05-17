@@ -689,8 +689,7 @@ function renderP3(){
         '<div class="result-rows" style="margin-bottom:1rem">'+compareRows+'</div>'+
         '<div class="msg-box">'+msgs[mi]+'</div>'+
         '<div class="done-btns">'+
-          (ok>=6?'<button class="primary-btn" onclick="window.location.href=\'index.html\'">まちがいLABO トップへ →</button>':
-                 '<button class="primary-btn" onclick="switchPhase(1)">もう一度自己分析して練習する →</button>')+
+          '<button class="primary-btn" onclick="switchPhase(2)">STEP練習に戻る →</button>'+
           '<button class="secondary-btn" onclick="resetP3()">もう一度再テストする</button>'+
         '</div>'+
       '</div>';
@@ -805,11 +804,12 @@ const NEXT_OPTIONS=[
   {icon:'☕', label:'休憩する'},
 ];
 function renderGoalAchieved(el){
+  var cur=(el&&el.id)?el.id.replace('phase',''):'0';
   [0,1,2,3].forEach(function(i){
     var ph=document.getElementById('phase'+i);
     var tb=document.getElementById('tab'+i);
-    if(ph)ph.style.display=i===0?'block':'none';
-    if(tb)tb.className='ptab'+(i===0?' active':'');
+    if(ph)ph.style.display=String(i)===cur?'block':'none';
+    if(tb)tb.className='ptab'+(String(i)===cur?' active':'');
   });
   var btnStyle='padding:14px 8px;border-radius:var(--r16);border:1.5px solid var(--card-border);background:#fff;font-size:13px;font-weight:700;color:var(--grntext);cursor:pointer;font-family:Zen Maru Gothic,sans-serif;transition:all 0.15s;text-align:center;line-height:1.5;width:100%';
   var optBtns=NEXT_OPTIONS.map(function(opt,i){

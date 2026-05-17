@@ -279,6 +279,22 @@ function mkRows(qs,ev){
     `<div class="rrow"><span class="rformula">${q.q}</span><span class="rbadge ${C[ev[i]||'ng']}">${L[ev[i]||'ng']}</span></div>`
   ).join('')+'</div>';
 }
+function mkCompare(evBefore,evAfter){
+  const cnt=ev=>['ok','half','ng'].map(k=>ev.filter(v=>v===k).length);
+  const [ok0,half0,ng0]=cnt(evBefore), [ok,half,ng]=cnt(evAfter);
+  const diff=(after,before)=>{const d=after-before;if(d>0)return `<span style="color:#27500a;font-weight:700">+${d}</span>`;if(d<0)return `<span style="color:#72243e;font-weight:700">${d}</span>`;return `<span style="color:#888">±0</span>`;};
+  const row=(label,b,a,color,d)=>`<div style="text-align:center;font-family:JetBrains Mono,monospace"><span style="color:${color};font-weight:700">${b}</span> <span style="font-size:11px;color:#888">${label}</span></div><div style="color:#aaa">→</div><div style="text-align:center;font-family:JetBrains Mono,monospace"><span style="color:${color};font-weight:700">${a}</span> <span style="font-size:11px;color:#888">${label}</span></div><div style="text-align:center">${d}</div>`;
+  return `<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:14px 16px;margin-bottom:1rem">
+    <div style="font-size:13px;font-weight:700;color:var(--grntext);margin-bottom:10px;text-align:center">📊 力試し → 再テスト の変化</div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr auto;gap:8px 14px;font-size:13px;align-items:center">
+      <div style="text-align:center;color:#888;font-size:11px">力試し</div><div></div><div style="text-align:center;color:var(--grntext);font-size:11px;font-weight:700">再テスト</div><div style="text-align:center;font-size:11px;color:#888">変化</div>
+      ${row('◯',ok0,ok,'#27500a',diff(ok,ok0))}
+      ${row('△',half0,half,'#ba7517',diff(half0,half))}
+      ${row('✕',ng0,ng,'#d4537e',diff(ng0,ng))}
+    </div>
+  </div>
+  <div style="font-size:11px;color:#888;text-align:center;margin-bottom:10px">※ 力試しと再テストは別の問題です。全体の調子の変化として見てね。</div>`;
+}
 function mkDone(icon,title,qs,ev,btns){
   return `<div class="done-wrap">
     <div style="text-align:center;margin-bottom:1rem"><div class="done-icon">${icon}</div><div class="done-title">${title}</div></div>
@@ -300,11 +316,14 @@ function renderTest(qs,state,isFirst){
       return;
     }
     if(perfect){renderGoalAchieved(el,isFirst);return;}
-    const btn=isFirst
-      ?`<button class="primary-btn" onclick="goPhase(1)">自己分析へ進む →</button>`
-      :`<button class="primary-btn" onclick="goPhase(1)">もう一度自己分析して練習する →</button>
-        <button class="secondary-btn" onclick="resetT2()">もう一度再テストする</button>`;
-    el.innerHTML=`<div class="msg-box">📍 テスト完了！</div>${mkStat(state.ev)}${mkRows(qs,state.ev)}<div class="done-btns">${btn}</div>`;
+    if(isFirst){
+      el.innerHTML=`<div class="msg-box">📍 テスト完了！</div>${mkStat(state.ev)}${mkRows(qs,state.ev)}<div class="done-btns"><button class="primary-btn" onclick="goPhase(1)">自己分析へ進む →</button></div>`;
+    }else{
+      el.innerHTML=`<div class="msg-box">🎉 再テスト完了！</div>${mkCompare(t1.ev,state.ev)}${mkRows(qs,state.ev)}<div class="done-btns">
+        <button class="primary-btn" onclick="goPhase(2)">STEP練習に戻る →</button>
+        <button class="secondary-btn" onclick="resetT2()">もう一度再テストする</button>
+      </div>`;
+    }
     return;
   }
   const q=qs[state.cur];

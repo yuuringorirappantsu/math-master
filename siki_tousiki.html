@@ -557,22 +557,29 @@ function renderP3(){
     if(p3.evals.every(v=>v==='ok')){renderGoalAchieved(el);return;}
     let ok=0,half=0,ng=0;
     p3.evals.forEach(v=>{if(v==='ok')ok++;else if(v==='half')half++;else ng++;});
+    let ok0=0,half0=0,ng0=0;
+    p0.evals.forEach(v=>{if(v==='ok')ok0++;else if(v==='half')half0++;else ng0++;});
+    const diff=(after,before)=>{const d=after-before;if(d>0)return '<span style="color:#27500a;font-weight:700">+'+d+'</span>';if(d<0)return '<span style="color:#72243e;font-weight:700">'+d+'</span>';return '<span style="color:#888">±0</span>';};
     const msgs=['まだ難しいところが残っています。STEPに戻って練習しよう。','着実に伸びています！もう一息。','大きく伸びています！','完璧！'];
     const mi=ok<=2?0:ok<=4?1:ok<=6?2:3;
     const L={ok:'◯',half:'△',ng:'✕'},C={ok:'rb-ok',half:'rb-half',ng:'rb-ng'};
     const rows=TEST2.map((q,i)=>'<div class="rrow"><span class="rformula">'+q.q+'</span><span class="rbadge '+C[p3.evals[i]||'ng']+'">'+L[p3.evals[i]||'ng']+'</span></div>').join('');
     el.innerHTML='<div class="done-wrap">'+
       '<div style="text-align:center;margin-bottom:1.25rem"><div class="done-icon">🎉</div><div class="done-title">再テスト完了！</div></div>'+
-      '<div class="stat-row">'+
-        '<div class="stat-c"><div class="stat-n" style="color:#5c2e0a">'+ok+'</div><div class="stat-l">◯ できた</div></div>'+
-        '<div class="stat-c"><div class="stat-n" style="color:#ba7517">'+half+'</div><div class="stat-l">△ 一部</div></div>'+
-        '<div class="stat-c"><div class="stat-n" style="color:#d4537e">'+ng+'</div><div class="stat-l">✕ 間違い</div></div>'+
+      '<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:14px 16px;margin-bottom:1rem">'+
+        '<div style="font-size:13px;font-weight:700;color:var(--grntext);margin-bottom:10px;text-align:center">📊 力試し → 再テスト の変化</div>'+
+        '<div style="display:grid;grid-template-columns:1fr auto 1fr auto;gap:8px 14px;font-size:13px;align-items:center">'+
+          '<div style="text-align:center;color:#888;font-size:11px">力試し</div><div></div><div style="text-align:center;color:var(--grntext);font-size:11px;font-weight:700">再テスト</div><div style="text-align:center;font-size:11px;color:#888">変化</div>'+
+          '<div style="text-align:center;font-family:JetBrains Mono,monospace"><span style="color:#5c2e0a;font-weight:700">'+ok0+'</span> <span style="font-size:11px;color:#888">◯</span></div><div style="color:#aaa">→</div><div style="text-align:center;font-family:JetBrains Mono,monospace"><span style="color:#5c2e0a;font-weight:700">'+ok+'</span> <span style="font-size:11px;color:#888">◯</span></div><div style="text-align:center">'+diff(ok,ok0)+'</div>'+
+          '<div style="text-align:center;font-family:JetBrains Mono,monospace"><span style="color:#ba7517;font-weight:700">'+half0+'</span> <span style="font-size:11px;color:#888">△</span></div><div style="color:#aaa">→</div><div style="text-align:center;font-family:JetBrains Mono,monospace"><span style="color:#ba7517;font-weight:700">'+half+'</span> <span style="font-size:11px;color:#888">△</span></div><div style="text-align:center">'+diff(half0,half)+'</div>'+
+          '<div style="text-align:center;font-family:JetBrains Mono,monospace"><span style="color:#d4537e;font-weight:700">'+ng0+'</span> <span style="font-size:11px;color:#888">✕</span></div><div style="color:#aaa">→</div><div style="text-align:center;font-family:JetBrains Mono,monospace"><span style="color:#d4537e;font-weight:700">'+ng+'</span> <span style="font-size:11px;color:#888">✕</span></div><div style="text-align:center">'+diff(ng0,ng)+'</div>'+
+        '</div>'+
       '</div>'+
+      '<div style="font-size:11px;color:#888;text-align:center;margin-bottom:10px">※ 力試しと再テストは別の問題です。全体の調子の変化として見てね。</div>'+
       '<div class="result-rows">'+rows+'</div>'+
       '<div class="msg-box">'+msgs[mi]+'</div>'+
       '<div class="done-btns">'+
-        (ok>=6?'<button class="primary-btn" onclick="window.location.href=\'index.html\'">まちがいLABO トップへ →</button>':
-               '<button class="primary-btn" onclick="switchPhase(1)">もう一度自己分析して練習する →</button>')+
+        '<button class="primary-btn" onclick="switchPhase(2)">STEP練習に戻る →</button>'+
         '<button class="secondary-btn" onclick="p3.evals=Array(TEST2.length).fill(null);p3.cur=0;p3.done=false;renderP3()">もう一度再テストする</button>'+
       '</div></div>';
     return;
@@ -592,11 +599,12 @@ const NEXT_OPTIONS=[
   {icon:'☕',label:'休憩する'},
 ];
 function renderGoalAchieved(el){
+  var cur=(el&&el.id)?el.id.replace('phase',''):'0';
   [0,1,2,3].forEach(function(i){
     var ph=document.getElementById('phase'+i);
     var tb=document.getElementById('tab'+i);
-    if(ph)ph.style.display=i===0?'block':'none';
-    if(tb)tb.className='ptab'+(i===0?' active':'');
+    if(ph)ph.style.display=String(i)===cur?'block':'none';
+    if(tb)tb.className='ptab'+(String(i)===cur?' active':'');
   });
   var btnStyle='padding:14px 8px;border-radius:var(--r16);border:1.5px solid var(--card-border);background:#fff;font-size:13px;font-weight:700;color:var(--grntext);cursor:pointer;font-family:Zen Maru Gothic,sans-serif;transition:all 0.15s;text-align:center;line-height:1.5;width:100%';
   var optBtns=NEXT_OPTIONS.map(function(opt,i){
