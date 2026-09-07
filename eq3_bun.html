@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>二次方程式の利用（中3）— まちがいLABO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Zen Maru Gothic',sans-serif;background:#eff6fc;min-height:100vh;padding:1.5rem 1rem}
+.container{max-width:640px;margin:0 auto}
+:root{
+  --blu:#dcebf7;--blu2:#a8cae8;--blu3:#3b7fbf;--blu4:#265d8f;
+  --blutext:#0e2e50;--blutext2:#254978;
+  --peach:#faeeda;--peachtext:#633806;
+  --rose:#fbeaf0;--rosetext:#72243e;
+  --sage:#eaf3de;--sagetext:#27500a;
+  --r20:20px;--r16:16px;--card-border:#a8cae8;
+}
+.back-link{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--card-border);border-radius:999px;padding:6px 14px;font-size:12px;color:var(--blutext2);cursor:pointer;margin-bottom:1rem;transition:all 0.15s;font-family:'Zen Maru Gothic',sans-serif;font-weight:500;text-decoration:none}
+.back-link:hover{background:var(--blu)}
+.top-header{background:var(--blu);border-radius:24px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:14px;border:1.5px solid var(--blu2)}
+.top-icon{width:48px;height:48px;border-radius:50%;background:var(--blu3);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;flex-shrink:0}
+.top-title{font-size:18px;font-weight:700;color:var(--blutext)}
+.top-sub{font-size:12px;color:var(--blutext2);margin-top:2px}
+.top-badge{display:inline-block;background:#fff;border:1px solid var(--blu2);border-radius:999px;font-size:10px;font-weight:700;color:var(--blutext2);padding:2px 10px;margin-top:4px}
+.phase-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:1.25rem}
+.ptab{padding:9px 4px;border-radius:999px;border:none;background:#c5dcf0;font-size:12px;color:#254978;cursor:pointer;text-align:center;line-height:1.35;transition:all 0.18s;font-family:'Zen Maru Gothic',sans-serif}
+.ptab span{display:block;font-size:10px;margin-top:2px;opacity:0.85}
+.ptab.active{background:var(--blu3);color:#fff;font-weight:700}
+.q-card{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:1.25rem;margin-bottom:1rem}
+.q-num-badge{display:inline-flex;align-items:center;gap:5px;background:var(--blu);color:var(--blutext);font-size:11px;font-weight:700;padding:3px 12px;border-radius:999px;margin-bottom:10px}
+.q-formula{font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:4px;line-height:1.8}
+.q-direction{font-size:13px;color:#254978;margin-bottom:1rem}
+.pip-row{display:flex;gap:5px;margin-bottom:1.25rem}
+.pip{flex:1;height:8px;border-radius:999px}
+.reveal-btn{display:inline-flex;align-items:center;gap:6px;background:var(--blu);color:var(--blutext);border:1.5px solid var(--blu2);border-radius:999px;padding:8px 18px;font-size:13px;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;font-weight:500}
+.reveal-btn:hover{background:var(--blu2)}
+.dontknow-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#888;border:1.5px solid #ddd;border-radius:999px;padding:8px 18px;font-size:13px;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;margin-left:8px}
+.ans-box{background:#e7f0f9;border-radius:var(--r16);padding:1rem;margin-top:10px;display:none;border:1px solid var(--blu2)}
+.ans-box.show{display:block}
+.ans-label{font-size:11px;color:var(--blutext2);margin-bottom:4px;font-weight:700}
+.ans-val{font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--blutext);margin-bottom:6px;line-height:1.8}
+.ans-hint{font-size:12px;color:var(--blutext2);line-height:1.8}
+.eval-wrap{margin-top:1rem;display:none}
+.eval-wrap.show{display:block}
+.eval-q{font-size:13px;color:#254978;margin-bottom:8px}
+.eval-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.e-btn{padding:10px 6px;border-radius:var(--r16);border:1.5px solid var(--card-border);background:#fff;font-size:14px;font-weight:700;cursor:pointer;text-align:center;font-family:'Zen Maru Gothic',sans-serif}
+.e-btn:hover{background:var(--blu)}
+.e-ok.sel{background:var(--sage);border-color:#639922;color:var(--sagetext)}
+.e-half.sel{background:var(--peach);border-color:#ba7517;color:var(--peachtext)}
+.e-ng.sel{background:var(--rose);border-color:#d4537e;color:var(--rosetext)}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}
+.nav-count{font-size:12px;color:#254978}
+.next-btn{display:inline-flex;align-items:center;gap:6px;background:var(--blu3);color:#fff;border:none;border-radius:999px;padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif}
+.next-btn:hover{background:var(--blu4)}
+.next-btn:disabled{opacity:0.3;cursor:default}
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0.75rem}
+.choice-btn{padding:12px 8px;border-radius:var(--r16);border:1.5px solid var(--card-border);background:#fff;font-size:15px;font-weight:700;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:all 0.2s;text-align:center}
+.choice-btn:hover{background:var(--blu)}
+.choice-correct{background:#dcebf7!important;border-color:#3b7fbf!important;color:#0e2e50!important;cursor:default}
+.choice-wrong{background:#fbeaf0!important;border-color:#d4537e!important;color:#72243e!important;cursor:default}
+.ox-result{text-align:center;font-size:18px;font-weight:700;padding:10px;border-radius:var(--r16);margin-bottom:0.75rem}
+.ox-correct{background:#dcebf7;color:#0e2e50}
+.ox-wrong{background:#fbeaf0;color:#72243e}
+.step-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:1.25rem}
+.snav{padding:8px 3px;border-radius:999px;border:none;background:#c5dcf0;font-size:11px;color:#254978;cursor:pointer;text-align:center;line-height:1.35;font-family:'Zen Maru Gothic',sans-serif}
+.snav span{display:block;font-size:9px;margin-top:2px;opacity:0.8}
+.snav.active{background:var(--blu3);color:#fff;font-weight:700}
+.done-wrap{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:1.5rem}
+.done-icon{width:64px;height:64px;border-radius:50%;background:var(--blu);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 1rem}
+.done-title{font-size:18px;font-weight:700;color:#1a1a2e;text-align:center;margin-bottom:0.5rem}
+.done-btns{display:flex;flex-direction:column;gap:8px}
+.primary-btn{width:100%;padding:12px;border-radius:999px;border:none;background:var(--blu3);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif}
+.primary-btn:hover{background:var(--blu4)}
+.secondary-btn{width:100%;padding:11px;border-radius:999px;border:1.5px solid var(--blu2);background:#fff;color:#1a1a2e;font-size:14px;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif}
+.secondary-btn:hover{background:var(--blu)}
+.result-rows{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r20);padding:0.75rem 1rem;margin-bottom:1rem}
+.rrow{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:0.5px solid var(--blu)}
+.rrow:last-child{border-bottom:none}
+.rformula{flex:1;color:#1a1a2e;font-size:12px;line-height:1.5}
+.rbadge{padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+.rb-ok{background:var(--sage);color:var(--sagetext)}
+.rb-half{background:var(--peach);color:var(--peachtext)}
+.rb-ng{background:var(--rose);color:var(--rosetext)}
+.stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1rem}
+.stat-c{background:#eff6fc;border-radius:var(--r16);padding:0.75rem;text-align:center}
+.stat-n{font-size:22px;font-weight:700;margin-bottom:2px}
+.stat-l{font-size:11px;color:#254978}
+.msg-box{font-size:13px;color:var(--blutext2);line-height:1.7;padding:10px 14px;background:var(--blu);border-radius:var(--r16);margin-bottom:1rem;border:1px solid var(--blu2)}
+.sa-q{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:10px;line-height:1.5;margin-top:1rem}
+.sa-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:0.5rem}
+.sa-btn{text-align:left;padding:11px 14px;border-radius:var(--r16);border:1.5px solid var(--blu2);background:#fff;font-size:13px;color:#1a1a2e;cursor:pointer;line-height:1.5;font-family:'Zen Maru Gothic',sans-serif}
+.sa-btn:hover{background:var(--blu)}
+.sa-btn.sel{background:var(--blu);border-color:var(--blu3);color:var(--blutext);font-weight:700}
+.rule-toggle{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--blu);border:1.5px solid var(--blu2);border-radius:var(--r16);cursor:pointer;font-size:13px;font-weight:700;color:var(--blutext);margin-bottom:0.75rem}
+.rule-toggle:hover{background:var(--blu2)}
+.rule-body{display:none;background:#e7f0f9;border:1px solid var(--blu2);border-radius:var(--r16);padding:1rem;margin-bottom:0.75rem;font-size:11px}
+.rule-body.open{display:block}
+.rule-sec{margin-bottom:10px}
+.rule-sec:last-child{margin-bottom:0}
+.rule-sec-title{font-weight:700;color:var(--blutext);margin-bottom:6px;font-size:12px}
+.rule-row{display:flex;gap:8px;padding:4px 0;border-bottom:0.5px solid var(--blu2);line-height:1.6}
+.rule-row:last-child{border-bottom:none}
+.rule-label{font-weight:700;color:var(--blutext);min-width:90px;font-size:11px;flex-shrink:0}
+.rule-ex{font-family:'JetBrains Mono',monospace;color:var(--blutext2);font-size:11px}
+.pat-grid1{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.pat-card{background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:0.75rem;cursor:pointer;transition:all 0.15s}
+.pat-card:hover{background:var(--blu)}
+.pat-name{font-size:12px;font-weight:700;color:var(--blutext);margin-bottom:4px}
+.pat-ex{font-size:11px;color:var(--blutext2)}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;font-size:0.85em;line-height:1.1}
+.frac .num{border-bottom:1.5px solid currentColor;padding:0 3px;text-align:center}
+.frac .den{padding:0 3px;text-align:center}
+</style>
+</head>
+<body>
+<div class="container">
+<a class="back-link" href="index.html">← まちがいLABO トップへ</a>
+<div class="top-header">
+  <div class="top-icon">x²</div>
+  <div>
+    <div class="top-title">二次方程式の利用</div>
+    <div class="top-sub">力試し → 分析 → 練習 → 再テスト</div>
+    <span class="top-badge">中3・文章題</span>
+  </div>
+</div>
+<div class="phase-tabs">
+  <button class="ptab active" id="tab0" onclick="goPhase(0)">力試し<span>テスト</span></button>
+  <button class="ptab" id="tab1" onclick="goPhase(1)">自己<span>分析</span></button>
+  <button class="ptab" id="tab2" onclick="goPhase(2)">STEP<span>練習</span></button>
+  <button class="ptab" id="tab3" onclick="goPhase(3)">再<span>テスト</span></button>
+</div>
+<div id="app"></div>
+</div>
+<script>
+const sh = a => [...a].sort(()=>Math.random()-0.5);
+const fr = (n,d) => `<span class="frac"><span class="num">${n}</span><span class="den">${d}</span></span>`;
+const pipHtml = (total,cur) =>
+  '<div class="pip-row">'+Array(total).fill(0).map((_,i)=>
+    `<div class="pip" style="background:${i<cur?'#3b7fbf':i===cur?'#a8cae8':'#c5dcf0'}"></div>`).join('')+'</div>';
+
+// ===== 問題プール =====
+
+// STEP1: 二次方程式を立てる練習（解かない）
+const PS1=[
+  {q:'ある数 x を 2 乗すると 25 になる。方程式で表せ',
+   a:'x² = 25',
+   hint:'「2 乗」→ x²、「〜になる」→ ＝'},
+  {q:'ある数 x を 2 乗して 3 加えると 12 になる。方程式で表せ',
+   a:'x² + 3 = 12',
+   hint:'x² + 3 = 12'},
+  {q:'ある数 x を 2 乗すると、x の 4 倍に等しくなる。方程式で表せ',
+   a:'x² = 4x',
+   hint:'x² と 4x が等しい'},
+  {q:'ある数 x を 2 乗して 3x を引くと 10 になる。方程式で表せ',
+   a:'x² − 3x = 10',
+   hint:'x² − 3x = 10'},
+  {q:'ある数 x とその 2 乗の和が 20 になる。方程式で表せ',
+   a:'x + x² = 20（または x² + x = 20）',
+   hint:'x + x² = 20'},
+  {q:'連続する 2 つの整数（小さい方を x）の積が 30 になる。方程式で表せ',
+   a:'x(x + 1) = 30',
+   hint:'2 つは x と x+1、その積 = 30'},
+  {q:'ある数 x を 2 乗した数は、その数の 5 倍より 6 大きい。方程式で表せ',
+   a:'x² = 5x + 6',
+   hint:'左辺 x²、右辺「5x より 6 大きい」= 5x + 6'},
+  {q:'縦 x cm、横 (x + 3) cm の長方形の面積が 40 cm²。方程式で表せ',
+   a:'x(x + 3) = 40',
+   hint:'面積 = 縦 × 横'},
+  {q:'1 辺 x cm の正方形の面積が 49 cm²。方程式で表せ',
+   a:'x² = 49',
+   hint:'面積 = 1 辺 × 1 辺'},
+  {q:'ある数 x に 2 を加えた数を 2 乗すると 16 になる。方程式で表せ',
+   a:'(x + 2)² = 16',
+   hint:'「x に 2 を加えた数」= x+2、それを 2 乗'},
+  {q:'ある数 x を 2 乗して 2x を加えると 15 になる。方程式で表せ',
+   a:'x² + 2x = 15',
+   hint:'x² + 2x = 15'},
+  {q:'連続する 2 つの正の偶数（小さい方を x）の積が 48。方程式で表せ',
+   a:'x(x + 2) = 48',
+   hint:'連続する偶数は 2 とび: x と x+2'},
+];
+
+// STEP2: パターン別に方程式を立てる練習
+// 面積パターン（立式）
+const PT_AREA_S=[
+  {q:'縦の長さが x cm、横の長さが縦より 3 cm 長い長方形がある。面積が 40 cm² のとき、方程式を立てよ。',
+   a:'x(x + 3) = 40',
+   hint:'横 = x+3。面積 = 縦 × 横 = x(x+3) = 40'},
+  {q:'1 辺 x cm の正方形の面積が、1 辺の長さの 6 倍に等しい。方程式を立てよ。',
+   a:'x² = 6x',
+   hint:'面積 = x²、1辺の6倍 = 6x'},
+  {q:'縦 (x + 2) cm、横 (x + 5) cm の長方形の面積が 40 cm²。方程式を立てよ。',
+   a:'(x + 2)(x + 5) = 40',
+   hint:'面積 = 縦 × 横 = (x+2)(x+5) = 40'},
+  {q:'横の長さが縦の 2 倍の長方形がある。縦を x cm とすると、面積が 72 cm² になる。方程式を立てよ。',
+   a:'x × 2x = 72（または 2x² = 72）',
+   hint:'横 = 2x。面積 = 縦 × 横 = 2x² = 72'},
+  {q:'縦 10 m、横 15 m の長方形の土地の周りに幅 x m の道をつけたら、道の面積が 74 m² になった。方程式を立てよ。',
+   a:'(10 + 2x)(15 + 2x) − 10 × 15 = 74',
+   hint:'外側の長方形の面積 − 元の面積 = 道の面積'},
+];
+// 整数パターン（立式）
+const PT_INT_S=[
+  {q:'連続する 2 つの正の整数がある。小さい方を x とすると、その積が 42 になる。方程式を立てよ。',
+   a:'x(x + 1) = 42',
+   hint:'2 つは x と x+1、その積が 42'},
+  {q:'連続する 2 つの正の整数の平方の和が 25。小さい方を x として方程式を立てよ。',
+   a:'x² + (x + 1)² = 25',
+   hint:'「平方の和」= x² + (x+1)²'},
+  {q:'ある正の整数 x を 2 乗した数は、その数の 3 倍より 4 大きい。方程式を立てよ。',
+   a:'x² = 3x + 4',
+   hint:'x² は「3x より 4 大きい」= 3x + 4'},
+  {q:'連続する 2 つの正の奇数の積が 63。小さい方を x として方程式を立てよ。',
+   a:'x(x + 2) = 63',
+   hint:'連続する奇数は 2 とび: x と x+2'},
+  {q:'大小 2 つの正の整数がある。大きい方は小さい方より 5 大きく、積が 84。小さい方を x として方程式を立てよ。',
+   a:'x(x + 5) = 84',
+   hint:'大 = x+5、積 = x(x+5) = 84'},
+];
+// 直方体パターン（立式）
+const PT_BOX_S=[
+  {q:'1 辺 20 cm の正方形の紙の四隅から、1 辺 x cm の正方形を切り取り、ふたのない直方体の箱を作る。底面の面積が 144 cm² になる。方程式を立てよ。',
+   a:'(20 − 2x)² = 144',
+   hint:'底面は 1 辺 (20 − 2x) cm の正方形。面積 = (20−2x)²'},
+  {q:'1 辺 12 cm の正方形の紙の四隅から、1 辺 x cm の正方形を切り取り、ふたのない直方体の箱を作る。底面の面積が 64 cm² になる。方程式を立てよ。',
+   a:'(12 − 2x)² = 64',
+   hint:'底面は 1 辺 (12 − 2x) cm の正方形'},
+  {q:'縦 16 cm、横 20 cm の長方形の紙の四隅から、1 辺 x cm の正方形を切り取り、ふたのない直方体の箱を作る。底面積が 192 cm² になる。方程式を立てよ。',
+   a:'(16 − 2x)(20 − 2x) = 192',
+   hint:'底面は 縦 (16−2x)、横 (20−2x) の長方形'},
+  {q:'1 辺 18 cm の正方形の紙の四隅から 1 辺 x cm の正方形を切り取り、ふたのない直方体の箱を作る。底面積が 100 cm² のとき、方程式を立てよ。',
+   a:'(18 − 2x)² = 100',
+   hint:'底面は 1 辺 (18 − 2x) cm の正方形'},
+  {q:'縦 10 cm、横 14 cm の長方形の紙の四隅から 1 辺 x cm の正方形を切り取り、ふたのない直方体の箱を作る。底面積が 60 cm² のとき、方程式を立てよ。',
+   a:'(10 − 2x)(14 − 2x) = 60',
+   hint:'底面は 縦 (10−2x)、横 (14−2x) の長方形'},
+];
+// 動点パターン（立式）
+const PT_MOV_S=[
+  {q:'1 辺 10 cm の正方形 ABCD で、点 P は A を出発して辺 AB 上を毎秒 1 cm で B まで進む。P が A を出発してから x 秒後、△APD の面積が 15 cm² になる。方程式を立てよ。（AD = 10 cm、0 < x < 10）',
+   a:fr('1','2')+' × x × 10 = 15（または 5x = 15）',
+   hint:'△APD の面積 = '+fr('1','2')+' × AP × AD = '+fr('1','2')+' × x × 10'},
+  {q:'AB = 12 cm、BC = 8 cm の長方形 ABCD で、点 P は A を出発して AB 上を毎秒 2 cm で B に向かい、点 Q は B を出発して BC 上を毎秒 1 cm で C に向かって進む。同時に出発してから x 秒後、△PBQ の面積が 8 cm² になる。方程式を立てよ。（0 < x < 6）',
+   a:fr('1','2')+' × (12 − 2x) × x = 8（または x(12 − 2x) = 16）',
+   hint:'x 秒後、PB = 12 − 2x、BQ = x。△PBQ = '+fr('1','2')+' × PB × BQ'},
+  {q:'1 辺 8 cm の正方形 ABCD で、点 P は A を出発して AB 上を毎秒 1 cm で、点 Q は同時に A を出発して AD 上を毎秒 2 cm で進む。x 秒後、△APQ の面積が 12 cm² になる。方程式を立てよ。（0 < x < 4）',
+   a:fr('1','2')+' × x × 2x = 12（または x² = 12）',
+   hint:'△APQ = '+fr('1','2')+' × AP × AQ = '+fr('1','2')+' × x × 2x'},
+  {q:'AB = 10 cm、AD = 6 cm の長方形 ABCD で、点 P は A を出発して AB 上を毎秒 1 cm で進む。x 秒後、△PBC（P, B, C を頂点とする三角形）の面積が 12 cm² になる。方程式を立てよ。（0 < x < 10）',
+   a:fr('1','2')+' × (10 − x) × 6 = 12（または 3(10 − x) = 12）',
+   hint:'PB = 10 − x、BC = 6。△PBC = '+fr('1','2')+' × PB × BC'},
+  {q:'1 辺 10 cm の正方形 ABCD で、点 P は A を出発して AB 上を毎秒 1 cm、点 Q は同時に B を出発して BC 上を毎秒 1 cm で進む。x 秒後、△PBQ の面積が 8 cm² になる。方程式を立てよ。（0 < x < 10）',
+   a:fr('1','2')+' × (10 − x) × x = 8（または x(10 − x) = 16）',
+   hint:'x 秒後、PB = 10 − x、BQ = x。△PBQ = '+fr('1','2')+' × PB × BQ'},
+];
+
+// STEP3: パターン別に立式して解く
+// 面積パターン（解く）
+const PT_AREA_X=[
+  {q:'縦の長さが x cm、横の長さが縦より 3 cm 長い長方形の面積が 40 cm²。縦の長さ x を求めよ。',
+   a:'x = 5（cm）',
+   hint:'x(x+3) = 40 → x² + 3x − 40 = 0 → (x−5)(x+8) = 0 → x = 5（x>0）'},
+  {q:'1 辺 x cm の正方形の面積が、1 辺の長さの 6 倍に等しい。x を求めよ。',
+   a:'x = 6（cm）',
+   hint:'x² = 6x → x² − 6x = 0 → x(x−6) = 0 → x = 6（x>0）'},
+  {q:'縦 (x + 2) cm、横 (x + 5) cm の長方形の面積が 40 cm²。x を求めよ。',
+   a:'x = 3（cm）',
+   hint:'(x+2)(x+5) = 40 → x² + 7x + 10 = 40 → x² + 7x − 30 = 0 → (x−3)(x+10) = 0 → x = 3（x>0）'},
+  {q:'横の長さが縦の 2 倍の長方形の面積が 72 cm²。縦を x cm として求めよ。',
+   a:'x = 6（cm）',
+   hint:'2x² = 72 → x² = 36 → x = 6（x>0）'},
+  {q:'1 辺 x cm の正方形の面積が、1 辺の長さより 6 大きい数の 3 倍に等しい。x を求めよ。',
+   a:'x = 6（cm）',
+   hint:'x² = 3(x + 6) → x² − 3x − 18 = 0 → (x−6)(x+3) = 0 → x = 6（x>0）'},
+];
+// 整数パターン（解く）
+const PT_INT_X=[
+  {q:'連続する 2 つの正の整数の積が 42 になる。2 つの整数を求めよ。',
+   a:'6 と 7',
+   hint:'小さい方を x とおく → x(x+1) = 42 → x² + x − 42 = 0 → (x−6)(x+7) = 0 → x = 6（x>0）'},
+  {q:'連続する 2 つの正の整数の平方の和が 25 になる。2 つの整数を求めよ。',
+   a:'3 と 4',
+   hint:'x² + (x+1)² = 25 → 2x² + 2x − 24 = 0 → x² + x − 12 = 0 → (x−3)(x+4) = 0 → x = 3（x>0）'},
+  {q:'ある正の整数を 2 乗した数は、その数の 3 倍より 4 大きい。もとの整数を求めよ。',
+   a:'4',
+   hint:'x² = 3x + 4 → x² − 3x − 4 = 0 → (x−4)(x+1) = 0 → x = 4（x>0）'},
+  {q:'連続する 2 つの正の奇数の積が 63 になる。2 つの奇数を求めよ。',
+   a:'7 と 9',
+   hint:'小さい方を x とおく → x(x+2) = 63 → x² + 2x − 63 = 0 → (x−7)(x+9) = 0 → x = 7（x>0）'},
+  {q:'大小 2 つの正の整数がある。大きい方は小さい方より 5 大きく、積は 84。2 つの整数を求めよ。',
+   a:'7 と 12',
+   hint:'小さい方 x、大 x+5 → x(x+5) = 84 → x² + 5x − 84 = 0 → (x−7)(x+12) = 0 → x = 7（x>0）'},
+];
+// 直方体パターン（解く）
+const PT_BOX_X=[
+  {q:'1 辺 20 cm の正方形の紙の四隅から 1 辺 x cm の正方形を切り取り、ふたのない直方体の箱を作る。底面の面積が 144 cm² になるとき、x を求めよ。',
+   a:'x = 4（cm）',
+   hint:'(20 − 2x)² = 144 → 20 − 2x = 12（正の方）→ x = 4（0<x<10）'},
+  {q:'1 辺 12 cm の正方形の紙の四隅から 1 辺 x cm の正方形を切り取り、ふたのない直方体の箱を作る。底面の面積が 64 cm² のとき、x を求めよ。',
+   a:'x = 2（cm）',
+   hint:'(12 − 2x)² = 64 → 12 − 2x = 8（正の方）→ x = 2（0<x<6）'},
+  {q:'縦 16 cm、横 20 cm の長方形の紙の四隅から 1 辺 x cm の正方形を切り取り、ふたのない直方体の箱を作る。底面積が 192 cm² のとき、x を求めよ。',
+   a:'x = 2（cm）',
+   hint:'(16−2x)(20−2x) = 192 → 4x² − 72x + 320 = 192 → x² − 18x + 32 = 0 → (x−2)(x−16) = 0 → x = 2（0<x<8）'},
+  {q:'1 辺 14 cm の正方形の紙の四隅から 1 辺 x cm の正方形を切り取り、ふたのない直方体の箱を作る。底面の面積が 100 cm² のとき、x を求めよ。',
+   a:'x = 2（cm）',
+   hint:'(14 − 2x)² = 100 → 14 − 2x = 10（正の方）→ x = 2（0<x<7）'},
+  {q:'縦 10 cm、横 14 cm の長方形の紙の四隅から 1 辺 x cm の正方形を切り取り、ふたのない直方体の箱を作る。底面積が 60 cm² のとき、x を求めよ。',
+   a:'x = 2（cm）',
+   hint:'(10−2x)(14−2x) = 60 → 4x² − 48x + 140 = 60 → x² − 12x + 20 = 0 → (x−2)(x−10) = 0 → x = 2（0<x<5）'},
+];
+// 動点パターン（解く）
+const PT_MOV_X=[
+  {q:'1 辺 10 cm の正方形 ABCD で、点 P は A を出発して AB 上を毎秒 1 cm で B に向かって進む。△APD の面積が 15 cm² になるのは、P が出発してから何秒後か。（0 < x < 10）',
+   a:'x = 3（秒後）',
+   hint:'△APD = '+fr('1','2')+' × x × 10 = 5x = 15 → x = 3'},
+  {q:'AB = 12 cm、BC = 8 cm の長方形 ABCD で、点 P は A を出発して AB 上を毎秒 2 cm で、点 Q は同時に B を出発して BC 上を毎秒 1 cm で進む。△PBQ の面積が 8 cm² になるのは何秒後か。（0 < x < 6）',
+   a:'x = 2 または 4（秒後）',
+   hint:fr('1','2')+' × (12−2x) × x = 8 → x(12−2x) = 16 → x² − 6x + 8 = 0 → (x−2)(x−4) = 0 → x = 2, 4'},
+  {q:'1 辺 8 cm の正方形 ABCD で、点 P は A を出発して AB 上を毎秒 1 cm で、点 Q は同時に A を出発して AD 上を毎秒 2 cm で進む。△APQ の面積が 12 cm² になるのは何秒後か。（0 < x < 4）',
+   a:'x = 2√3（秒後）',
+   hint:fr('1','2')+' × x × 2x = 12 → x² = 12 → x = 2√3（x>0、0<x<4 を満たす）'},
+  {q:'AB = 10 cm、AD = 6 cm の長方形 ABCD で、点 P は A を出発して AB 上を毎秒 1 cm で進む。△PBC の面積が 12 cm² になるのは何秒後か。',
+   a:'x = 6（秒後）',
+   hint:fr('1','2')+' × (10−x) × 6 = 12 → 3(10−x) = 12 → 10 − x = 4 → x = 6'},
+  {q:'1 辺 10 cm の正方形 ABCD で、点 P は A を出発して AB 上を毎秒 1 cm、点 Q は同時に B を出発して BC 上を毎秒 1 cm で進む。△PBQ の面積が 8 cm² になるのは何秒後か。（0 < x < 10）',
+   a:'x = 2 または 8（秒後）',
+   hint:fr('1','2')+' × (10−x) × x = 8 → x(10−x) = 16 → x² − 10x + 16 = 0 → (x−2)(x−8) = 0 → x = 2, 8'},
+];
+
+// 力試し・再テスト（文章題を解く）
+const TEST1=sh([
+  ...sh(PT_AREA_X).slice(0,2),
+  ...sh(PT_INT_X).slice(0,2),
+  ...sh(PT_BOX_X).slice(0,2),
+  ...sh(PT_MOV_X).slice(0,2),
+]);
+const TEST2=sh([
+  ...sh(PT_AREA_X).slice(2,4),
+  ...sh(PT_INT_X).slice(2,4),
+  ...sh(PT_BOX_X).slice(2,4),
+  ...sh(PT_MOV_X).slice(2,4),
+]);
+
+
+// ===== 状態 =====
+let phase=0;
+let t1={cur:0,ev:Array(TEST1.length).fill(null),done:false};
+let t2={cur:0,ev:Array(TEST2.length).fill(null),done:false};
+let sa={q1:new Set(),q2:new Set(),q3:null};
+let st={step:0,
+  s1qs:[],s1cur:0,s1ev:Array(8).fill(null),s1done:false,
+  s2pat:null,s2qs:[],s2cur:0,s2ev:Array(5).fill(null),s2done:false,
+  s3pat:null,s3qs:[],s3cur:0,s3ev:Array(5).fill(null),s3done:false,
+  s4qs:[],s4cur:0,s4ev:Array(15).fill(null),s4done:false};
+let _ox={};
+
+function goPhase(n){
+  phase=n;
+  [0,1,2,3].forEach(i=>document.getElementById('tab'+i).className='ptab'+(i===n?' active':''));
+  renderApp();
+}
+function renderApp(){
+  if(phase===0)renderTest(TEST1,t1,true);
+  else if(phase===1)renderSA();
+  else if(phase===2)renderSTEP();
+  else renderTest(TEST2,t2,false);
+}
+
+// ===== 共通部品 =====
+function mkStat(ev){
+  const ok=ev.filter(v=>v==='ok').length,half=ev.filter(v=>v==='half').length,ng=ev.filter(v=>v==='ng').length;
+  return `<div class="stat-row">
+    <div class="stat-c"><div class="stat-n" style="color:#27500a">${ok}</div><div class="stat-l">◯ できた</div></div>
+    <div class="stat-c"><div class="stat-n" style="color:#ba7517">${half}</div><div class="stat-l">△ 一部</div></div>
+    <div class="stat-c"><div class="stat-n" style="color:#d4537e">${ng}</div><div class="stat-l">✕ 間違い</div></div>
+  </div>`;
+}
+function mkRows(qs,ev){
+  const L={ok:'◯',half:'△',ng:'✕'},C={ok:'rb-ok',half:'rb-half',ng:'rb-ng'};
+  return '<div class="result-rows">'+qs.map((q,i)=>
+    `<div class="rrow"><span class="rformula">${q.q}</span><span class="rbadge ${C[ev[i]||'ng']}">${L[ev[i]||'ng']}</span></div>`
+  ).join('')+'</div>';
+}
+function mkCompare(evBefore,evAfter){
+  const cnt=ev=>['ok','half','ng'].map(k=>ev.filter(v=>v===k).length);
+  const [ok0,half0,ng0]=cnt(evBefore), [ok,half,ng]=cnt(evAfter);
+  const diff=(after,before)=>{const d=after-before;if(d>0)return `<span style="color:#27500a;font-weight:700">+${d}</span>`;if(d<0)return `<span style="color:#72243e;font-weight:700">${d}</span>`;return `<span style="color:#888">±0</span>`;};
+  const row=(label,b,a,color,d)=>`<div style="text-align:center;font-family:JetBrains Mono,monospace"><span style="color:${color};font-weight:700">${b}</span> <span style="font-size:11px;color:#888">${label}</span></div><div style="color:#aaa">→</div><div style="text-align:center;font-family:JetBrains Mono,monospace"><span style="color:${color};font-weight:700">${a}</span> <span style="font-size:11px;color:#888">${label}</span></div><div style="text-align:center">${d}</div>`;
+  return `<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:14px 16px;margin-bottom:1rem">
+    <div style="font-size:13px;font-weight:700;color:var(--blutext);margin-bottom:10px;text-align:center">📊 力試し → 再テスト の変化</div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr auto;gap:8px 14px;font-size:13px;align-items:center">
+      <div style="text-align:center;color:#888;font-size:11px">力試し</div><div></div><div style="text-align:center;color:var(--blutext);font-size:11px;font-weight:700">再テスト</div><div style="text-align:center;font-size:11px;color:#888">変化</div>
+      ${row('◯',ok0,ok,'#27500a',diff(ok,ok0))}
+      ${row('△',half0,half,'#ba7517',diff(half0,half))}
+      ${row('✕',ng0,ng,'#d4537e',diff(ng0,ng))}
+    </div>
+  </div>
+  <div style="font-size:11px;color:#888;text-align:center;margin-bottom:10px">※ 力試しと再テストは別の問題です。全体の調子の変化として見てね。</div>`;
+}
+function mkDone(icon,title,qs,ev,btns){
+  return `<div class="done-wrap">
+    <div style="text-align:center;margin-bottom:1rem"><div class="done-icon">${icon}</div><div class="done-title">${title}</div></div>
+    ${mkStat(ev)}${mkRows(qs,ev)}
+    <div class="msg-box" style="font-size:12px">💭 △・✕の問題をもう一度見て、どこで間違えたか考えてみよう。</div>
+    <div class="done-btns">${btns}</div>
+  </div>`;
+}
+
+// ===== テスト =====
+function renderTest(qs,state,isFirst){
+  const el=document.getElementById('app');
+  if(state.done){
+    const perfect=state.ev.every(v=>v==='ok');
+    // タイムアタックモード完了
+    if(window._taMode&&isFirst){
+      window._taMode=false;
+      renderTAResult(el,state);
+      return;
+    }
+    if(perfect){renderGoalAchieved(el,isFirst);return;}
+    if(isFirst){
+      el.innerHTML=`<div class="msg-box">📍 テスト完了！</div>${mkStat(state.ev)}${mkRows(qs,state.ev)}<div class="done-btns"><button class="primary-btn" onclick="goPhase(1)">自己分析へ進む →</button></div>`;
+    }else{
+      el.innerHTML=`<div class="msg-box">🎉 再テスト完了！</div>${mkCompare(t1.ev,state.ev)}${mkRows(qs,state.ev)}<div class="done-btns">
+        <button class="primary-btn" onclick="goPhase(2)">STEP練習に戻る →</button>
+        <button class="secondary-btn" onclick="resetT2()">もう一度再テストする</button>
+      </div>`;
+    }
+    return;
+  }
+  const q=qs[state.cur];
+  const isLast=state.cur===qs.length-1;
+  const nfn=isFirst?'nextT1':'nextT2';
+  let body='';
+  if(q.choices){
+    const shuffled=sh(q.choices.map((c,i)=>({c,ok:i===0})));
+    _ox['test']=shuffled;
+    body=`<div class="q-direction">正しい式を選べ</div>
+      <div class="choice-grid">${shuffled.map((it,i)=>
+        `<button class="choice-btn" id="txb${i}" onclick="pickOXTest(${i},'${nfn}')">${it.c}</button>`).join('')}</div>
+      <div id="txres"></div>
+      <div class="ans-box" id="txans"><div class="ans-hint">💡 ${q.hint}</div></div>
+      <div id="txnav" style="display:none">
+        <div class="nav-row"><span class="nav-count">${state.cur+1} / ${qs.length} 問目</span>
+          <button class="next-btn" onclick="${nfn}()">${isLast?'結果を見る →':'次の問題 →'}</button></div></div>`;
+  } else {
+    body=`<div class="q-direction">まず紙に解いてみよう！</div>
+      <button class="reveal-btn" id="trb" onclick="revTest()">👀 答えを見る</button>
+      <button class="dontknow-btn" onclick="dkTest('${nfn}')">🤔 分からない</button>
+      <div class="ans-box" id="tans"><div class="ans-label">答え</div><div class="ans-val">${q.a}</div><div class="ans-hint">💡 ${q.hint}</div></div>
+      <div class="eval-wrap" id="tev">
+        <div class="eval-q">自分の答えはどうだった？</div>
+        <div class="eval-row">
+          <button class="e-btn e-ok" id="te-ok" onclick="evTest('ok','${nfn}')">◯ できた</button>
+          <button class="e-btn e-half" id="te-half" onclick="evTest('half','${nfn}')">△ 一部</button>
+          <button class="e-btn e-ng" id="te-ng" onclick="evTest('ng','${nfn}')">✕ 間違い</button>
+        </div>
+      </div>
+      <div class="nav-row"><span class="nav-count">${state.cur+1} / ${qs.length} 問目</span>
+        <button class="next-btn" id="tnb" onclick="${nfn}()" disabled>${isLast?'結果を見る →':'次の問題 →'}</button></div>`;
+  }
+  el.innerHTML=`<div class="msg-box">📍 テストは自分の現在地を知るためのもの。正直に◯△✕をつけよう！</div>
+    ${pipHtml(qs.length,state.cur)}
+    <div class="q-card">
+      <div class="q-num-badge">📝 問題${state.cur+1} / ${qs.length}</div>
+      <div class="q-formula">${q.q}</div>
+      ${body}
+    </div>`;
+}
+// ===== 目標達成画面 =====
+const GOAL='二次方程式の利用（中3）を使いこなせるようになろう！';
+const NEXT_OPTIONS=[
+  {icon:'👨‍🏫', label:'説明してみる・教える'},
+  {icon:'📚', label:'ほかの問題にも挑戦'},
+  {icon:'⏱', label:'タイムアタックに挑戦'},
+  {icon:'🚀', label:'もう一歩先の発展問題'},
+  {icon:'🔁', label:'基礎に戻って確認'},
+  {icon:'☕', label:'休憩する'},
+];
+
+function renderGoalAchieved(el,isFirst){
+  const btnStyle='padding:14px 8px;border-radius:var(--r16);border:1.5px solid var(--card-border);background:#fff;font-size:13px;font-weight:700;color:var(--blutext);cursor:pointer;font-family:Zen Maru Gothic,sans-serif;transition:all 0.15s;text-align:center;line-height:1.5;width:100%';
+  const optBtns=NEXT_OPTIONS.map((opt,i)=>
+    '<button onclick="showNextOption('+i+')" style="'+btnStyle+'" '+
+    'onmouseover="this.style.background=\'var(--blu)\'" onmouseout="this.style.background=\'#fff\'">'+
+    '<div style="font-size:24px;margin-bottom:4px">'+opt.icon+'</div>'+opt.label+
+    '</button>'
+  ).join('');
+  el.innerHTML=
+    '<div class="done-wrap" style="text-align:center">'+
+      '<div style="font-size:48px;margin-bottom:0.5rem">🏆</div>'+
+      '<div style="font-size:22px;font-weight:700;color:var(--blutext);margin-bottom:4px">目標達成！</div>'+
+      '<div style="font-size:15px;color:var(--blutext2);margin-bottom:1.25rem;font-weight:700">'+GOAL+'</div>'+
+      '<div style="background:var(--blu);border-radius:var(--r16);padding:1rem;margin-bottom:1.25rem;border:1px solid var(--blu2);text-align:left">'+
+        '<div style="font-size:13px;color:var(--blutext2);line-height:1.8">🌟 全問正解！すばらしい！<br>次は何をする？</div>'+
+      '</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+optBtns+'</div>'+
+    '</div>'+
+    '<div id="next-detail"></div>';
+}
+
+let _nextEl=null;
+function showNextOption(i){
+  const el=document.getElementById('next-detail');
+  if(!el)return;
+  const fns=[c0,c1,c2,c3,c4,c5];
+  if(fns[i])el.innerHTML='<div class="q-card" style="margin-top:1rem">'+fns[i]()+'</div>';
+}
+function c0(){
+  return '<div style="font-size:16px;font-weight:700;color:var(--blutext);margin-bottom:1rem">👨‍🏫 説明してみる・教える</div>'+
+    '<div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:0.75rem">☆ 教えることで、自分の理解がグッと深まる！</div>'+
+    '<button onclick="toggleEffect()" style="width:100%;text-align:left;padding:10px 14px;border-radius:var(--r16);border:1.5px solid var(--blu2);background:var(--blu);font-size:13px;font-weight:700;color:var(--blutext);cursor:pointer;font-family:Zen Maru Gothic,sans-serif;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">'+
+      '人に教えることの効果 <span id="eff-arrow">▼</span></button>'+
+    '<div id="eff-body" style="display:none;background:#e7f0f9;border:1px solid var(--blu2);border-radius:var(--r16);padding:1rem;margin-bottom:1rem;font-size:13px;color:var(--blutext2);line-height:2">'+
+      '・説明するには、自分が理解していないとできない。<br>'+
+      '・説明しようとすると、ぼんやりしていた部分が見えてくる。<br>'+
+      '・学習科学（ラーニング・ピラミッド）では、「人に教える」が一番記憶に残って定着するといわれている。'+
+    '</div>'+
+    '<div style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:6px">☆ 教える人は誰でもOK！</div>'+
+    '<div style="font-size:13px;color:var(--blutext2);line-height:1.8;margin-bottom:1rem">（友達、先生、おうちの人、飼ってるペット、、、、）</div>'+
+    '<div style="font-size:13px;color:var(--blutext2);line-height:1.8;margin-bottom:1rem">☆ その人の「分からない」に寄り添って、説明してみよう！</div>'+
+    '<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem">'+
+      '<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:10px">何人に説明できた？</div>'+
+      '<div style="display:flex;align-items:center;gap:12px">'+
+        '<input type="number" id="teach-count" min="0" max="99" value="0" style="width:72px;font-size:24px;font-weight:700;text-align:center;border:1.5px solid var(--blu2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--blutext)">'+
+        '<span style="font-size:16px;color:#1a1a2e">人</span>'+
+        '<button onclick="addTeach(1)" style="padding:8px 16px;border-radius:999px;border:none;background:var(--blu3);color:#fff;font-size:18px;font-weight:700;cursor:pointer">+</button>'+
+      '</div>'+
+    '</div>';
+}
+function c1(){
+  return '<div style="font-size:16px;font-weight:700;color:var(--blutext);margin-bottom:1rem">📚 ほかの問題にも挑戦</div>'+
+    '<div style="font-size:13px;color:var(--blutext2);line-height:1.8;margin-bottom:1rem">'+
+      '☆ 同じ単元の別の問題で、もう一度力試しをしてみよう！<br>'+
+      '☆ 違う問題を解くことで、理解がさらに深まるよ。</div>'+
+    '<button class="primary-btn" onclick="retryNewTest()">別の問題で、もう一度力試しテストをする →</button>';
+}
+function c2(){
+  const prev=window._taTime||null;
+  return '<div style="font-size:16px;font-weight:700;color:var(--blutext);margin-bottom:1rem">⏱ タイムアタックに挑戦</div>'+
+    '<div style="font-size:13px;color:var(--blutext2);line-height:1.8;margin-bottom:1rem">'+
+      '☆ ストップウォッチ（スマホのタイマーなど）を用意しよう！<br>'+
+      '☆ スタートを押したらすぐ問題が始まるよ。全問解き終わったらタイムを記録しよう。<br>'+
+      '☆ 速く解けるようになると、試験でも余裕が生まれるよ！</div>'+
+    (prev?'<div style="background:#e7f0f9;border:1px solid var(--blu2);border-radius:var(--r16);padding:10px 14px;margin-bottom:1rem;font-size:13px;color:var(--blutext2)">'+
+      '⏱ 前回のタイム：<strong style="font-size:16px;color:var(--blutext)">'+prev+'</strong></div>':'')+
+    '<button class="primary-btn" onclick="startTA()" style="margin-bottom:0">⏱ タイマーを用意したらスタート！</button>';
+}
+function startTA(){
+  window._taMode=true;
+  TEST1.sort(()=>Math.random()-0.5);
+  t1={cur:0,ev:Array(TEST1.length).fill(null),done:false};
+  goPhase(0);
+}
+function c3(){
+  const qs=[
+    {q:'縦 8 m、横 12 m の長方形の花だんがある。この花だんの縦・横の長さをそれぞれ x m ずつ大きくして、面積が 2 倍になるようにしたい。x を求めよ。',
+     h:'💡 新しい面積 = (8+x)(12+x)、元の面積 = 96。新しい面積が元の 2 倍なので (8+x)(12+x) = 192。',
+     a:'(8+x)(12+x) = 2 × 8 × 12<br>→ x² + 20x + 96 = 192<br>→ x² + 20x − 96 = 0<br>解の公式より：x = '+fr('−20 ± √(400+384)','2')+' = '+fr('−20 ± √784','2')+' = '+fr('−20 ± 28','2')+'<br>x = 4 または −24<br>x > 0 なので <strong>x = 4（m）</strong>。',
+     level:'★★'},
+    {q:'ある正の整数 x がある。x を 2 乗した数は、x を 5 倍した数より 14 大きい。x を求めよ。',
+     h:'💡 「x を 2 乗」= x²、「x の 5 倍より 14 大きい」= 5x + 14。等号でつなぐ。',
+     a:'x² = 5x + 14<br>→ x² − 5x − 14 = 0<br>→ (x − 7)(x + 2) = 0<br>→ x = 7 または −2<br>x が正の整数なので <strong>x = 7</strong>。',
+     level:'★★'},
+    {q:'1 辺 30 cm の正方形の紙の四隅から 1 辺 x cm の正方形を切り取り、ふたのない直方体の箱を作る。底面の面積が側面の面積の合計と等しくなるとき、x を求めよ。',
+     h:'💡 底面積 = (30 − 2x)²。側面 1 つの面積 = 高さ × 底面の 1 辺 = x(30 − 2x)。側面は 4 つ。',
+     a:'底面積 = (30 − 2x)²<br>側面の面積の合計 = 4 × x(30 − 2x)<br>等式：(30 − 2x)² = 4x(30 − 2x)<br>両辺を (30 − 2x) でわる（≠ 0 なので）：<br>30 − 2x = 4x<br>→ 30 = 6x → x = 5<br>0 < x < 15 を満たすので <strong>x = 5（cm）</strong>。',
+     level:'★★★'},
+    {q:'AB = 10 cm、AD = 8 cm の長方形 ABCD で、点 P は A を出発して AB 上を毎秒 1 cm で、点 Q は同時に A を出発して AD 上を毎秒 2 cm で進む。△APQ の面積が 9 cm² になるのは何秒後か。（0 < x < 4）',
+     h:'💡 x 秒後、AP = x、AQ = 2x。△APQ = '+fr('1','2')+' × AP × AQ = '+fr('1','2')+' × x × 2x = x²。',
+     a:'x 秒後、AP = x cm、AQ = 2x cm<br>△APQ = '+fr('1','2')+' × x × 2x = x²<br>x² = 9<br>→ x = ±3<br>x > 0 かつ 0 < x < 4 を満たすので <strong>x = 3（秒後）</strong>。',
+     level:'★★'},
+    {q:'ある正の整数 a と、それより 3 大きい正の整数 b がある。a² + b² が 89 になるとき、a と b を求めよ。',
+     h:'💡 b = a + 3 とおいて、a² + (a+3)² = 89 の方程式を立てよう。',
+     a:'b = a + 3<br>a² + (a+3)² = 89<br>a² + a² + 6a + 9 = 89<br>2a² + 6a − 80 = 0<br>a² + 3a − 40 = 0<br>(a − 5)(a + 8) = 0<br>a = 5 または −8<br>a は正の整数なので a = 5、よって b = 8。<br>答え：<strong>a = 5、b = 8</strong>（検算: 25 + 64 = 89 ◯）',
+     level:'★★★'},
+    {q:'縦 12 cm、横 16 cm の長方形 ABCD の内側に、幅 x cm の枠（額縁のような形）を作った。枠の内側の長方形の面積が、元の長方形の面積の '+fr('5','12')+' になるとき、x を求めよ。',
+     h:'💡 枠の内側は、縦 (12 − 2x)、横 (16 − 2x) の長方形。元の面積 = 192、その '+fr('5','12')+' = 80。',
+     a:'枠の内側 = (12 − 2x)(16 − 2x)<br>元の面積 × '+fr('5','12')+' = 192 × '+fr('5','12')+' = 80<br>(12 − 2x)(16 − 2x) = 80<br>192 − 24x − 32x + 4x² = 80<br>4x² − 56x + 192 = 80<br>4x² − 56x + 112 = 0<br>x² − 14x + 28 = 0<br>解の公式：x = '+fr('14 ± √(196 − 112)','2')+' = '+fr('14 ± √84','2')+' = 7 ± √21<br>√21 ≒ 4.58 なので x ≒ 2.42 または 11.58。<br>0 < x < 6 なので <strong>x = 7 − √21（cm）</strong>。',
+     level:'★★★'},
+  ];
+  const checks=window._devChecks||Array(qs.length).fill(false);
+  window._devChecks=checks;
+  let html=
+    '<div style="font-size:16px;font-weight:700;color:var(--blutext);margin-bottom:0.75rem">🚀 もう一歩先の発展問題</div>'+ 
+    '<div style="font-size:13px;color:var(--blutext2);line-height:1.8;margin-bottom:1rem">☆ 二次方程式の範囲だけで、少しややこしい問題たち。落ち着いて状況を整理して立式しよう！</div>';
+  qs.forEach((q,i)=>{
+    html+=
+      '<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem;margin-bottom:0.75rem">'+ 
+        '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">'+ 
+          '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;margin-top:2px">'+ 
+            '<input type="checkbox" id="dev'+i+'" '+(checks[i]?'checked':'')+' onchange="devCheck('+i+')" style="width:18px;height:18px;accent-color:var(--blu3);cursor:pointer"></label>'+ 
+          '<div>'+ 
+            '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--blu);color:var(--blutext);margin-right:6px">'+q.level+'</span>'+ 
+            '<span style="font-size:13px;font-weight:700;color:#1a1a2e;line-height:1.7">Q'+(i+1)+'. '+q.q+'</span></div></div>'+ 
+        '<div style="display:flex;gap:8px;margin-bottom:6px">'+ 
+          '<button onclick="toggleHint('+i+')" style="flex:1;text-align:left;padding:8px 12px;border-radius:var(--r16);border:1.5px solid var(--blu2);background:var(--blu);font-size:12px;font-weight:700;color:var(--blutext);cursor:pointer;font-family:Zen Maru Gothic,sans-serif;display:flex;justify-content:space-between">💡 ヒントを見る <span id="hintarr'+i+'">▼</span></button>'+ 
+          '<button onclick="toggleDev('+i+')" style="flex:1;text-align:left;padding:8px 12px;border-radius:var(--r16);border:1.5px solid var(--blu2);background:#e7f0f9;font-size:12px;font-weight:700;color:var(--blutext2);cursor:pointer;font-family:Zen Maru Gothic,sans-serif;display:flex;justify-content:space-between">答えと解説 <span id="devarr'+i+'">▼</span></button>'+ 
+        '</div>'+ 
+        '<div id="hintbody'+i+'" style="display:none;background:var(--blu);border:1px solid var(--blu2);border-radius:var(--r16);padding:0.75rem 1rem;margin-bottom:6px;font-size:13px;color:var(--blutext);line-height:1.8">'+q.h+'</div>'+ 
+        '<div id="devans'+i+'" style="display:none;background:#e7f0f9;border:1px solid var(--blu2);border-radius:var(--r16);padding:1rem;font-size:12px;color:var(--blutext2);line-height:1.9">'+q.a+'</div>'+ 
+      '</div>';
+  });
+  return html;
+}
+function devCheck(i){if(!window._devChecks)window._devChecks=Array(5).fill(false);window._devChecks[i]=document.getElementById('dev'+i).checked;}
+function toggleDev(i){const b=document.getElementById('devans'+i),a=document.getElementById('devarr'+i);if(!b)return;const open=b.style.display==='block';b.style.display=open?'none':'block';if(a)a.textContent=open?'▼':'▲';}
+function toggleHint(i){const b=document.getElementById('hintbody'+i),a=document.getElementById('hintarr'+i);if(!b)return;const open=b.style.display==='block';b.style.display=open?'none':'block';if(a)a.textContent=open?'▼':'▲';}
+function c4(){
+  return '<div style="font-size:16px;font-weight:700;color:var(--blutext);margin-bottom:1rem">🔁 基礎に戻って確認</div>'+
+    '<div style="font-size:13px;color:var(--blutext2);line-height:1.8;margin-bottom:1rem">'+
+      '☆ 満点でも、「なんとなく解けた」部分がないか確認しよう！<br>'+
+      '☆ STEP 0のルール表をもう一度見て、言葉で説明できるか確かめてみよう。</div>'+
+    '<button class="primary-btn" onclick="st.step=0;goPhase(2)">STEP 0 のルール確認へ →</button>';
+}
+function c5(){
+  return '<div style="font-size:16px;font-weight:700;color:var(--blutext);margin-bottom:1rem">☕ 休憩する</div>'+
+    '<div style="font-size:14px;font-weight:700;color:#1a1a2e;line-height:1.8;margin-bottom:0.5rem">'+
+      '今日の目標は達成！ゆっくり休もう。<br>頑張った脳には休憩が必要！<br>記憶は休んでる間に整理されるよ。</div>'+
+    '<div style="font-size:12px;color:#aaa;line-height:1.9;margin-bottom:1.25rem">'+
+      '深呼吸する / 空を見る / 水を飲む / 少し伸びやマッサージをする / 首を回す / 少し目を閉じてみる... など。どれも大事な時間✨</div>'+
+    '<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem;margin-bottom:0.75rem">'+
+      '<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:10px">何分休憩する？（最大15分）</div>'+
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'+
+        '<input type="number" id="rest-min" min="1" max="15" value="5" '+
+          'style="width:72px;font-size:24px;font-weight:700;text-align:center;border:1.5px solid var(--blu2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--blutext)" '+
+          'oninput="if(this.value>15)this.value=15;if(this.value<1)this.value=1">'+
+        '<span style="font-size:16px;color:#1a1a2e;font-weight:700">分</span>'+
+        '<button onclick="startRest()" id="rest-start-btn" style="padding:10px 20px;border-radius:999px;border:none;background:var(--blu3);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:Zen Maru Gothic,sans-serif">スタート ▶</button>'+
+      '</div>'+
+      '<div id="rest-timer" style="display:none;text-align:center">'+
+        '<div id="rest-display" style="font-size:52px;font-weight:700;font-family:JetBrains Mono,monospace;color:var(--blutext);margin-bottom:8px">05:00</div>'+
+        '<div style="display:flex;gap:8px;justify-content:center">'+
+          '<button onclick="pauseRest()" id="rest-pause-btn" style="padding:8px 18px;border-radius:999px;border:1.5px solid var(--blu2);background:#fff;font-size:13px;font-weight:700;cursor:pointer;color:var(--blutext);font-family:Zen Maru Gothic,sans-serif">⏸ 一時停止</button>'+
+          '<button onclick="stopRest()" style="padding:8px 18px;border-radius:999px;border:1.5px solid #ddd;background:#fff;font-size:13px;cursor:pointer;color:#888;font-family:Zen Maru Gothic,sans-serif">✕ やめる</button>'+
+        '</div>'+
+      '</div>'+
+      '<div id="rest-done" style="display:none;text-align:center;padding:1rem">'+
+        '<div style="font-size:32px;margin-bottom:8px">🌿</div>'+
+        '<div style="font-size:28px;font-weight:700;color:var(--blutext);margin-bottom:8px">終了！</div>'+
+        '<div style="font-size:14px;color:var(--blutext2);line-height:1.8">気持ちを切り替えて<br>次の課題に挑戦しよう！</div>'+
+      '</div>'+
+    '</div>';
+}
+let _restTimer=null;
+let _restRemain=0;
+let _restPaused=false;
+function startRest(){
+  const min=Math.min(15,Math.max(1,parseInt(document.getElementById('rest-min').value)||5));
+  _restRemain=min*60;
+  _restPaused=false;
+  document.getElementById('rest-start-btn').style.display='none';
+  document.getElementById('rest-min').disabled=true;
+  document.getElementById('rest-timer').style.display='block';
+  updateRestDisplay();
+  if(_restTimer)clearInterval(_restTimer);
+  _restTimer=setInterval(()=>{
+    if(_restPaused)return;
+    _restRemain--;
+    updateRestDisplay();
+    if(_restRemain<=0){
+      clearInterval(_restTimer);
+      document.getElementById('rest-timer').style.display='none';
+      document.getElementById('rest-done').style.display='block';
+    }
+  },1000);
+}
+function updateRestDisplay(){
+  const el=document.getElementById('rest-display');
+  if(!el)return;
+  const m=Math.floor(_restRemain/60);
+  const s=_restRemain%60;
+  el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+}
+function pauseRest(){
+  _restPaused=!_restPaused;
+  const btn=document.getElementById('rest-pause-btn');
+  if(btn)btn.textContent=_restPaused?'▶ 再開':'⏸ 一時停止';
+}
+function stopRest(){
+  if(_restTimer)clearInterval(_restTimer);
+  document.getElementById('rest-timer').style.display='none';
+  document.getElementById('rest-start-btn').style.display='inline-flex';
+  document.getElementById('rest-min').disabled=false;
+}
+function toggleEffect(){
+  const b=document.getElementById('eff-body');
+  const a=document.getElementById('eff-arrow');
+  if(!b)return;
+  const open=b.style.display==='block';
+  b.style.display=open?'none':'block';
+  if(a)a.textContent=open?'▼':'▲';
+}
+function addTeach(n){
+  const inp=document.getElementById('teach-count');
+  if(!inp)return;
+  inp.value=Math.max(0,parseInt(inp.value||0)+n);
+}
+function pickOXTest(i,nfn){
+  const s=_ox['test'];if(!s)return;
+  const state=phase===0?t1:t2;
+  const ok=s[i].ok;
+  state.ev[state.cur]=ok?'ok':'ng';
+  s.forEach((_,j)=>{
+    const b=document.getElementById('txb'+j);if(!b)return;
+    if(s[j].ok)b.className='choice-btn choice-correct';
+    else if(j===i&&!ok)b.className='choice-btn choice-wrong';
+    b.onclick=null;
+  });
+  const res=document.getElementById('txres');
+  if(res){res.className='ox-result '+(ok?'ox-correct':'ox-wrong');res.textContent=ok?'✓ 正解！':'✗ 不正解';}
+  document.getElementById('txans').className='ans-box show';
+  document.getElementById('txnav').style.display='block';
+}
+function revTest(){document.getElementById('tans').className='ans-box show';document.getElementById('tev').className='eval-wrap show';document.getElementById('trb').style.display='none';}
+function dkTest(nfn){const st=phase===0?t1:t2;st.ev[st.cur]='ng';revTest();document.getElementById('te-ng').className='e-btn e-ng sel';document.getElementById('tnb').disabled=false;}
+function evTest(v,nfn){const s=phase===0?t1:t2;s.ev[s.cur]=v;['ok','half','ng'].forEach(k=>document.getElementById('te-'+k).className='e-btn e-'+k+(v===k?' sel':''));document.getElementById('tnb').disabled=false;}
+function nextT1(){t1.cur<TEST1.length-1?t1.cur++:t1.done=true;renderApp();}
+function nextT2(){t2.cur<TEST2.length-1?t2.cur++:t2.done=true;renderApp();}
+function renderTAResult(el,state){
+  const ok=state.ev.filter(v=>v==='ok').length;
+  const prev=window._taTime||null;
+  el.innerHTML=
+    '<div class="done-wrap" style="text-align:center">'+
+      '<div style="font-size:48px;margin-bottom:0.5rem">⏱</div>'+
+      '<div style="font-size:20px;font-weight:700;color:var(--blutext);margin-bottom:0.5rem">タイムアタック完了！</div>'+
+      mkStat(state.ev)+
+      (prev?'<div style="background:#e7f0f9;border:1px solid var(--blu2);border-radius:var(--r16);padding:10px 14px;margin-bottom:1rem;font-size:13px;color:var(--blutext2)">⏱ 前回のタイム：<strong style="font-size:16px;color:var(--blutext)">'+prev+'</strong></div>':'')+
+      '<div style="background:#fff;border:1.5px solid var(--card-border);border-radius:var(--r16);padding:1rem;margin-bottom:1rem;text-align:left">'+
+        '<div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:10px">⏱ 今回のタイムを入力しよう</div>'+
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">'+
+          '<input type="number" id="ta-min" min="0" max="59" placeholder="分" style="width:64px;font-size:20px;font-weight:700;text-align:center;border:1.5px solid var(--blu2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--blutext)">'+
+          '<span style="font-size:16px;font-weight:700">:</span>'+
+          '<input type="number" id="ta-sec" min="0" max="59" placeholder="秒" style="width:64px;font-size:20px;font-weight:700;text-align:center;border:1.5px solid var(--blu2);border-radius:var(--r16);padding:8px;font-family:JetBrains Mono,monospace;color:var(--blutext)">'+
+          '<span style="font-size:13px;color:var(--blutext2)">分：秒</span>'+
+        '</div>'+
+        '<div id="ta-compare"></div>'+
+        '<button class="primary-btn" onclick="saveTA()">このタイムを記録する</button>'+
+      '</div>'+
+      '<div class="done-btns">'+
+        '<button class="secondary-btn" onclick="startTA()">もう一度タイムアタック</button>'+
+        '<button class="secondary-btn" onclick="t1={cur:0,ev:Array(TEST1.length).fill(null),done:false};goPhase(0)">通常テストに戻る</button>'+
+      '</div>'+
+    '</div>';
+}
+function saveTA(){
+  const m=parseInt(document.getElementById('ta-min').value)||0;
+  const s=parseInt(document.getElementById('ta-sec').value)||0;
+  if(m===0&&s===0)return;
+  const timeStr=m+'分'+s+'秒';
+  const prev=window._taTime||null;
+  const cmp=document.getElementById('ta-compare');
+  if(prev&&cmp){
+    // 比較
+    const [pm,ps]=prev.replace('分',':').replace('秒','').split(':').map(Number);
+    const prevSec=pm*60+ps;
+    const nowSec=m*60+s;
+    const diff=prevSec-nowSec;
+    if(diff>0){
+      cmp.innerHTML='<div style="background:#dcebf7;border-radius:var(--r16);padding:8px 12px;margin-bottom:8px;font-size:13px;font-weight:700;color:#0e2e50">🎉 前回より '+Math.floor(diff/60)+'分'+diff%60+'秒 速くなった！</div>';
+    } else if(diff<0){
+      cmp.innerHTML='<div style="background:#faeeda;border-radius:var(--r16);padding:8px 12px;margin-bottom:8px;font-size:13px;color:#633806">もう少し！前回より '+(Math.floor(Math.abs(diff)/60))+'分'+Math.abs(diff)%60+'秒 おそかったよ。</div>';
+    } else {
+      cmp.innerHTML='<div style="background:#e7f0f9;border-radius:var(--r16);padding:8px 12px;margin-bottom:8px;font-size:13px;color:var(--blutext2)">前回と同じタイム！</div>';
+    }
+  }
+  window._taTime=timeStr;
+  const btn=document.querySelector('#ta-compare')?.nextElementSibling;
+  if(btn)btn.textContent='✓ 記録済み（'+timeStr+'）';
+}
+function retryNewTest(){
+  // TEST1の問題を再シャッフルして最初から
+  TEST1.sort(()=>Math.random()-0.5);
+  t1={cur:0,ev:Array(TEST1.length).fill(null),done:false};
+  goPhase(0);
+}
+function resetT2(){t2={cur:0,ev:Array(TEST2.length).fill(null),done:false};renderApp();}
+
+// ===== 自己分析 =====
+function renderSA(){
+  const el=document.getElementById('app');
+  const ready=sa.q1.size>0&&sa.q3!==null;
+  el.innerHTML=`
+    <div class="msg-box">💎 間違いは宝物。どこでつまずいたかを知ることが成長の第一歩！</div>
+    ${mkRows(TEST1,t1.ev)}
+    <div class="sa-q">Q1. △や✕の原因（複数OK）</div>
+    <div class="sa-opts">${[
+      '何を x にすべきか分からない',
+      '式を立てるのが苦手',
+      '面積・道の問題が苦手',
+      '整数の問題が苦手',
+      '直方体（四隅切り取り）の問題が苦手',
+      '動点の問題が苦手',
+      '式は立てられるけど、二次方程式が解けない',
+      '解の吟味（どちらが答えか）で迷う'
+    ].map((t,i)=>`<button class="sa-btn${sa.q1.has(i)?' sel':''}" onclick="saQ(1,${i})">${t}</button>`).join('')}</div>
+    <div class="sa-q">Q2. 次にやるべきSTEP</div>
+    <div class="sa-opts">${[
+      'STEP 0 — 解き方を確認',
+      'STEP 1 — パターン別に方程式を立てる',
+      'STEP 2 — パターン別に立式して解く',
+      'STEP 3 — 全パターンごちゃまぜ'
+    ].map((t,i)=>`<button class="sa-btn${sa.q3===i?' sel':''}" onclick="saQ(3,${i})">${t}</button>`).join('')}</div>
+    <button class="primary-btn" onclick="saGo()" ${ready?'':'disabled style="opacity:0.35;cursor:default"'}>このSTEPの練習を始める →</button>`;
+}
+function saQ(qn,i){
+  if(qn===1){sa.q1.has(i)?sa.q1.delete(i):sa.q1.add(i);}
+  else if(qn===2){sa.q2.has(i)?sa.q2.delete(i):sa.q2.add(i);}
+  else{sa.q3=i;}
+  renderSA();
+}
+function saGo(){if(!sa.q1.size||sa.q3===null)return;st.step=sa.q3;goPhase(2);}
+
+// ===== STEP練習 =====
+function renderSTEP(){
+  const el=document.getElementById('app');
+  el.innerHTML=`
+    <div class="msg-box">⬆️ レベルアップの時間！自分のペースでじっくり進もう。</div>
+    <div class="step-nav">
+      ${[['STEP 0','解き方'],['STEP 1','パターン別立式'],['STEP 2','パターン別解く'],['STEP 3','混合']].map((s,i)=>
+        `<button class="snav${st.step===i?' active':''}" onclick="switchST(${i})">${s[0]}<span>${s[1]}</span></button>`).join('')}
+    </div>
+    <div id="sc"></div>`;
+  renderSC();
+}
+function switchST(i){st.step=i;renderSTEP();}
+function renderSC(){
+  const el=document.getElementById('sc');
+  // STEP0=解き方、STEP1=パターン別立式（旧S2）、STEP2=パターン別解く（旧S3）、STEP3=混合（旧S4）
+  if(st.step===0)renderS0(el);
+  else if(st.step===1)renderS2(el);
+  else if(st.step===2)renderS3(el);
+  else renderS4(el);
+}
+
+// STEP0 ルール確認
+function renderS0(el){
+  const sections=[
+    {title:'📖 二次方程式の文章題の解き方',items:[
+      {label:'1. 何を x とおく？',   rule:'求めたいものを x とおくのが基本。「連続する整数」なら小さい方を x、真ん中を x など、状況に応じて選ぶ。',  ex:'連続する 2 つの整数 → 小さい方を x とおくと、もう 1 つは x + 1'},
+      {label:'2. 二次方程式を立てる', rule:'長方形の面積、整数の積、動く点による三角形の面積など、x² が出てくる式を立てる。',                    ex:'縦 x cm、横 (x+3) cm の面積 40 cm²\n→ x(x + 3) = 40'},
+      {label:'3. 展開・整理して解く', rule:'式を展開して ax² + bx + c = 0 の形に整えてから、因数分解 or 解の公式で解く。',                       ex:'x(x + 3) = 40\n→ x² + 3x − 40 = 0\n→ (x − 5)(x + 8) = 0\n→ x = 5 または −8'},
+      {label:'4. 解の吟味（大事！）', rule:'二次方程式は解が 2 つ出ることが多い。長さや個数などは「正の数」でなければならない。範囲もチェック！',       ex:'x = 5 or −8　→ 長さは正なので x = 5\n（−8 は問題に合わない）'},
+    ]},
+    {title:'📐 面積の公式',items:[
+      {label:'長方形',           rule:'面積 = 縦 × 横',                                                                     ex:'縦 x、横 (x+3) → 面積 = x(x+3)'},
+      {label:'正方形',           rule:'面積 = 1 辺 × 1 辺 = (1 辺)²',                                                        ex:'1 辺 x cm → 面積 = x²'},
+      {label:'三角形',           rule:'面積 = '+fr('1','2')+' × 底辺 × 高さ',                                              ex:'底辺 x、高さ 6 → 面積 = 3x'},
+      {label:'道の面積',         rule:'道つきの長方形は「外側全体の面積 − 元の面積 = 道の面積」で立式。',                     ex:'元 10×15、幅 x → (10+2x)(15+2x) − 150 = 道の面積'},
+    ]},
+    {title:'🔢 整数のおき方',items:[
+      {label:'連続する 2 整数',   rule:'小さい方を x とおくと、もう 1 つは x + 1',                                            ex:'2 つの積 = 42 → x(x+1) = 42'},
+      {label:'連続する 3 整数',   rule:'真ん中を x とおくと、3 つは x−1, x, x+1',                                             ex:'和 = 45 → (x−1)+x+(x+1) = 45'},
+      {label:'連続する偶数・奇数', rule:'2 とびになるので、小さい方を x とおくと、もう 1 つは x + 2',                          ex:'2 つの積 = 63（奇数）→ x(x+2) = 63'},
+      {label:'平方の和',         rule:'x² + (x+1)² のように、各項を 2 乗してから足す',                                       ex:'x² + (x+1)² = 25'},
+    ]},
+    {title:'📦 直方体（四隅を切り取る）',items:[
+      {label:'底面の 1 辺',       rule:'元の辺の両端から x ずつ切るので、底面は「元の辺 − 2x」',                             ex:'元 20 cm、切り取り x → 底面 = 20 − 2x'},
+      {label:'底面積（正方形）',   rule:'(元の辺 − 2x)²',                                                                    ex:'1 辺 20 cm → 底面積 = (20 − 2x)²'},
+      {label:'底面積（長方形）',   rule:'(縦 − 2x)(横 − 2x)',                                                                ex:'縦 16、横 20 → 底面積 = (16−2x)(20−2x)'},
+      {label:'高さ',             rule:'切り取った正方形の 1 辺 = x',                                                          ex:'高さ = x cm'},
+      {label:'x の範囲',          rule:'0 < x < 元の辺の半分（切り取りすぎない）',                                            ex:'元 20 cm なら 0 < x < 10'},
+    ]},
+    {title:'🏃 動点の考え方',items:[
+      {label:'x 秒後の位置',      rule:'動いた距離 = 速さ × x',                                                              ex:'毎秒 2 cm で x 秒 → 動いた距離 = 2x'},
+      {label:'残りの長さ',        rule:'元の辺 − 動いた距離',                                                                ex:'AB = 12 cm、AP = 2x → PB = 12 − 2x'},
+      {label:'三角形の面積',      rule:fr('1','2')+' × 底辺 × 高さ',                                                        ex:'△APQ = '+fr('1','2')+' × AP × AQ'},
+      {label:'範囲チェック',      rule:'動点が辺の上にある間だけ有効。（辺の長さ ÷ 速さ）秒までしか動けない。',                 ex:'AB=10、毎秒2 → 0 < x < 5'},
+    ]},
+    {title:'✅ 解の吟味のポイント',items:[
+      {label:'長さ・個数',        rule:'負の数はダメ。0 も普通 NG。x > 0 の解だけ採用。',                                    ex:'x = 5, −8 → x = 5 のみ'},
+      {label:'範囲つき',          rule:'0 < x < 4 のように範囲がある場合、その範囲に入る解だけ採用。',                          ex:'x = 3, 6 で 0<x<5 → x = 3 のみ'},
+      {label:'両方 OK もある',    rule:'動点で「x 秒後と (10−x) 秒後の 2 回」通ることもある。両方が範囲内なら両方答え。',       ex:'x = 2, 8 で 0<x<10 → 両方 OK'},
+    ]},
+  ];
+  el.innerHTML=
+    '<div class="msg-box">📖 文章題は「①何を x にする ②二次方程式を立てる ③解く ④吟味する」の4ステップ！</div>'+
+    sections.map(sec=>
+      `<div style="margin-bottom:1rem">
+        <div style="font-size:13px;font-weight:700;color:var(--blutext);margin-bottom:8px;padding:6px 12px;background:var(--blu);border-radius:999px;display:inline-block">${sec.title}</div>
+        ${sec.items.map(it=>`
+          <div class="q-card" style="margin-bottom:8px">
+            <div class="q-num-badge">📖 ${it.label}</div>
+            <div style="font-size:12px;color:var(--blutext2);background:#e7f0f9;border-radius:var(--r16);padding:8px 12px;margin-bottom:8px;line-height:1.7">${it.rule}</div>
+            <div style="font-size:13px;color:#1a1a2e;line-height:2">${it.ex.replace(/\n/g,'<br>')}</div>
+          </div>`).join('')}
+      </div>`
+    ).join('')+
+    '<button class="primary-btn" onclick="switchST(1)">ルールを確認できた！STEP 1 へ →</button>';
+}
+
+function ruleRef(sections){
+  const all={
+    basic:`<div class="rule-sec">
+      <div class="rule-sec-title">解き方の流れ</div>
+      <div class="rule-row"><span class="rule-label">1. xにおく</span><span class="rule-ex">求めるものを x とおく</span></div>
+      <div class="rule-row"><span class="rule-label">2. 立式</span><span class="rule-ex">条件を「二次方程式」として式に</span></div>
+      <div class="rule-row"><span class="rule-label">3. 解く</span><span class="rule-ex">因数分解 or 解の公式で x を求める</span></div>
+      <div class="rule-row"><span class="rule-label">4. 吟味</span><span class="rule-ex">問題に合う解を選ぶ（長さ・個数は正、範囲に合うかも確認）</span></div>
+    </div>`,
+    area:`<div class="rule-sec">
+      <div class="rule-sec-title">面積の公式</div>
+      <div class="rule-row"><span class="rule-label">長方形</span><span class="rule-ex">面積 = 縦 × 横</span></div>
+      <div class="rule-row"><span class="rule-label">正方形</span><span class="rule-ex">面積 = 1辺 × 1辺 = (1辺)²</span></div>
+      <div class="rule-row"><span class="rule-label">三角形</span><span class="rule-ex">面積 = '+fr('1','2')+' × 底辺 × 高さ</span></div>
+      <div class="rule-row"><span class="rule-label">道の面積</span><span class="rule-ex">外側全体 − 元の土地 = 道の面積</span></div>
+    </div>`,
+    integer:`<div class="rule-sec">
+      <div class="rule-sec-title">整数のおき方</div>
+      <div class="rule-row"><span class="rule-label">連続する整数</span><span class="rule-ex">2つ: x, x+1　　3つ: x−1, x, x+1</span></div>
+      <div class="rule-row"><span class="rule-label">連続する偶数・奇数</span><span class="rule-ex">2つ: x, x+2（どちらも2とび）</span></div>
+      <div class="rule-row"><span class="rule-label">平方の和</span><span class="rule-ex">x² + (x+1)²</span></div>
+      <div class="rule-row"><span class="rule-label">積</span><span class="rule-ex">x(x+1)、x(x+2) など</span></div>
+    </div>`,
+    box:`<div class="rule-sec">
+      <div class="rule-sec-title">直方体（四隅を切り取る）</div>
+      <div class="rule-row"><span class="rule-label">底面の1辺</span><span class="rule-ex">元の辺 − 2x（両端から x ずつ切るので）</span></div>
+      <div class="rule-row"><span class="rule-label">正方形の紙</span><span class="rule-ex">底面積 = (元−2x)²</span></div>
+      <div class="rule-row"><span class="rule-label">長方形の紙</span><span class="rule-ex">底面積 = (縦−2x)(横−2x)</span></div>
+      <div class="rule-row"><span class="rule-label">高さ</span><span class="rule-ex">切り取った正方形の1辺 = x</span></div>
+      <div class="rule-row"><span class="rule-label">x の範囲</span><span class="rule-ex">0 < x < 元の辺の半分（切り取りすぎない）</span></div>
+    </div>`,
+    move:`<div class="rule-sec">
+      <div class="rule-sec-title">動点の考え方</div>
+      <div class="rule-row"><span class="rule-label">x 秒後の位置</span><span class="rule-ex">動いた距離 = 速さ × x</span></div>
+      <div class="rule-row"><span class="rule-label">残りの長さ</span><span class="rule-ex">元の辺 − 動いた距離</span></div>
+      <div class="rule-row"><span class="rule-label">三角形の面積</span><span class="rule-ex">'+fr('1','2')+' × 底辺 × 高さ</span></div>
+      <div class="rule-row"><span class="rule-label">範囲チェック</span><span class="rule-ex">動点が辺の上にある間だけ（例: 0<x<辺の長さ/速さ）</span></div>
+    </div>`,
+  };
+  const body=sections.map(k=>all[k]||'').join('');
+  return `<div class="rule-toggle" onclick="toggleRule()">📖 ルール表を見る <span id="rule-arrow">▼</span></div>
+  <div class="rule-body" id="rule-body">${body}</div>`;
+}
+function toggleRule(){
+  const b=document.getElementById('rule-body');
+  const a=document.getElementById('rule-arrow');
+  if(!b)return;
+  b.classList.toggle('open');
+  if(a)a.textContent=b.classList.contains('open')?'▲':'▼';
+}
+// STEP1
+function renderS1(el){
+  if(!st.s1qs.length)st.s1qs=sh(PS1).slice(0,8);
+  if(st.s1done){el.innerHTML=mkDone('✏️','STEP 1 完了！',st.s1qs,st.s1ev,
+    `<button class="primary-btn" onclick="switchST(2)">STEP 2 へ進む →</button>
+     <button class="secondary-btn" onclick="rst('s1',8)">もう一度</button>`);return;}
+  el.innerHTML=ruleRef(['basic','area','integer']);
+  renderNCard(el,st.s1qs[st.s1cur],st.s1cur,8,'s1');
+}
+
+// STEP2: パターン別に方程式を立てる練習（解かない）
+const S2PATS=[
+  {label:'面積',   pool:PT_AREA_S, ex:'長方形、道の問題'},
+  {label:'整数',   pool:PT_INT_S,  ex:'連続する整数、平方の和'},
+  {label:'直方体', pool:PT_BOX_S,  ex:'四隅を切り取って箱を作る'},
+  {label:'動点',   pool:PT_MOV_S,  ex:'図形の辺上を動く点'},
+];
+function renderS2(el){
+  if(st.s2pat===null||st.s2pat===undefined){
+    el.innerHTML=ruleRef(['basic','area'])+'<div class="q-card"><div class="q-num-badge">📝 STEP 2 — どのパターンの立式を練習する？</div>'+
+      '<div style="font-size:12px;color:var(--blutext2);margin-bottom:0.5rem">※ ここでは方程式を立てるところまで！解かなくてOK。</div>'+
+      '<div class="pat-grid1">'+
+      S2PATS.map((pt,i)=>`<div class="pat-card" onclick="pickS2(${i})"><div class="pat-name">${pt.label}</div><div class="pat-ex">${pt.ex}</div></div>`).join('')+
+      '</div></div>';
+    return;
+  }
+  if(st.s2done){el.innerHTML=mkDone('📝',S2PATS[st.s2pat].label+'（立式）完了！',st.s2qs,st.s2ev,
+    `<button class="primary-btn" onclick="st.s2pat=null;st.s2done=false;st.s2qs=[];renderSTEP()">別のパターンを練習する</button>
+     <button class="primary-btn" onclick="switchST(2)">STEP 2 へ進む →</button>
+     <button class="secondary-btn" onclick="rst('s2',5)">もう一度</button>`);return;}
+  const q=st.s2qs[st.s2cur];
+  const s2rules=[['area','basic'],['integer','basic'],['box','basic'],['move','basic']];
+  el.innerHTML=ruleRef(s2rules[st.s2pat]||['basic']);
+  renderNCard(el,q,st.s2cur,5,'s2');
+}
+function pickS2(i){st.s2pat=i;st.s2cur=0;st.s2ev=Array(5).fill(null);st.s2done=false;st.s2qs=sh(S2PATS[i].pool).slice(0,5);renderSTEP();}
+
+// STEP3: パターン別に方程式を立てて解く
+const S3PATS=[
+  {label:'面積',   pool:PT_AREA_X, ex:'長方形、道の問題'},
+  {label:'整数',   pool:PT_INT_X,  ex:'連続する整数、平方の和'},
+  {label:'直方体', pool:PT_BOX_X,  ex:'四隅を切り取って箱を作る'},
+  {label:'動点',   pool:PT_MOV_X,  ex:'図形の辺上を動く点'},
+];
+function renderS3(el){
+  if(st.s3pat===null){
+    el.innerHTML=ruleRef(['basic','area'])+'<div class="q-card"><div class="q-num-badge">✏️ STEP 3 — どのパターンを解く？</div>'+
+      '<div style="font-size:12px;color:var(--blutext2);margin-bottom:0.5rem">※ 方程式を立てて、x まで求めよう！</div>'+
+      '<div class="pat-grid1">'+
+      S3PATS.map((pt,i)=>`<div class="pat-card" onclick="pickS3(${i})"><div class="pat-name">${pt.label}</div><div class="pat-ex">${pt.ex}</div></div>`).join('')+
+      '</div></div>';
+    return;
+  }
+  if(st.s3done){el.innerHTML=mkDone('📖',S3PATS[st.s3pat].label+'（解く）完了！',st.s3qs,st.s3ev,
+    `<button class="primary-btn" onclick="st.s3pat=null;st.s3done=false;st.s3qs=[];renderSTEP()">別のパターンを練習する</button>
+     <button class="primary-btn" onclick="switchST(3)">STEP 3 へ進む →</button>
+     <button class="secondary-btn" onclick="rst('s3',5)">もう一度</button>`);return;}
+  const q=st.s3qs[st.s3cur];
+  const s3rules=[['area','basic'],['integer','basic'],['box','basic'],['move','basic']];
+  el.innerHTML=ruleRef(s3rules[st.s3pat]||['basic']);
+  renderNCard(el,q,st.s3cur,5,'s3');
+}
+function pickS3(i){st.s3pat=i;st.s3cur=0;st.s3ev=Array(5).fill(null);st.s3done=false;st.s3qs=sh(S3PATS[i].pool).slice(0,5);renderSTEP();}
+
+// STEP4
+function renderS4(el){
+  if(!st.s4qs.length)st.s4qs=sh([...PS1,...PT_AREA_S,...PT_INT_S,...PT_BOX_S,...PT_MOV_S,...PT_AREA_X,...PT_INT_X,...PT_BOX_X,...PT_MOV_X]).slice(0,15);
+  if(st.s4done){el.innerHTML=mkDone('🔀','STEP 4 完了！',st.s4qs,st.s4ev,
+    `<button class="primary-btn" onclick="goPhase(3)">再テストに挑戦する →</button>
+     <button class="secondary-btn" onclick="rst('s4',15)">もう一度</button>`);return;}
+  const q=st.s4qs[st.s4cur];
+  if(q.choices)renderOXCard(el,q,st.s4cur,15,'s4');
+  else renderNCard(el,q,st.s4cur,15,'s4');
+}
+
+function rst(k,len){st[k+'cur']=0;st[k+'ev']=Array(len).fill(null);st[k+'done']=false;renderSTEP();}
+
+// 通常カード
+function renderNCard(el,q,cur,total,key){
+  const isLast=cur===total-1;
+  el.innerHTML+=pipHtml(total,cur)+`
+    <div class="q-card">
+      <div class="q-num-badge">✏️ 問題${cur+1} / ${total}</div>
+      <div class="q-formula">${q.q}</div>
+      <div class="q-direction">紙に書いてから確認しよう！</div>
+      <button class="reveal-btn" id="rb${key}" onclick="revN('${key}')">👀 答えを見る</button>
+      <button class="dontknow-btn" onclick="dkN('${key}',${total})">🤔 分からない</button>
+      <div class="ans-box" id="ab${key}"><div class="ans-label">答え</div><div class="ans-val">${q.a}</div><div class="ans-hint">💡 ${q.hint}</div></div>
+      <div class="eval-wrap" id="ew${key}">
+        <div class="eval-q">自分の答えはどうだった？</div>
+        <div class="eval-row">
+          <button class="e-btn e-ok" id="eo${key}" onclick="evN('${key}','ok',${total})">◯ できた</button>
+          <button class="e-btn e-half" id="eh${key}" onclick="evN('${key}','half',${total})">△ 一部</button>
+          <button class="e-btn e-ng" id="en${key}" onclick="evN('${key}','ng',${total})">✕ 間違い</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav-row"><span class="nav-count">${cur+1} / ${total} 問目</span>
+      <button class="next-btn" id="nb${key}" onclick="nxN('${key}',${total})" disabled>${isLast?'結果を見る →':'次の問題 →'}</button></div>`;
+}
+function revN(k){document.getElementById('ab'+k).className='ans-box show';document.getElementById('ew'+k).className='eval-wrap show';document.getElementById('rb'+k).style.display='none';}
+function dkN(k,t){st[k+'ev'][st[k+'cur']]='ng';revN(k);document.getElementById('en'+k).className='e-btn e-ng sel';document.getElementById('nb'+k).disabled=false;}
+function evN(k,v,t){st[k+'ev'][st[k+'cur']]=v;['ok','half','ng'].forEach(n=>document.getElementById('e'+n[0]+k).className='e-btn e-'+n+(v===n?' sel':''));document.getElementById('nb'+k).disabled=false;}
+function nxN(k,t){st[k+'cur']<t-1?st[k+'cur']++:st[k+'done']=true;renderSTEP();}
+
+// 選択肢カード
+function renderOXCard(el,q,cur,total,key){
+  const shuffled=sh(q.choices.map((c,i)=>({c,ok:i===0})));
+  _ox[key]=shuffled;
+  const isLast=cur===total-1;
+  el.innerHTML+=pipHtml(total,cur)+`
+    <div class="q-card">
+      <div class="q-num-badge">✏️ 問題${cur+1} / ${total}</div>
+      <div class="q-formula">${q.q}</div>
+      <div class="q-direction">正しい式を選べ</div>
+      <div class="choice-grid">
+        ${shuffled.map((it,i)=>`<button class="choice-btn" id="oxb${i}" onclick="pickOX('${key}',${i},${total})">${it.c}</button>`).join('')}
+      </div>
+      <div id="oxres${key}"></div>
+      <div class="ans-box" id="ab${key}"><div class="ans-hint">💡 ${q.hint}</div></div>
+      <div id="ewnav${key}" style="display:none">
+        <div class="nav-row"><span class="nav-count">${cur+1} / ${total} 問目</span>
+          <button class="next-btn" onclick="nxN('${key}',${total})">${isLast?'結果を見る →':'次の問題 →'}</button></div>
+      </div>
+    </div>`;
+}
+function pickOX(key,i,total){
+  const s=_ox[key];if(!s)return;
+  const ok=s[i].ok;
+  st[key+'ev'][st[key+'cur']]=ok?'ok':'ng';
+  s.forEach((_,j)=>{
+    const b=document.getElementById('oxb'+j);if(!b)return;
+    if(s[j].ok)b.className='choice-btn choice-correct';
+    else if(j===i&&!ok)b.className='choice-btn choice-wrong';
+    b.onclick=null;
+  });
+  const res=document.getElementById('oxres'+key);
+  if(res){res.className='ox-result '+(ok?'ox-correct':'ox-wrong');res.textContent=ok?'✓ 正解！':'✗ 不正解';}
+  document.getElementById('ab'+key).className='ans-box show';
+  document.getElementById('ewnav'+key).style.display='block';
+}
+
+renderApp();
+</script>
+</body>
+</html>
